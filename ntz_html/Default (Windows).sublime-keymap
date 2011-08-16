@@ -1,0 +1,23 @@
+[
+	{ "keys": ["ctrl+enter"], "command": "close_tag" },
+	{
+		"keys"   :	["ctrl+shift+enter"], 
+		"command":	"insert_snippet",
+		"args"   :	{ "contents": "<br/>" },
+		"context":	[ { "key": "selector", "operator": "equal", "operand": "text.html" } ]
+	},
+	{ // wrap tags. the built in wrap tags function works a little awkward.
+		"keys"   :	["alt+shift+w"], 
+		"command":	"insert_snippet",
+		"args"   :	{ "contents": "<${1:p}>${0:$SELECTION}</${1/\\s.*//}>" },
+		"context":	[ { "key": "selector", "operator": "equal", "operand": "text.html" } ]
+	},
+	{
+		"keys"   :	["ctrl+b"], 
+		"command":	"insert_snippet",
+		"args"   :	{ "contents": "<strong>${1:$SELECTION}</strong>" },
+		"context":	[ { "key": "selector", "operator": "equal", "operand": "text.html" } ]
+	},
+	// in html/php files there is no way of toggling the sidebar using default shortcut
+	{ "keys": ["ctrl+shift+b"], "command": "toggle_side_bar" }
+]

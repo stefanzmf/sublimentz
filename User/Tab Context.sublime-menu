@@ -1,0 +1,18 @@
+[	
+
+		{ "caption": "-" },
+		{ "command": "expand_tabs", "caption": "Convert Indentation to Spaces", "args": {"set_translate_tabs": true} },
+		{ "command": "unexpand_tabs", "caption": "Convert Indentation to Tabs", "args": {"set_translate_tabs": true} },
+
+		{ "caption": "-" },
+		{ "caption": "Google it!", "command": "google_it" },
+		{ "command":  "sort_css", "caption" :  "Sort CSS" },
+
+		{	"caption":	"-"},
+		{ "caption": "JavaScript", "command": "set_file_type", "args":{ "syntax" : "Packages/JavaScript/JavaScript.tmLanguage" } },
+		{ "caption": "HTML", "command": "set_file_type", "args":{ "syntax" : "Packages/HTML/HTML.tmLanguage" } },
+		{ "caption": "PHP", "command": "set_file_type", "args":{ "syntax" : "Packages/PHP/PHP.tmLanguage" } },
+		{ "caption": "CSS", "command": "set_file_type", "args":{ "syntax" : "Packages/CSS/CSS.tmLanguage" } },
+		{ "caption": "Custom Syntax", "command": "set_file_syntax" },
+		{ "caption": "Toggle main menu", "command": "toggle_menu" }
+]

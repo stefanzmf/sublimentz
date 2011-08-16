@@ -1,0 +1,4 @@
+<snippet>
+	<content><![CDATA[return ${1:false}${2:true};$0]]></content>
+	<tabTrigger>ret</tabTrigger>
+</snippet>

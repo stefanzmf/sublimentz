@@ -1,0 +1,5 @@
+<snippet>
+	<content><![CDATA[<option${1: value="$2"}>$3</option>$0]]></content>
+	<tabTrigger>opt</tabTrigger>
+	<scope>text.html,source.php</scope>
+</snippet>

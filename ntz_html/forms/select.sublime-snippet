@@ -1,0 +1,5 @@
+<snippet>
+	<content><![CDATA[<select name="${1:select[]}"${2: ${3:id}${4:class}="$5"}>$0</select>]]></content>
+	<tabTrigger>sel</tabTrigger>
+	<scope>text.html,source.php</scope>
+</snippet>

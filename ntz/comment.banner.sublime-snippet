@@ -1,0 +1,7 @@
+<snippet>
+    <content><![CDATA[/* ==${1/./=/g}== */
+/* = ${1:Comment} = */
+/* ==${1/./=/g}== */]]></content>
+    <tabTrigger>/.</tabTrigger>
+    <scope>source.js,source.css,source.php</scope>
+</snippet>

@@ -1,0 +1,19 @@
+// Place user-specific overrides in this file, to ensure they"re preserved
+// when upgrading
+{
+	"word_highlights_draw_outlined" : true,
+	"word_highlights_when_selection_is_empty" : true,
+	"shift_tab_unindent" : true,
+	"new_window_settings":
+	{
+		"side_bar_visible": false,
+		"status_bar_visible": true,
+		"show_tabs": true,
+		"show_minimap": false
+	}
+	,"show_tab_close_buttons":false
+	,"theme": "Soda Dark.sublime-theme"
+	,"use_simple_full_screen":true
+	,"ignored_packages": ["Vintage"]
+}
+//sublime.log_commands(True)
