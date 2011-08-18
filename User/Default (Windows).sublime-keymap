@@ -82,6 +82,10 @@
 	{ "keys": ["super+a"], "command": "convert_to_pascal" },
 
 	{ "keys": ["alt+f4"], "command": "hot_exit" },
+
+	{ "keys": ["alt+backspace"], "command": "run_macro_file", "args": {"file": "Packages/User/delete_subword.sublime-macro"} },
+	{ "keys": ["alt+delete"], "command": "run_macro_file", "args": {"file": "Packages/User/delete_subword_forward.sublime-macro"} },
+
 	{ "keys": ["alt+a"], "command": "replace_all", "args": {"close_panel": false}, "context": [{"key": "panel", "operand": "replace"}] },
 
 	{ "keys": ["shift+ctrl+alt+left"], "command": "navigation_history_back"},

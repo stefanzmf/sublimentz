@@ -14,6 +14,8 @@
 	,"show_tab_close_buttons":false
 	,"theme": "Soda Dark.sublime-theme"
 	,"use_simple_full_screen":true
-	,"ignored_packages": ["Vintage"]
+	,"ignored_packages": [""] // Vintage
+	// Valid values are "system", "enabled" and "disabled"
+	,"overlay_scroll_bars": "enabled"
 }
 //sublime.log_commands(True)
