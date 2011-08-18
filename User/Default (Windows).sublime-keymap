@@ -1,5 +1,4 @@
 [
-
 	{ "keys": ["ctrl+alt+right"], "command": "next_view_in_stack" },
 	{ "keys": ["ctrl+alt+left"], "command": "prev_view_in_stack" },
 	{ "keys": ["ctrl+shift+tab"], "command": "prev_view" },
@@ -20,6 +19,18 @@
 
 	// quick set syntax
 	{ "keys": ["alt+1"], "command": "set_file_type", "args":{ "syntax" : "Packages/JavaScript/JavaScript.tmLanguage" } },
+	{ "keys": ["alt+1"], "command": "set_file_type", "args":{ "syntax" : "Packages/JavaScript/JavaScript.tmLanguage" },
+		"context":	[
+			{ "key": "selector", "operator": "equal", "operand": "source.js.jquery" },
+			{ "key": "selector", "operator": "not_equal", "operand": "source.js" }
+		]
+	},
+	{ "keys": ["alt+1"], "command": "set_file_type", "args":{ "syntax" : "Packages/jQuery-Sublime-Text-Package/Syntaxes/jQuery (JavaScript).tmLanguage" },
+		"context":	[ 
+			{ "key": "selector", "operator": "equal", "operand": "source.js" },
+			{ "key": "selector", "operator": "not_equal", "operand": "source.js.jquery" }
+		]
+	},
 	{ "keys": ["alt+2"], "command": "set_file_type", "args":{ "syntax" : "Packages/HTML/HTML.tmLanguage" } },
 	{ "keys": ["alt+3"], "command": "set_file_type", "args":{ "syntax" : "Packages/PHP/PHP.tmLanguage" } },
 	{ "keys": ["alt+4"], "command": "set_file_type", "args":{ "syntax" : "Packages/CSS/CSS.tmLanguage" } }, 
@@ -74,6 +85,9 @@
 	{ "keys": ["alt+a"], "command": "replace_all", "args": {"close_panel": false}, "context": [{"key": "panel", "operand": "replace"}] },
 
 	{ "keys": ["shift+ctrl+alt+left"], "command": "navigation_history_back"},
-	{ "keys": ["shift+ctrl+alt+right"], "command": "navigation_history_forward"}
+	{ "keys": ["shift+ctrl+alt+right"], "command": "navigation_history_forward"},
+
+	// the default `ctrl+shift+a` shortcut is binded to align
+	{ "keys": ["ctrl+alt+enter"], "command": "expand_selection", "args": {"to": "tag"} }
 
 ]
