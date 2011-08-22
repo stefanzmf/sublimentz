@@ -24,7 +24,7 @@
 	"match_brackets_content": true,
 	"rulers":
 	[
-		0
+		0, 150
 	],
 	"shift_tab_unindent": true,
 	"show_active_indent_guides": true,
