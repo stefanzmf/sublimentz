@@ -30,6 +30,7 @@
 	{ "keys": ["ctrl+shift+b"], "command": "toggle_side_bar" },
 
 	// autopair for angle brakets:
+	// dont forget to add "auto_match_angle_brakets_enabled":true into base file.sublime-settings file (or at least into html file settings)
 	{ "keys": ["<"], "command": "insert_snippet", "args": {"contents": "<$0>"}, "context":
 		[
 			{ "key": "setting.auto_match_enabled", "operator": "equal", "operand": true },
