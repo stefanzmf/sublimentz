@@ -92,6 +92,8 @@
 	{ "keys": ["shift+ctrl+alt+right"], "command": "navigation_history_forward"},
 
 	// the default `ctrl+shift+a` shortcut is binded to align
-	{ "keys": ["ctrl+alt+enter"], "command": "expand_selection", "args": {"to": "tag"} }
+	{ "keys": ["ctrl+alt+enter"], "command": "expand_selection", "args": {"to": "tag"} },
 
+	{ "keys": ["alt+shift+`"], "command": "open_terminal" },
+	{ "keys": ["ctrl+alt+shift+`"], "command": "open_terminal_project_folder" }
 ]
