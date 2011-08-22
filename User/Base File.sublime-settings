@@ -24,7 +24,7 @@
 	"match_brackets_content": true,
 	"rulers":
 	[
-		0
+		0, 150
 	],
 	"shift_tab_unindent": true,
 	"show_active_indent_guides": true,
@@ -36,5 +36,7 @@
 	"use_tab_stops": true,
 	"wide_caret": true,
 	"word_separators": "./\\()\"'-:,.;<>~!@#$%^&*|+=[]{}`~?",
-	"word_wrap": false
+	"word_wrap": false,
+	"auto_match_angle_brakets_enabled":true,
+	"auto_match_tilda_enabled":true 
 }

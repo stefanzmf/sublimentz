@@ -36,8 +36,8 @@ and don't need to be repeated here. Anything listed here will take precedence, h
 	{ "keys": ["ctrl+alt+up"], "command": "scroll_lines", "args": {"amount": 1.0} },
 	{ "keys": ["ctrl+alt+down"], "command": "scroll_lines", "args": {"amount": -1.0} },
 
-	{ "keys": ["alt+super+up"], "command": "select_lines", "args": {"forward": false} },
-	{ "keys": ["alt+super+down"], "command": "select_lines", "args": {"forward": true} },
+	{ "keys": ["ctrl+shift+up"], "command": "select_lines", "args": {"forward": false} },
+	{ "keys": ["ctrl+shift+down"], "command": "select_lines", "args": {"forward": true} },
 
 	{ "keys": ["super+shift+["], "command": "prev_view" },
 	{ "keys": ["super+shift+]"], "command": "next_view" },
@@ -136,6 +136,9 @@ and don't need to be repeated here. Anything listed here will take precedence, h
 	{ "keys": ["super+shift+space"], "command": "expand_selection", "args": {"to": "scope"} },
 	{ "keys": ["ctrl+shift+m"], "command": "expand_selection", "args": {"to": "brackets"} },
 	{ "keys": ["ctrl+m"], "command": "move_to", "args": {"to": "brackets"} },
+	{ "keys": ["super+shift+a"], "command": "expand_selection", "args": {"to": "tag"} },
+
+	{ "keys": ["super+alt+."], "command": "close_tag" },
 
 	{ "keys": ["ctrl+q"], "command": "toggle_record_macro" },
 	{ "keys": ["ctrl+shift+q"], "command": "run_macro" },

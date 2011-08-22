@@ -24,7 +24,7 @@
 	"use_simple_full_screen": false,
 
 	// Valid values are "system", "enabled" and "disabled"
-	"overlay_scroll_bars": "system",
+	"overlay_scroll_bars": "enabled",
 
 	// List any packages to ignore here. When removing entries from this list,
 	// a restart may be required if the package contains plugins.

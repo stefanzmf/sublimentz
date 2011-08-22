@@ -165,6 +165,16 @@
                 ]
             },
             {
+                "caption": "Tag",
+                "id": "tag",
+                "children":
+                [
+                    { "command": "close_tag" },
+                    { "command": "expand_selection", "args": {"to": "tag"}, "caption": "Expand Selection to Tag" },
+                    { "command": "insert_snippet", "args": { "name": "Packages/XML/long-tag.sublime-snippet" }, "caption": "Wrap Selection With Tag" }
+                ]
+            },
+            {
                 "caption": "Mark",
                 "id": "mark",
                 "children":
@@ -252,7 +262,8 @@
                     { "command": "expand_selection", "args": {"to": "word"}, "caption": "Expand Selection to Word" },
                     { "command": "expand_selection_to_paragraph", "caption": "Expand Selection to Paragraph" },
                     { "command": "expand_selection", "args": {"to": "scope"}, "caption": "Expand Selection to Scope" },
-                    { "command": "expand_selection", "args": {"to": "brackets"}, "caption": "Expand Selection to Brackets" }
+                    { "command": "expand_selection", "args": {"to": "brackets"}, "caption": "Expand Selection to Brackets" },
+                    { "command": "expand_selection", "args": {"to": "tag"}, "caption": "Expand Selection to Tag" }
                 ]
             },
             { "caption": "-" },

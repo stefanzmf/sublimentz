@@ -1,5 +1,4 @@
 [
-
 	{ "keys": ["ctrl+alt+right"], "command": "next_view_in_stack" },
 	{ "keys": ["ctrl+alt+left"], "command": "prev_view_in_stack" },
 	{ "keys": ["ctrl+shift+tab"], "command": "prev_view" },
@@ -20,6 +19,18 @@
 
 	// quick set syntax
 	{ "keys": ["alt+1"], "command": "set_file_type", "args":{ "syntax" : "Packages/JavaScript/JavaScript.tmLanguage" } },
+	{ "keys": ["alt+1"], "command": "set_file_type", "args":{ "syntax" : "Packages/JavaScript/JavaScript.tmLanguage" },
+		"context":	[
+			{ "key": "selector", "operator": "equal", "operand": "source.js.jquery" },
+			{ "key": "selector", "operator": "not_equal", "operand": "source.js" }
+		]
+	},
+	{ "keys": ["alt+1"], "command": "set_file_type", "args":{ "syntax" : "Packages/jQuery-Sublime-Text-Package/Syntaxes/jQuery (JavaScript).tmLanguage" },
+		"context":	[ 
+			{ "key": "selector", "operator": "equal", "operand": "source.js" },
+			{ "key": "selector", "operator": "not_equal", "operand": "source.js.jquery" }
+		]
+	},
 	{ "keys": ["alt+2"], "command": "set_file_type", "args":{ "syntax" : "Packages/HTML/HTML.tmLanguage" } },
 	{ "keys": ["alt+3"], "command": "set_file_type", "args":{ "syntax" : "Packages/PHP/PHP.tmLanguage" } },
 	{ "keys": ["alt+4"], "command": "set_file_type", "args":{ "syntax" : "Packages/CSS/CSS.tmLanguage" } }, 
@@ -71,9 +82,57 @@
 	{ "keys": ["super+a"], "command": "convert_to_pascal" },
 
 	{ "keys": ["alt+f4"], "command": "hot_exit" },
+
+	{ "keys": ["alt+backspace"], "command": "run_macro_file", "args": {"file": "Packages/User/delete_subword.sublime-macro"} },
+	{ "keys": ["alt+delete"], "command": "run_macro_file", "args": {"file": "Packages/User/delete_subword_forward.sublime-macro"} },
+
 	{ "keys": ["alt+a"], "command": "replace_all", "args": {"close_panel": false}, "context": [{"key": "panel", "operand": "replace"}] },
 
 	{ "keys": ["shift+ctrl+alt+left"], "command": "navigation_history_back"},
-	{ "keys": ["shift+ctrl+alt+right"], "command": "navigation_history_forward"}
+	{ "keys": ["shift+ctrl+alt+right"], "command": "navigation_history_forward"},
 
+	// the default `ctrl+shift+a` shortcut is binded to align
+	{ "keys": ["ctrl+alt+enter"], "command": "expand_selection", "args": {"to": "tag"} },
+
+	{ "keys": ["alt+shift+`"], "command": "open_terminal" },
+	{ "keys": ["ctrl+alt+shift+`"], "command": "open_terminal_project_folder" },
+
+
+
+	// pairing ` ` quotes
+	// dont forget to add "auto_match_tilda_enabled":true into base file.sublime-settings file!
+	{ "keys": ["`"], "command": "insert_snippet", "args": {"contents": "`$0`"}, "context":
+		[
+			{ "key": "setting.auto_match_tilda_enabled", "operator": "equal", "operand": true },
+			{ "key": "setting.auto_match_enabled", "operator": "equal", "operand": true },
+			{ "key": "selection_empty", "operator": "equal", "operand": true, "match_all": true },
+			{ "key": "following_text", "operator": "regex_contains", "operand": "^(?:\t| |\\)|]|\\}|$)", "match_all": true },
+			{ "key": "preceding_text", "operator": "not_regex_contains", "operand": "[\"a-zA-Z0-9_]$", "match_all": true },
+			{ "key": "eol_selector", "operator": "not_equal", "operand": "string.quoted.double", "match_all": true }
+		]
+	},
+	{ "keys": ["`"], "command": "insert_snippet", "args": {"contents": "`${0:$SELECTION}`"}, "context":
+		[
+			{ "key": "setting.auto_match_tilda_enabled", "operator": "equal", "operand": true },
+			{ "key": "setting.auto_match_enabled", "operator": "equal", "operand": true },
+			{ "key": "selection_empty", "operator": "equal", "operand": false, "match_all": true }
+		]
+	},
+	{ "keys": ["`"], "command": "move", "args": {"by": "characters", "forward": true}, "context":
+		[
+			{ "key": "setting.auto_match_tilda_enabled", "operator": "equal", "operand": true },
+			{ "key": "setting.auto_match_enabled", "operator": "equal", "operand": true },
+			{ "key": "selection_empty", "operator": "equal", "operand": true, "match_all": true },
+			{ "key": "following_text", "operator": "regex_contains", "operand": "^`", "match_all": true }
+		]
+	},
+	{ "keys": ["backspace"], "command": "run_macro_file", "args": {"file": "Packages/Default/Delete Left Right.sublime-macro"}, "context":
+		[
+			{ "key": "setting.auto_match_tilda_enabled", "operator": "equal", "operand": true },
+			{ "key": "setting.auto_match_enabled", "operator": "equal", "operand": true },
+			{ "key": "selection_empty", "operator": "equal", "operand": true, "match_all": true },
+			{ "key": "preceding_text", "operator": "regex_contains", "operand": "`$", "match_all": true },
+			{ "key": "following_text", "operator": "regex_contains", "operand": "^`", "match_all": true }
+		]
+	}
 ]
