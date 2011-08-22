@@ -36,5 +36,7 @@
 	"use_tab_stops": true,
 	"wide_caret": true,
 	"word_separators": "./\\()\"'-:,.;<>~!@#$%^&*|+=[]{}`~?",
-	"word_wrap": false
+	"word_wrap": false,
+	"auto_match_angle_brakets_enabled":true,
+	"auto_match_tilda_enabled":true 
 }
