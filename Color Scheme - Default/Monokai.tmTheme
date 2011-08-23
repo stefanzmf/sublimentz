@@ -27,8 +27,19 @@
 				<string>#000000</string>
 				<key>selectionBorder</key>
 				<string>#222218</string>
-        <key>bracketHighlight</key>
-        <string>#BB0000</string>
+				<key>bracketHighlight</key>
+				<string>#BB0000</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Guide</string>
+			<key>scope</key>
+			<string>guide</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#EDF2E9</string>
 			</dict>
 		</dict>
 		<dict>
