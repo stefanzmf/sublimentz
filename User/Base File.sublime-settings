@@ -15,6 +15,11 @@
 	],
 	"font_size": 10,
 	"highlight_line": true,
+	"indent_guides_active_color_scope_name": "active_guide",
+	"indent_guides_color_scope_name": "comment",
+	"indent_guides_flush_with_gutter": true,
+	"indent_guides_flush_with_text": true,
+	"indent_guides_max_file_characters": 524288,
 	"line_padding_bottom": 1.5,
 	"line_padding_top": 1.5,
 	"match_brackets_angle": false,
@@ -26,6 +31,8 @@
 		150
 	],
 	"shift_tab_unindent": true,
+	"show_active_indent_guides": true,
+	"show_indent_guides": true,
 	"sort_css_on_save": false,
 	"tab_completion": true,
 	"tab_size": 2,
@@ -33,13 +40,5 @@
 	"use_tab_stops": false,
 	"wide_caret": true,
 	"word_separators": "./\\()\"'-:,.;<>~!@#$%^&*|+=[]{}`~?",
-	"word_wrap": false,
-
-	"show_indent_guides": true,
-	"show_active_indent_guides": true,
-	"indent_guides_flush_with_text": true,
-	"indent_guides_flush_with_gutter": true,
-	"indent_guides_max_file_characters": 524288,
-	"indent_guides_color_scope_name" : "comment",
-	"indent_guides_active_color_scope_name" : "active_guide"
+	"word_wrap": false
 }
