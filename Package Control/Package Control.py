@@ -468,7 +468,8 @@ class VcsUpgrader():
                 'C:\\Program Files\\Mercurial',
                 'C:\\Program Files (x86)\\Mercurial',
                 'C:\\Program Files (x86)\\TortoiseHg',
-                'C:\\Program Files\\TortoiseHg']
+                'C:\\Program Files\\TortoiseHg',
+                'C:\\cygwin\\bin']
         else:
             dirs = ['/usr/local/git/bin', '/usr/local/sbin',
                 '/usr/local/bin', '/usr/sbin',
@@ -488,11 +489,17 @@ class GitUpgrader(VcsUpgrader):
         if os.name == 'nt':
             name += '.exe'
         binary = self.find_binary(name)
+        if os.path.isdir(binary):
+            full_path = os.path.join(binary, name)
+            if os.path.exists(full_path):
+                binary = full_path
         if not binary:
-            sublime.error_message((__name__ + ': Unable to find %s. ' +
-                'Please set the git_binary setting in %s.') % (name,
-                os.path.join(sublime.packages_path(), 'User', __name__ +
-                '.sublime-settings')))
+            sublime.error_message(('%s: Unable to find %s. ' +
+                'Please set the git_binary setting by accessing the ' +
+                'Preferences > Package Settings > %s > ' +
+                'Settings – User menu entry. The Settings – Default entry ' +
+                'can be used for reference, but changes to that will be ' +
+                'overwritten upon next upgrade.') % (__name__, name, __name__))
             return False
         return binary
 
@@ -534,11 +541,17 @@ class HgUpgrader(VcsUpgrader):
         if os.name == 'nt':
             name += '.exe'
         binary = self.find_binary(name)
+        if os.path.isdir(binary):
+            full_path = os.path.join(binary, name)
+            if os.path.exists(full_path):
+                binary = full_path
         if not binary:
-            sublime.error_message((__name__ + ': Unable to find %s. ' +
-                'Please set the hg_binary setting in %s.') % (name,
-                os.path.join(sublime.packages_path(), 'User', __name__ +
-                '.sublime-settings')))
+            sublime.error_message(('%s: Unable to find %s. ' +
+                'Please set the hg_binary setting by accessing the ' +
+                'Preferences > Package Settings > %s > ' +
+                'Settings – User menu entry. The Settings – Default entry ' +
+                'can be used for reference, but changes to that will be ' +
+                'overwritten upon next upgrade.') % (__name__, name, __name__))
             return False
         return binary
 
@@ -831,6 +844,8 @@ class PackageManager():
             '.sublime-package'
         package_path = os.path.join(sublime.installed_packages_path(),
             package_filename)
+        pristine_package_path = os.path.join(os.path.dirname(
+            sublime.packages_path()), 'Pristine Packages', package_filename)
 
         package_bytes = self.download_url(url, 'Error downloading package.')
         if package_bytes == False:
@@ -859,7 +874,7 @@ class PackageManager():
                     sublime.packages_path()), 'Backup',
                     datetime.datetime.now().strftime('%Y%m%d%H%M%S'))
                 if not os.path.exists(backup_dir):
-                    os.mkdir(backup_dir)
+                    os.makedirs(backup_dir)
                 package_backup_dir = os.path.join(backup_dir, package_name)
                 shutil.copytree(package_dir, package_backup_dir)
             except (OSError, IOError) as (exception):
@@ -940,6 +955,10 @@ class PackageManager():
         # Here we delete the package file from the installed packages directory
         # since we don't want to accidentally overwrite user changes
         os.remove(package_path)
+        # We have to remove the pristine package too or else Sublime Text 2
+        # will silently delete the package
+        if os.path.exists(pristine_package_path):
+            os.remove(pristine_package_path)
 
         os.chdir(sublime.packages_path())
         return True

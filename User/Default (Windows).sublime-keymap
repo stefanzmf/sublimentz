@@ -97,8 +97,6 @@
 	{ "keys": ["alt+shift+`"], "command": "open_terminal" },
 	{ "keys": ["ctrl+alt+shift+`"], "command": "open_terminal_project_folder" },
 
-
-
 	// pairing ` ` quotes
 	// dont forget to add "auto_match_tilda_enabled":true into base file.sublime-settings file!
 	{ "keys": ["`"], "command": "insert_snippet", "args": {"contents": "`$0`"}, "context":
@@ -134,5 +132,9 @@
 			{ "key": "preceding_text", "operator": "regex_contains", "operand": "`$", "match_all": true },
 			{ "key": "following_text", "operator": "regex_contains", "operand": "^`", "match_all": true }
 		]
+	},
+
+	{
+		"keys":["ctrl+shift+g"], "command": "toggle_setting", "args": {"setting": "draw_indent_guides"}
 	}
 ]

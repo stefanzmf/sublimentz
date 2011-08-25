@@ -1,3 +1,9 @@
 {
-	"git_binary": "C:\\cygwin\\git\\bin"
+	"git_binary": "C:\\cygwin\\git\\bin\\git.exe",
+	"repositories":
+	[
+		"https://github.com/pyparadigm/SublimeTagmatcher",
+		"https://github.com/notanumber/gitst2.git",
+		"https://bitbucket.org/sublimator/editpreferences2/wiki/Home"
+	]
 }

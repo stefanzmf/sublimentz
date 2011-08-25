@@ -6,6 +6,7 @@ SublimeCodeIntel
 *History.sublime-settings
 numberIncrement
 User/UntitledFiles
+User/SFTP.sublime-settings
 
 ActionScript
 AppleScript
@@ -40,6 +41,7 @@ Regular Expressions
 RestructuredText
 Ruby
 Scala
+SFTP
 ShellScript
 SQL
 TCL

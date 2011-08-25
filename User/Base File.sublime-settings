@@ -1,6 +1,7 @@
 {
+	"auto_match_angle_brakets_enabled": true,
+	"auto_match_tilda_enabled": true,
 	"caret_style": "phase",
-	"codeintel_live": false,
 	"color_scheme": "Packages/Color Scheme - Default/Monokai.tmTheme",
 	"default_line_ending": "LF",
 	"delete_space_with_word": false,
@@ -14,17 +15,20 @@
 	],
 	"font_size": 10,
 	"highlight_line": true,
-	"highlight_trailing_spaces_max_file_size": 0,
 	"indent_guides_active_color_scope_name": "active_guide",
-	"indent_guides_flush_with_gutter": false,
+	"indent_guides_color_scope_name": "comment",
+	"indent_guides_flush_with_gutter": true,
 	"indent_guides_flush_with_text": true,
+	"indent_guides_max_file_characters": 524288,
 	"line_padding_bottom": 1.5,
 	"line_padding_top": 1.5,
 	"match_brackets_angle": false,
 	"match_brackets_content": true,
+	"mid_line_tabs": true,
 	"rulers":
 	[
-		0, 150
+		0,
+		150
 	],
 	"shift_tab_unindent": true,
 	"show_active_indent_guides": true,
@@ -33,10 +37,8 @@
 	"tab_completion": true,
 	"tab_size": 2,
 	"translate_tabs_to_spaces": false,
-	"use_tab_stops": true,
+	"use_tab_stops": false,
 	"wide_caret": true,
 	"word_separators": "./\\()\"'-:,.;<>~!@#$%^&*|+=[]{}`~?",
-	"word_wrap": false,
-	"auto_match_angle_brakets_enabled":true,
-	"auto_match_tilda_enabled":true 
+	"word_wrap": false
 }
