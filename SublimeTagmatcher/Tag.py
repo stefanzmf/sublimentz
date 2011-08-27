@@ -34,11 +34,11 @@ class TagCommand(sublime_plugin.EventListener):
       tag1['region'] = sublime.Region(tag1['begin'], tag1['end'] + 1)
 
       # Get 2nd Tag
-      tag2['end'] = tag2['match']
+      tag2['end'] = tag2['match'] - 1
       tag2['begin'] = tag2['end']
       while(view.substr(tag2['begin']) != '<'):
         tag2['begin'] = tag2['begin'] - 1
-      tag2['region'] = sublime.Region(tag2['begin'], tag2['end'])
+      tag2['region'] = sublime.Region(tag2['begin'], tag2['end'] + 1)
 
       # Highlight
       lightRegions = [tag1['region'], tag2['region']]

@@ -123,9 +123,9 @@
 	// color), "activeGuide" (also a color) and "guideWidth"
 	"draw_indent_guides": true,
 
-	// Set to false to draw the active indent guide in the same color as the
-	// other indent guides
-	"highlight_active_indent_guide": true,
+	// Controls how the indent guides are drawn, valid options are
+	// "draw_normal", "draw_active" and "stippled"
+	"indent_guide_options": ["draw_normal", "draw_active", "stippled"],
 
 	// Set to true to removing trailing white space on save
 	"trim_trailing_white_space_on_save": false,

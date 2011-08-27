@@ -364,7 +364,16 @@
         "id": "view",
         "children":
         [
-            { "command": "toggle_side_bar" },
+            {
+                "caption": "Side Bar",
+                "id": "side_bar",
+                "children":
+                [
+                    { "command": "toggle_side_bar" },
+                    { "caption": "-" },
+                    { "command": "toggle_show_open_files" }
+                ]
+            },
             { "command": "toggle_minimap" },
             { "command": "toggle_tabs" },
             { "command": "toggle_status_bar" },
