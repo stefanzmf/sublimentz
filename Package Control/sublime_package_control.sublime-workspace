@@ -4,6 +4,10 @@
 		"selected_items":
 		[
 			[
+				"pristin",
+				"pristine_package_path"
+			],
+			[
 				"overrid",
 				"override_action"
 			],
@@ -467,7 +471,7 @@
 			"file": "/home/will/.config/sublime-text-2/Packages/Package Control/Package Control.py",
 			"settings":
 			{
-				"buffer_size": 58213,
+				"buffer_size": 59507,
 				"line_ending": "Windows"
 			}
 		},
@@ -475,7 +479,7 @@
 			"file": "/home/will/.config/sublime-text-2/Packages/User/Package Control.sublime-settings",
 			"settings":
 			{
-				"buffer_size": 388,
+				"buffer_size": 484,
 				"line_ending": "Unix"
 			}
 		},
@@ -499,7 +503,15 @@
 			"file": "/home/will/.config/sublime-text-2/Packages/Package Control/package-metadata.json",
 			"settings":
 			{
-				"buffer_size": 136,
+				"buffer_size": 135,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/home/will/.config/sublime-text-2/Packages/ST2-GitHubinator/githubinator.py",
+			"settings":
+			{
+				"buffer_size": 2265,
 				"line_ending": "Unix"
 			}
 		}
@@ -507,9 +519,13 @@
 	"build_system": "Packages/Python/Python.sublime-build",
 	"command_palette":
 	{
-		"height": 69,
+		"height": 107,
 		"selected_items":
 		[
+			[
+				"insta",
+				"Package Control: Install Package"
+			],
 			[
 				"create",
 				"Package Control: Create Package File"
@@ -536,10 +552,6 @@
 			],
 			[
 				"inst",
-				"Package Control: Install Package"
-			],
-			[
-				"insta",
 				"Package Control: Install Package"
 			],
 			[
@@ -753,6 +765,7 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"pristine_package_path",
 			".sublime-settings",
 			"setting",
 			"print ",
@@ -879,8 +892,7 @@
 			"\\",
 			"'c72db590-52c3-dd11-ac64-001ec957401f'",
 			"'c534e823-56c3-dd11-ac64-001ec957401f'",
-			"'c22db590-52c3-dd11-ac64-001ec957401f'",
-			"'bb309da8-52c3-dd11-ac64-001ec957401f'"
+			"'c22db590-52c3-dd11-ac64-001ec957401f'"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -938,7 +950,7 @@
 	"groups":
 	[
 		{
-			"selected": 0,
+			"selected": 4,
 			"sheets":
 			[
 				{
@@ -946,15 +958,15 @@
 					"file": "/home/will/.config/sublime-text-2/Packages/Package Control/Package Control.py",
 					"settings":
 					{
-						"buffer_size": 58213,
+						"buffer_size": 59507,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								16467,
-								16467
+								34309,
+								34309
 							]
 						],
 						"settings":
@@ -964,7 +976,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0,
-						"translation.y": 0,
+						"translation.y": 15296,
 						"zoom_level": 1
 					},
 					"type": "text"
@@ -974,7 +986,7 @@
 					"file": "/home/will/.config/sublime-text-2/Packages/User/Package Control.sublime-settings",
 					"settings":
 					{
-						"buffer_size": 388,
+						"buffer_size": 484,
 						"regions":
 						{
 						},
@@ -1056,20 +1068,48 @@
 					"file": "/home/will/.config/sublime-text-2/Packages/Package Control/package-metadata.json",
 					"settings":
 					{
-						"buffer_size": 136,
+						"buffer_size": 135,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								136,
-								136
+								135,
+								135
 							]
 						],
 						"settings":
 						{
 							"syntax": "Packages/JavaScript/JSON.tmLanguage"
+						},
+						"translation.x": 0,
+						"translation.y": 0,
+						"zoom_level": 1
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "/home/will/.config/sublime-text-2/Packages/ST2-GitHubinator/githubinator.py",
+					"settings":
+					{
+						"buffer_size": 2265,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								498,
+								646
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0,
 						"translation.y": 0,
@@ -1111,10 +1151,6 @@
 		]
 	},
 	"menu_visible": true,
-	"output.sftp":
-	{
-		"height": 110
-	},
 	"replace":
 	{
 		"height": 62
@@ -1646,12 +1682,24 @@
 		"selected_items":
 		[
 			[
-				"tor",
-				"/home/will/.config/sublime-text-2/Packages/Tortoise/sublime_tortoise.sublime-project"
+				"scaff",
+				"/home/will/svn/scaffolder.imarc.net.sublime-project"
+			],
+			[
+				"gal",
+				"/home/will/svn/galengateway.com.sublime-project"
 			],
 			[
 				"wbo",
 				"/home/will/hg/wbond.net/wbond.net.sublime-project"
+			],
+			[
+				"wbod",
+				"/home/will/hg/wbond.net/wbond.net.sublime-project"
+			],
+			[
+				"tor",
+				"/home/will/.config/sublime-text-2/Packages/Tortoise/sublime_tortoise.sublime-project"
 			],
 			[
 				"wb",
@@ -1660,10 +1708,6 @@
 			[
 				"nas",
 				"/home/will/svn/nasuni.com.sublime-project"
-			],
-			[
-				"wbod",
-				"/home/will/hg/wbond.net/wbond.net.sublime-project"
 			],
 			[
 				"sftp",
@@ -1676,10 +1720,6 @@
 			[
 				"wbd",
 				"/home/will/hg/wbond.net/wbond.net.sublime-project"
-			],
-			[
-				"gal",
-				"/home/will/svn/galengateway.com.sublime-project"
 			],
 			[
 				"ali",
