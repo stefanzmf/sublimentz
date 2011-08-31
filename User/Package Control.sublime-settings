@@ -2,6 +2,9 @@
 	"git_binary": "C:\\cygwin\\git\\bin\\git.exe",
 	"repositories":
 	[
-		"https://github.com/pyparadigm/SublimeTagmatcher"
+		"https://github.com/pyparadigm/SublimeTagmatcher",
+		"https://github.com/notanumber/gitst2",
+		"https://github.com/pyparadigm/SublimeBrackets",
+		"https://github.com/ehamiter/ST2-Color-Console"
 	]
 }

@@ -136,5 +136,55 @@
 
 	{
 		"keys":["ctrl+shift+g"], "command": "toggle_setting", "args": {"setting": "draw_indent_guides"}
+	},
+
+	// zen coding settings
+	{
+		"keys": [
+			"escape", "escape"
+		], 
+		"args": {}, 
+		"command": "zen_as_you_type", 
+		"context": [
+			{
+				"operand": "source.css - source.css.embedded, text.xml, text.html -source -meta.tag, meta.scope.between-tag-pair.html -source", 
+				"operator": "equal", 
+				"match_all": true, 
+				"key": "selector"
+			}
+		]
+	},
+	{
+		"keys": [
+			"escape", "escape"
+		], 
+		"command": "wrap_zen_as_you_type", 
+		"context": [
+			{
+				"operand": "text.html meta.tag - string - meta.scope.between-tag-pair.html",
+				"operator": "equal", 
+				"match_all": true, 
+				"key": "selector"
+			}
+		]
+	},
+	{
+		"keys": [
+			"escape", "escape"
+		], 
+		"command": "wrap_zen_as_you_type", 
+		"context": [
+			{
+				"operand"  : false,
+				"key"      : "selection_empty",
+				"match_all": true,
+				"operator" : "equal"
+			},
+			{
+				"key"      : "num_selections",
+				"operand"  : 1,
+				"operator" : "equal"
+			}
+		]
 	}
 ]

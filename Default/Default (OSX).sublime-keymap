@@ -202,6 +202,7 @@ and don't need to be repeated here. Anything listed here will take precedence, h
 	},
 
 	{ "keys": ["super+alt+p"], "command": "show_scope_name" },
+	{ "keys": ["ctrl+shift+p"], "command": "show_scope_name" },
 
 	{ "keys": ["super+b"], "command": "build" },
 	{ "keys": ["f7"], "command": "build" },

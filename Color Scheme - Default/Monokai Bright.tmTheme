@@ -9,8 +9,6 @@
 		<dict>
 			<key>settings</key>
 			<dict>
-	      <key>brackets</key>
-	      <string>#FF0000</string>
 				<key>background</key>
 				<string>#272822</string>
 				<key>caret</key>
@@ -33,6 +31,8 @@
 				<string>#FFE792</string>
 				<key>findHighlightForeground</key>
 				<string>#000000</string>
+				<key>activeGuide</key>
+				<string>#9D550FB0</string>
 			</dict>
 		</dict>
 		<dict>
