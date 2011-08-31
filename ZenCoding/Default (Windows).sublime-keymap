@@ -1,6 +1,6 @@
 [{
   "keys": [
-    "ctrl+alt+shift+h"
+    "ctrl+alt+shift+z", "ctrl+alt+shift+h"
   ], 
   "args": {
     "doctype": "xt"
@@ -200,7 +200,7 @@
 }, 
 {
     "keys": [
-      "ctrl+shift+a"
+      "ctrl+shift+z", "ctrl+shift+a" 
     ], 
     "args": {
       "action": "match_pair_tagname"
@@ -542,7 +542,7 @@
     }
   ]
 }, 
-{
+/*{
   "keys": [
     "alt+shift+w"
   ], 
@@ -556,7 +556,7 @@
       "key": "selector"
     }
   ]
-},
+},*/
 {
   "keys": [
     "#"
@@ -638,7 +638,6 @@
     
   ]
 },
-{},
   {
       "keys"    : ["tab"],
       "__doc__" : "Insert a completion when there is a snippet active as long as there's a valid abbrevation that doesn't end in a full stop.",
