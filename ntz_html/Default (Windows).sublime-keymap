@@ -14,17 +14,20 @@
 	{
 		"keys"   :	["ctrl+b"], 
 		"command":	"insert_snippet",
-		"args"   :	{ "contents": "<strong>${1:$SELECTION}</strong>" }
+		"args"   :	{ "contents": "<strong>${1:$SELECTION}</strong>" },
+		"context":	[ { "key": "selector", "operator": "equal", "operand": "text.html" } ]
 	},
 	{
 		"keys"   :	["ctrl+i"], 
 		"command":	"insert_snippet",
-		"args"   :	{ "contents": "<em>${1:$SELECTION}</em>" }
+		"args"   :	{ "contents": "<em>${1:$SELECTION}</em>" },
+		"context":	[ { "key": "selector", "operator": "equal", "operand": "text.html" } ]
 	},
 	{
 		"keys"   :	["ctrl+alt+a"], 
 		"command":	"insert_snippet",
-		"args"   :	{ "contents": "<a href=\"${1:#}\">${2:$SELECTION}</a>" }
+		"args"   :	{ "contents": "<a href=\"${1:#}\">${2:$SELECTION}</a>" },
+		"context":	[ { "key": "selector", "operator": "equal", "operand": "text.html" } ]
 	},
 	// in html/php files there is no way of toggling the sidebar using default shortcut
 	{ "keys": ["ctrl+shift+b"], "command": "toggle_side_bar" },
@@ -81,6 +84,56 @@
 			{ "key": "following_text", "operator": "regex_contains", "operand": "^>", "match_all": true },
 			{ "key": "selector", "operator": "equal", "operand": "text.html" },
 			{ "key": "selector", "operator": "not_equal", "operand": "source.php" }
+		]
+	},
+
+	// zen coding settings
+	{
+		"keys": [
+			"super+enter"
+		], 
+		"args": {}, 
+		"command": "zen_as_you_type", 
+		"context": [
+			{
+				"operand": "source.css - source.css.embedded, text.xml, text.html -source -meta.tag, meta.scope.between-tag-pair.html -source", 
+				"operator": "equal", 
+				"match_all": true, 
+				"key": "selector"
+			}
+		]
+	},
+	{
+		"keys": [
+			"super+enter"
+		], 
+		"command": "wrap_zen_as_you_type", 
+		"context": [
+			{
+				"operand": "text.html meta.tag - string - meta.scope.between-tag-pair.html",
+				"operator": "equal", 
+				"match_all": true, 
+				"key": "selector"
+			}
+		]
+	},
+	{
+		"keys": [
+			"super+enter"
+		], 
+		"command": "wrap_zen_as_you_type", 
+		"context": [
+			{
+				"operand"  : false,
+				"key"      : "selection_empty",
+				"match_all": true,
+				"operator" : "equal"
+			},
+			{
+				"key"      : "num_selections",
+				"operand"  : 1,
+				"operator" : "equal"
+			}
 		]
 	}
 

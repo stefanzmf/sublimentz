@@ -1,14 +1,4 @@
-[	
-	{
-		"caption": "SFTP",
-		"children":
-		[
-			{ "command"	: "sftp_file" },
-			{ "command"	: "sftp_vcs_changed_files" },
-			{ "command"	: "sftp_show_panel" },
-			{ "command"	: "sftp_cancel_upload" }
-		]
-	},
+[
 	{ "caption": "-" },
 	{ "command":  "convert_to_snake", "caption"		:  "Convert Case (underscore)" },
 	{ "command":  "convert_to_camel", "caption"		:  "Convert Case (CamelCase)" },

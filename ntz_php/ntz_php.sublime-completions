@@ -1,0 +1,7 @@
+{
+	"scope": "source.php",
+	"completions":
+	[
+		{ "trigger": "foreach|each", "contents": "foreach ( \\$${1:variable} as \\$${2:key}${3: => \\$${4:value}} ) {\n${0:# code...}\n}" }
+	]
+}

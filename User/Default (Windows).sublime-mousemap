@@ -1,0 +1,21 @@
+[
+//	{ "button": "button1", "modifiers": ["ctrl", "alt"], "command": "show_overlay", "args": {"overlay": "goto", "text": "@"}  },
+
+	{ "button": "scroll_down", "modifiers": ["ctrl"], "command": "focus_group", "args": { "group": 0 } },
+	{ "button": "scroll_up", "modifiers": ["ctrl"], "command": "focus_group", "args": { "group": 1 } },
+
+	{ "button": "scroll_down", "modifiers": ["ctrl"], "command": "set_layout",
+		"args":
+			{
+				"cols": [0.0, 0.05, 2.0],
+				"rows": [0.0, 1.0],
+				"cells": [[0, 0, 1, 1], [1, 0, 2, 1]]
+			} },
+	{ "button": "scroll_up", "modifiers": ["ctrl"], "command": "set_layout",
+		"args":
+			{
+				"cols": [0.0, 0.95, 2.0],
+				"rows": [0.0, 1.0],
+				"cells": [[0, 0, 1, 1], [1, 0, 2, 1]]
+			} }
+]

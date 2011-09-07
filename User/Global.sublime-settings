@@ -3,7 +3,9 @@
 	[
 		"Vintage",
 		"ASP",
-		"ActionScript"
+		"ActionScript",
+		"SublimeBrackets",
+		"SublimeTagmatcher"
 	],
 	"new_window_settings":
 	{

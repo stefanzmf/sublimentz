@@ -13,7 +13,7 @@
 - Change the Scope, Outline, and Icon settings.
 - Save the file and your options should take effect immediately.
 
-![Example Screenshot](https://github.com/pyparadigm/SublimeTagmatcher/raw/master/ssoptions.png)
+![SS Options](https://github.com/pyparadigm/SublimeTagmatcher/raw/master/ssoptions.png)
 
 # Screenshot
-![Options Screenshot](https://github.com/pyparadigm/SublimeTagmatcher/raw/master/ssexample.png)
+![SS Example](https://github.com/pyparadigm/SublimeTagmatcher/raw/master/ssexample.png)
