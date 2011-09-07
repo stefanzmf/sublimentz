@@ -27,19 +27,8 @@
 				<string>#000000</string>
 				<key>selectionBorder</key>
 				<string>#222218</string>
-				<key>bracketHighlight</key>
-				<string>#BB0000</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
-			<string>Guide</string>
-			<key>scope</key>
-			<string>guide</string>
-			<key>settings</key>
-			<dict>
-				<key>foreground</key>
-				<string>#EDF2E9</string>
+				<key>activeGuide</key>
+				<string>#86b32b</string>
 			</dict>
 		</dict>
 		<dict>
@@ -223,7 +212,6 @@
 				<string>#A6E22E</string>
 			</dict>
 		</dict>
-
 		<dict>
 			<key>name</key>
 			<string>Library function</string>
@@ -358,7 +346,6 @@
 				<string>#E6DB74</string>
 			</dict>
 		</dict>
-
 	</array>
 	<key>uuid</key>
 	<string>D8D5E82E-3D5B-46B5-B38E-8C841C21347D</string>

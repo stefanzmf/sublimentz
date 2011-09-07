@@ -1,4 +1,20 @@
 [
+		{
+		"keys"   :	["tab"], 
+		"command":	"insert_snippet",
+		"args"   :	{ "contents": "\n" },
+		"context":	[ 
+			{ "key": "selector", "operator": "equal", "operand": "source.css" },
+			{ "key": "preceding_text", "operator": "regex_contains", "operand": ";", "match_all": true },
+			{ "key": "preceding_text", "operator": "not_regex_contains", "operand": "\\s", "match_all": true }
+		]
+	},
+	{ "keys": ["ctrl+alt+space"], "command": "alternative_autocomplete", "context":
+		[
+			{ "key": "num_selections", "operator": "equal", "operand": 1 },
+			{ "key": "overlay_visible", "operator": "equal", "operand": false }
+		]
+	},
 	{ "keys": ["ctrl+alt+right"], "command": "next_view_in_stack" },
 	{ "keys": ["ctrl+alt+left"], "command": "prev_view_in_stack" },
 	{ "keys": ["ctrl+shift+tab"], "command": "prev_view" },
@@ -136,5 +152,30 @@
 
 	{
 		"keys":["ctrl+shift+g"], "command": "toggle_setting", "args": {"setting": "draw_indent_guides"}
-	}
+	},
+	
+	{ "keys": ["ctrl+alt+1"], "command": "focus_group", "args": { "group": 0 } },
+	{ "keys": ["ctrl+alt+2"], "command": "focus_group", "args": { "group": 1 } },
+	{ "keys": ["ctrl+alt+3"], "command": "focus_group", "args": { "group": 2 } },
+	{ "keys": ["ctrl+alt+4"], "command": "focus_group", "args": { "group": 3 } },
+	{
+		"keys": ["ctrl+alt+shift+2"],
+		"command": "set_layout",
+		"args":
+			{
+				"cols": [0.0, 0.05, 2.0],
+				"rows": [0.0, 1.0],
+				"cells": [[0, 0, 1, 1], [1, 0, 2, 1]]
+			}
+	 },
+		{
+		"keys": ["ctrl+alt+shift+1"],
+		"command": "set_layout",
+		"args":
+			{
+				"cols": [0.0, 0.95, 2.0],
+				"rows": [0.0, 1.0],
+				"cells": [[0, 0, 1, 1], [1, 0, 2, 1]]
+			}
+	 }
 ]
