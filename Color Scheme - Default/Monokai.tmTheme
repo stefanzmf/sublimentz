@@ -28,7 +28,22 @@
 				<key>selectionBorder</key>
 				<string>#222218</string>
 				<key>activeGuide</key>
-				<string>#86b32b</string>
+				<string>#9D550FB0</string>
+
+				<key>bracketsForeground</key>
+				<string>#00FF00</string>
+
+				<key>bracketsOptions</key>
+				<string>foreground underline</string>
+
+				<key>bracketsContentForeground</key>
+				<string>#00FF00</string>
+
+				<key>bracketsContentsOptions</key>
+				<string>underline</string>
+
+				<key>tagsOptions</key>
+				<string>underline</string>
 			</dict>
 		</dict>
 		<dict>
