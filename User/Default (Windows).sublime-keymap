@@ -55,8 +55,9 @@
 	{ "keys":	["alt+w"], "command":	"toggle_single_line" }, // basically this work on css
 
 	{ "keys": ["ctrl+shift+t"], "command": "open_recently_closed_file", "args": {"show_quick_panel": true}},
-	{ "keys": ["ctrl+alt+shift+t"], "command": "open_recently_closed_file" },
+	//{ "keys": ["ctrl+alt+shift+t"], "command": "open_recently_closed_file" },
 	{ "keys": ["ctrl+t"], "command": "new_file" },
+	{ "keys": ["ctrl+alt+shift+n"], "command": "new_window" },
 
 	// switching tab quickly
 	{ "keys": ["ctrl+1"], "command": "select_by_index", "args": { "index": 0 } },

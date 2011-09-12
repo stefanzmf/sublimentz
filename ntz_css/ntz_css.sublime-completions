@@ -3,11 +3,11 @@
 	"completions":
 	[	
 
-		{ "trigger": "l|left", "contents": "left:$0;" },
-		{ "trigger": "r|right", "contents": "right:$0;" },
-		{ "trigger": "t|top", "contents": "top:$0;" },
-		{ "trigger": "b|bottom", "contents": "bottom:$0;" },
-		{ "trigger": "z|z-index", "contents": "z-index:$0;" },
+		{ "trigger": "l|left", "contents": "left:$1;$0" },
+		{ "trigger": "r|right", "contents": "right:$1;$0" },
+		{ "trigger": "t|top", "contents": "top:$1;$0" },
+		{ "trigger": "b|bottom", "contents": "bottom:$1;$0" },
+		{ "trigger": "z|z-index", "contents": "z-index:$1;$0" },
 
 		{ "trigger": "bo|bor", "contents": "border:${1:$2px ${3:solid} #${4:000}};$0" },
 		{ "trigger": "bb", "contents": "border-bottom:${1:$2px ${3:solid} #${4:000}};$0" },
