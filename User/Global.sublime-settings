@@ -6,7 +6,8 @@
 		"SublimeBrackets",
 		"SublimeTagmatcher",
 		"ActionScript",
-		"SCSS"
+		"SCSS",
+		"SublimeCodeIntel"
 	],
 	"new_window_settings":
 	{
