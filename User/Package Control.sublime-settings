@@ -1,5 +1,5 @@
 {
-	"auto_upgrade_last_run": 1315381070,
+	"auto_upgrade_last_run": 1315994617,
 	"git_binary": "C:\\cygwin\\git\\bin\\git.exe",
 	"repositories":
 	[
@@ -7,6 +7,7 @@
 		"https://github.com/notanumber/gitst2",
 		"https://github.com/pyparadigm/SublimeBrackets",
 		"https://github.com/ehamiter/ST2-Color-Console",
-		"https://github.com/jdc0589/JsFormat"
+		"https://github.com/jdc0589/JsFormat",
+		"https://bitbucket.org/scottbessler/sublimetextcaseconversion"
 	]
 }

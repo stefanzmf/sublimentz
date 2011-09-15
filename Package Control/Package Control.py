@@ -45,14 +45,14 @@ class PanelPrinter():
             self.write('Package Control Messages\n========================')
 
     def show(self):
-        sublime.set_timeout(self.show_callback, 0)
+        sublime.set_timeout(self.show_callback, 10)
 
     def show_callback(self):
         self.window.run_command("show_panel", {"panel": "output." + self.name})
 
     def write(self, string):
         callback = lambda: self.write_callback(string)
-        sublime.set_timeout(callback, 0)
+        sublime.set_timeout(callback, 10)
 
     def write_callback(self, string):
         self.init()
@@ -760,8 +760,7 @@ class PackageManager():
         repositories = self.list_repositories()
         packages = {}
         downloaders = []
-        pending_downloaders = []
-        domain_downloaders = {}
+        grouped_downloaders = {}
 
         # Repositories are run in reverse order so that the ones first
         # on the list will overwrite those last on the list
@@ -780,29 +779,34 @@ class PackageManager():
                     self.settings.get('package_name_map', {}), repo)
                 domain = re.sub('^https?://[^/]*?(\w+\.\w+)($|/.*$)', '\\1',
                     repo)
+                if not grouped_downloaders.get(domain):
+                    grouped_downloaders[domain] = []
+                grouped_downloaders[domain].append(downloader)
+
+        def schedule(downloader, delay):
+            downloader.has_started = False
+            def inner():
+                downloader.start()
+                downloader.has_started = True
+            sublime.set_timeout(inner, delay)
+
+        for domain_downloaders in grouped_downloaders.values():
+            for i in range(len(domain_downloaders)):
+                downloader = domain_downloaders[i]
                 downloaders.append(downloader)
-                pending_downloaders.append([domain, downloader])
+                schedule(downloader, i * 150)
 
-        # Wait until all of the downloaders have completed
-        while True:
-            # Ensure there is only one downloader per domain at a time
-            for pending in pending_downloaders:
-                can_start = not pending[0] in domain_downloaders
-                can_start = can_start or \
-                    not domain_downloaders[pending[0]].is_alive()
-                if can_start:
-                    domain_downloaders[pending[0]] = pending[1]
-                    pending[1].start()
-                    pending_downloaders.remove(pending)
+        complete = []
 
-            is_alive = len(pending_downloaders) > 0
-            for downloader in downloaders:
-                is_alive = downloader.is_alive() or is_alive
-            if not is_alive:
-                break
-            time.sleep(0.01)
+        while downloaders:
+            downloader = downloaders.pop()
+            if downloader.has_started:
+                downloader.join()
+                complete.append(downloader)
+            else:
+                downloaders.insert(0, downloader)
 
-        for downloader in downloaders:
+        for downloader in complete:
             repository_packages = downloader.packages
             if repository_packages == False:
                 continue
@@ -1267,57 +1271,59 @@ class PackageInstaller():
             vcs = None
             package_dir = self.manager.get_package_dir(package)
             settings = self.manager.settings
-            if os.path.exists(os.path.join(sublime.packages_path(), package,
-                    '.git')):
-                vcs = 'git'
-                incoming = GitUpgrader(settings.get('git_binary'),
-                    settings.get('git_update_command'), package_dir,
-                    settings.get('cache_length')).incoming()
-            elif os.path.exists(os.path.join(sublime.packages_path(), package,
-                    '.hg')):
-                vcs = 'hg'
-                incoming = HgUpgrader(settings.get('hg_binary'),
-                    settings.get('hg_update_command'), package_dir,
-                    settings.get('cache_length')).incoming()
-
-            if installed:
-                if not installed_version:
-                    if vcs:
-                        if incoming:
-                            action = 'pull'
-                            extra = ' with ' + vcs
-                        else:
-                            action = 'none'
-                            extra = ''
-                    else:
-                        action = 'overwrite'
-                        extra = ' %s with %s' % (installed_version_name,
-                            new_version)
-                else:
-                    res = self.manager.compare_versions(
-                        installed_version, download['version'])
-                    if res < 0:
-                        action = 'upgrade'
-                        extra = ' to %s from %s' % (new_version,
-                            installed_version_name)
-                    elif res > 0:
-                        action = 'downgrade'
-                        extra = ' to %s from %s' % (new_version,
-                            installed_version_name)
-                    else:
-                        action = 'reinstall'
-                        extra = ' %s' % new_version
-            else:
-                action = 'install'
-                extra = ' %s' % new_version
-            extra += ';'
-
-            if action in ignore_actions:
-                continue
 
             if override_action:
                 action = override_action
                 extra = ''
+
+            else:
+                if os.path.exists(os.path.join(sublime.packages_path(), package,
+                        '.git')):
+                    vcs = 'git'
+                    incoming = GitUpgrader(settings.get('git_binary'),
+                        settings.get('git_update_command'), package_dir,
+                        settings.get('cache_length')).incoming()
+                elif os.path.exists(os.path.join(sublime.packages_path(), package,
+                        '.hg')):
+                    vcs = 'hg'
+                    incoming = HgUpgrader(settings.get('hg_binary'),
+                        settings.get('hg_update_command'), package_dir,
+                        settings.get('cache_length')).incoming()
+
+                if installed:
+                    if not installed_version:
+                        if vcs:
+                            if incoming:
+                                action = 'pull'
+                                extra = ' with ' + vcs
+                            else:
+                                action = 'none'
+                                extra = ''
+                        else:
+                            action = 'overwrite'
+                            extra = ' %s with %s' % (installed_version_name,
+                                new_version)
+                    else:
+                        res = self.manager.compare_versions(
+                            installed_version, download['version'])
+                        if res < 0:
+                            action = 'upgrade'
+                            extra = ' to %s from %s' % (new_version,
+                                installed_version_name)
+                        elif res > 0:
+                            action = 'downgrade'
+                            extra = ' to %s from %s' % (new_version,
+                                installed_version_name)
+                        else:
+                            action = 'reinstall'
+                            extra = ' %s' % new_version
+                else:
+                    action = 'install'
+                    extra = ' %s' % new_version
+                extra += ';'
+
+                if action in ignore_actions:
+                    continue
 
             package_entry.append(info.get('description', 'No description ' + \
                 'provided'))
@@ -1369,7 +1375,7 @@ class InstallPackageThread(threading.Thread, PackageInstaller):
                     'available for installation.')
                 return
             self.window.show_quick_panel(self.package_list, self.on_done)
-        sublime.set_timeout(show_quick_panel, 0)
+        sublime.set_timeout(show_quick_panel, 10)
 
 
 class DiscoverPackagesCommand(sublime_plugin.WindowCommand):
@@ -1394,7 +1400,7 @@ class DiscoverPackagesThread(threading.Thread, PackageInstaller):
                     'available for discovery.')
                 return
             self.window.show_quick_panel(self.package_list, self.on_done)
-        sublime.set_timeout(show_quick_panel, 0)
+        sublime.set_timeout(show_quick_panel, 10)
 
     def on_done(self, picked):
         if picked == -1:
@@ -1404,7 +1410,7 @@ class DiscoverPackagesThread(threading.Thread, PackageInstaller):
         def open_url():
             sublime.active_window().run_command('open_url',
                 {"url": packages.get(package_name).get('url')})
-        sublime.set_timeout(open_url, 0)
+        sublime.set_timeout(open_url, 10)
 
 
 class UpgradePackageCommand(sublime_plugin.WindowCommand):
@@ -1430,7 +1436,7 @@ class UpgradePackageThread(threading.Thread, PackageInstaller):
                     'ready for upgrade.')
                 return
             self.window.show_quick_panel(self.package_list, self.on_done)
-        sublime.set_timeout(show_quick_panel, 0)
+        sublime.set_timeout(show_quick_panel, 10)
 
     def on_done(self, picked):
         if picked == -1:
@@ -1523,7 +1529,7 @@ class ListPackagesThread(threading.Thread, ExistingPackagesCommand):
                     'to list.')
                 return
             self.window.show_quick_panel(self.package_list, self.on_done)
-        sublime.set_timeout(show_quick_panel, 0)
+        sublime.set_timeout(show_quick_panel, 10)
 
     def on_done(self, picked):
         if picked == -1:
@@ -1532,7 +1538,7 @@ class ListPackagesThread(threading.Thread, ExistingPackagesCommand):
         def open_dir():
             self.window.run_command('open_dir',
                 {"dir": os.path.join(sublime.packages_path(), package_name)})
-        sublime.set_timeout(open_dir, 0)
+        sublime.set_timeout(open_dir, 10)
 
 
 class RemovePackageCommand(sublime_plugin.WindowCommand,
@@ -1583,7 +1589,7 @@ class RemovePackageThread(threading.Thread):
             settings = sublime.load_settings('Global.sublime-settings')
             settings.set('ignored_packages', self.ignored_packages)
             sublime.save_settings('Global.sublime-settings')
-        sublime.set_timeout(unignore_package, 0)
+        sublime.set_timeout(unignore_package, 10)
 
 
 class AddRepositoryChannelCommand(sublime_plugin.WindowCommand):
@@ -1750,7 +1756,7 @@ class PackageCleanup(threading.Thread):
                 shutil.rmtree(package_dir)
                 print __name__ + ': Removed old directory for package %s' % \
                     path
-        sublime.set_timeout(lambda: AutomaticUpgrader().start(), 0)
+        sublime.set_timeout(lambda: AutomaticUpgrader().start(), 10)
 
 
 PackageCleanup().start()
