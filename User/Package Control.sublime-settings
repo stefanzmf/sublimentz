@@ -1,5 +1,5 @@
 {
-	"auto_upgrade_last_run": 1315994617,
+	"auto_upgrade_last_run": 1317011622.0,
 	"git_binary": "C:\\cygwin\\git\\bin\\git.exe",
 	"repositories":
 	[
@@ -8,6 +8,7 @@
 		"https://github.com/pyparadigm/SublimeBrackets",
 		"https://github.com/ehamiter/ST2-Color-Console",
 		"https://github.com/jdc0589/JsFormat",
-		"https://bitbucket.org/scottbessler/sublimetextcaseconversion"
+		"https://bitbucket.org/scottbessler/sublimetextcaseconversion",
+		"https://github.com/facelessuser/BracketHighlighter"
 	]
 }

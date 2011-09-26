@@ -37,15 +37,15 @@
 				<key>bracketsForeground</key>
 				<string>#F8F8F2A5</string>
 				<key>bracketsOptions</key>
-				<string>foreground underline</string>
+				<string>underline</string>
 
 				<key>bracketContentsForeground</key>
 				<string>#F8F8F2A5</string>
 				<key>bracketContentsOptions</key>
-				<string>foreground underline</string>
+				<string>underline</string>
 
 				<key>tagsOptions</key>
-				<string>foreground underline</string>
+				<string>stippled_underline</string>
 			</dict>
 		</dict>
 		<dict>

@@ -113,7 +113,6 @@ def make_range(opening_tag=None, closing_tag=None, ix=0):
 		else:
 			start_ix = opening_tag.end
 			end_ix = closing_tag.start
-	
 	return start_ix, end_ix
 
 def save_match(opening_tag=None, closing_tag=None, ix=0):
@@ -131,22 +130,22 @@ def save_match(opening_tag=None, closing_tag=None, ix=0):
 	
 	return last_match['start_ix'] != -1 and (last_match['start_ix'], last_match['end_ix']) or (None, None)
 
-def match(html, start_ix, mode='xhtml'):
+def match(html, start_ix, mode='xhtml', use_threshold=True, search_thresh=2000):
 	"""
 	Search for matching tags in <code>html</code>, starting from
 	<code>start_ix</code> position. The result is automatically saved
 	in <code>last_match</code> property
 	"""
-	return _find_pair(html, start_ix, mode, save_match)
+	return _find_pair(html, start_ix, use_threshold, search_thresh, mode, save_match)
 
-def find(html, start_ix, mode='xhtml'):
+def find(html, start_ix, mode='xhtml', use_threshold=True, search_thresh=2000):
 	"""
 	Search for matching tags in <code>html</code>, starting from
 	<code>start_ix</code> position.
 	"""
-	return _find_pair(html, start_ix, mode)
+	return _find_pair(html, start_ix, use_threshold, search_thresh, mode)
 
-def get_tags(html, start_ix, mode='xhtml'):
+def get_tags(html, start_ix, mode='xhtml', use_threshold=True, search_thresh=2000):
 	"""
 	Search for matching tags in <code>html</code>, starting from 
 	<code>start_ix</code> position. The difference between 
@@ -155,10 +154,15 @@ def get_tags(html, start_ix, mode='xhtml'):
 	and returns array of opening and closing tags
 	This method is generally used for lookups
 	"""
-	return _find_pair(html, start_ix, mode, lambda op, cl=None, ix=0: (op, cl) if op and op.type == 'tag' else None)
+	return _find_pair(html, start_ix, use_threshold, search_thresh, mode, lambda op, cl=None, ix=0: (op, cl) if op and op.type == 'tag' else None)
 
+def is_tag(substr):
+	if(re.match(start_tag,substr) or re.match(end_tag,substr)):
+		return True
+	else:
+		return False
 
-def _find_pair(html, start_ix, mode='xhtml', action=make_range):
+def _find_pair(html, start_ix, use_threshold, search_threshold, mode='xhtml', action=make_range):
 	"""
 	Search for matching tags in <code>html</code>, starting from
 	<code>start_ix</code> position
@@ -178,6 +182,8 @@ def _find_pair(html, start_ix, mode='xhtml', action=make_range):
 
 	forward_stack = []
 	backward_stack = []
+	opening_name = None
+	closing_name = None
 	opening_tag = None
 	closing_tag = None
 	html_len = len(html)
@@ -203,6 +209,10 @@ def _find_pair(html, start_ix, mode='xhtml', action=make_range):
 #    find opening tag
 	ix = start_ix - 1
 	while ix >= 0:
+		if (use_threshold == True):
+			search_threshold -= 1
+			if(search_threshold < 0):
+				return action(None)
 		ch = html[ix]
 		if ch == '<':
 			check_str = html[ix:]
@@ -211,6 +221,7 @@ def _find_pair(html, start_ix, mode='xhtml', action=make_range):
 				tmp_tag = Tag(m, ix)
 				if tmp_tag.start < start_ix and tmp_tag.end > start_ix: # direct hit on searched closing tag
 					closing_tag = tmp_tag
+					closing_name = tmp_tag.name
 				else:
 					backward_stack.append(tmp_tag)
 			else:
@@ -224,6 +235,7 @@ def _find_pair(html, start_ix, mode='xhtml', action=make_range):
 						backward_stack.pop()
 					else: # found nearest unclosed tag
 						opening_tag = tmp_tag
+						opening_name = tmp_tag.name
 						break
 				elif check_str.startswith('<!--'): # found comment start
 					end_ix = check_str.find('-->') + ix + 3;
@@ -242,6 +254,10 @@ def _find_pair(html, start_ix, mode='xhtml', action=make_range):
 	if not closing_tag:
 		ix = start_ix
 		while ix < html_len:
+			if (use_threshold == True):
+				search_threshold -= 1
+				if(search_threshold < 0):
+					return action(None)
 			ch = html[ix]
 			if ch == '<':
 				check_str = html[ix:]
@@ -258,6 +274,7 @@ def _find_pair(html, start_ix, mode='xhtml', action=make_range):
 							forward_stack.pop()
 						else:  # found matched closing tag
 							closing_tag = tmp_tag;
+							closing_name = tmp_tag.name
 							break
 					elif has_match('<!--'): # found comment
 						ix += check_str.find('-->') + 2
@@ -269,5 +286,6 @@ def _find_pair(html, start_ix, mode='xhtml', action=make_range):
 					return action(Comment( find_comment_start(ix), end_ix ))
 				
 			ix += 1
-	
+	if(opening_name != closing_name):
+		return action(None)
 	return action(opening_tag, closing_tag, start_ix)

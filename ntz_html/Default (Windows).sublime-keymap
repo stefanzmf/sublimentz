@@ -135,6 +135,16 @@
 				"operator" : "equal"
 			}
 		]
+	},
+	{
+		"keys": ["~"], "args": {"contents": " href=\"$1\""},
+		"command": "insert_snippet",
+		"context": [
+			{
+				"operand": "text.html meta.tag -string -punctuation.definition.tag.begin.html -meta.scope.between-tag-pair.html -source",
+				"operator": "equal", "match_all": true, "key": "selector"
+			}
+		]
 	}
 
 ]

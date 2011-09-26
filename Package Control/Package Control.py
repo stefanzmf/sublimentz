@@ -286,7 +286,7 @@ class BitBucketPackageProvider():
                 ' repository ' + api_url + '.')
             return False
 
-        changeset_url = api_url + '/changesets/?limit=1'
+        changeset_url = api_url + '/changesets/default'
         changeset_json = package_manager.download_url(changeset_url,
             'Error downloading repository.')
         if changeset_json == False:
@@ -297,7 +297,7 @@ class BitBucketPackageProvider():
             sublime.error_message(__name__ + ': Error parsing JSON from ' +
                 ' repository ' + changeset_url + '.')
             return False
-        commit_date = last_commit['changesets'][0]['timestamp']
+        commit_date = last_commit['timestamp']
         timestamp = datetime.datetime.strptime(commit_date[0:19],
             '%Y-%m-%d %H:%M:%S')
         utc_timestamp = timestamp.strftime(
@@ -315,7 +315,7 @@ class BitBucketPackageProvider():
                 {
                     'version': utc_timestamp,
                     'url': repo + '/get/' + \
-                        last_commit['changesets'][0]['node'] + '.zip'
+                        last_commit['node'] + '.zip'
                 }
             ]
         }
@@ -408,11 +408,14 @@ class UrlLib2Downloader():
 
 
 class WgetDownloader(CliDownloader):
+    def __init__(self, settings):
+        self.settings = settings
+        self.wget = self.find_binary('wget')
+
     def download(self, url, error_message, timeout, tries):
-        wget = self.find_binary('wget')
-        if not wget:
+        if not self.wget:
             return False
-        command = [wget, '--timeout', str(int(timeout)), '-o',
+        command = [self.wget, '--timeout', str(int(timeout)), '-o',
             '/dev/null', '-O', '-', '-U', 'Sublime Package Control', url]
 
         if self.settings.get('http_proxy'):
@@ -446,11 +449,14 @@ class WgetDownloader(CliDownloader):
 
 
 class CurlDownloader(CliDownloader):
+    def __init__(self, settings):
+        self.settings = settings
+        self.curl = self.find_binary('curl')
+
     def download(self, url, error_message, timeout, tries):
-        curl = self.find_binary('curl')
-        if not curl:
+        if not self.curl:
             return False
-        command = [curl, '-f', '--user-agent', 'Sublime Package Control',
+        command = [self.curl, '-f', '--user-agent', 'Sublime Package Control',
             '--connect-timeout', str(int(timeout)), '-s', url]
 
         if self.settings.get('http_proxy'):
