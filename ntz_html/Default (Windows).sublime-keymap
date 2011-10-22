@@ -24,7 +24,7 @@
 		"context":	[ { "key": "selector", "operator": "equal", "operand": "text.html" } ]
 	},
 	{
-		"keys"   :	["ctrl+alt+a"], 
+		"keys"   :	["alt+shift+a"], 
 		"command":	"insert_snippet",
 		"args"   :	{ "contents": "<a href=\"${1:#}\">${2:$SELECTION}</a>" },
 		"context":	[ { "key": "selector", "operator": "equal", "operand": "text.html" } ]

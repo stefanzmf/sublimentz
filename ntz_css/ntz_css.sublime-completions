@@ -1,101 +1,104 @@
 {
-	"scope": "source.css",
-	"completions":
-	[	
+  "scope": "source.css",
+  "completions":
+  [ 
 
-		{ "trigger": "l|left", "contents": "left:$1;$0" },
-		{ "trigger": "r|right", "contents": "right:$1;$0" },
-		{ "trigger": "t|top", "contents": "top:$1;$0" },
-		{ "trigger": "b|bottom", "contents": "bottom:$1;$0" },
-		{ "trigger": "z|z-index", "contents": "z-index:$1;$0" },
+    { "trigger": "l|left", "contents": "left:$1;$0" },
+    { "trigger": "r|right", "contents": "right:$1;$0" },
+    { "trigger": "t|top", "contents": "top:$1;$0" },
+    { "trigger": "b|bottom", "contents": "bottom:$1;$0" },
+    { "trigger": "z|z-index", "contents": "z-index:$1;$0" },
 
-		{ "trigger": "bo|bor", "contents": "border:${1:$2px ${3:solid} #${4:000}};$0" },
-		{ "trigger": "bb", "contents": "border-bottom:${1:$2px ${3:solid} #${4:000}};$0" },
-		{ "trigger": "bt", "contents": "border-top:${1:$2px ${3:solid} #${4:000}};$0" },
-		{ "trigger": "bl", "contents": "border-left:${1:$2px ${3:solid} #${4:000}};$0" },
-		{ "trigger": "br", "contents": "border-right:${1:$2px ${3:solid} #${4:000}};$0" },
-		{ "trigger": "bw", "contents": "border-width:$1;$0" },
-		
-		{ "trigger": "m|mar", "contents": "margin:${1:${2:0}${3:px} ${4:0}${5:px} ${6:0}${7:px} ${8:0}${9:px}};$0" },
-		{ "trigger": "mb", "contents": "margin-bottom:$1;$0" },
-		{ "trigger": "mt", "contents": "margin-top:$1;$0" },
-		{ "trigger": "ml", "contents": "margin-left:$1;$0" },
-		{ "trigger": "mr", "contents": "margin-right:$1;$0" },
-		
-		{ "trigger": "p|pad", "contents": "padding:${1:${2:0}${3:px} ${4:0}${5:px} ${6:0}${7:px} ${8:0}${9:px}};$0" },
-		{ "trigger": "pb", "contents": "padding-bottom:$1;$0" },
-		{ "trigger": "pt", "contents": "padding-top:$1;$0" },
-		{ "trigger": "pl", "contents": "padding-left:$1;$0" },
-		{ "trigger": "pr", "contents": "padding-right:$1;$0" },
+    { "trigger": "bo|bor", "contents": "border:${1:$2px ${3:solid} #${4:000}};$0" },
+    { "trigger": "bb", "contents": "border-bottom:${1:$2px ${3:solid} #${4:000}};$0" },
+    { "trigger": "bt", "contents": "border-top:${1:$2px ${3:solid} #${4:000}};$0" },
+    { "trigger": "bl", "contents": "border-left:${1:$2px ${3:solid} #${4:000}};$0" },
+    { "trigger": "br", "contents": "border-right:${1:$2px ${3:solid} #${4:000}};$0" },
+    { "trigger": "bw", "contents": "border-width:$1;$0" },
+    
+    { "trigger": "m|mar", "contents": "margin:${1:${2:0}${3:px} ${4:0}${5:px} ${6:0}${7:px} ${8:0}${9:px}};$0" },
+    { "trigger": "mb", "contents": "margin-bottom:$1;$0" },
+    { "trigger": "mt", "contents": "margin-top:$1;$0" },
+    { "trigger": "ml", "contents": "margin-left:$1;$0" },
+    { "trigger": "mr", "contents": "margin-right:$1;$0" },
+    
+    { "trigger": "p|pad", "contents": "padding:${1:${2:0}${3:px} ${4:0}${5:px} ${6:0}${7:px} ${8:0}${9:px}};$0" },
+    { "trigger": "pb", "contents": "padding-bottom:$1;$0" },
+    { "trigger": "pt", "contents": "padding-top:$1;$0" },
+    { "trigger": "pl", "contents": "padding-left:$1;$0" },
+    { "trigger": "pr", "contents": "padding-right:$1;$0" },
 
-		{ "trigger": "pos|position", "contents": "position:${1:relative}${2:absolute}${3:fixed}${4:static};$0" },
-		{ "trigger": "abs|absolute", "contents": "position:absolute;$0" },
-		{ "trigger": "rel|relative", "contents": "position:relative;$0" },
+    { "trigger": "pos|position", "contents": "position:${1:relative}${2:absolute}${3:fixed}${4:static};$0" },
+    { "trigger": "abs|absolute", "contents": "position:absolute;$0" },
+    { "trigger": "rel|relative", "contents": "position:relative;$0" },
 
-		{ "trigger": "h", "contents": "height:$1;$0" },
-		{ "trigger": "mh", "contents": "min-height:$1;$0" },
-		{ "trigger": "mah", "contents": "max-height:$1;$0" },
-		
-		{ "trigger": "w", "contents": "width:$1;$0" },
-		{ "trigger": "mw", "contents": "min-width:$1;$0" },
-		{ "trigger": "maw", "contents": "max-width:$1;$0" },
+    { "trigger": "h", "contents": "height:$1;$0" },
+    { "trigger": "mh", "contents": "min-height:$1;$0" },
+    { "trigger": "mah", "contents": "max-height:$1;$0" },
+    
+    { "trigger": "w", "contents": "width:$1;$0" },
+    { "trigger": "mw", "contents": "min-width:$1;$0" },
+    { "trigger": "maw", "contents": "max-width:$1;$0" },
 
-		/* visibility & display */
-		{ "trigger": "d|dis|display", "contents": "display:${1:block}${2:none}${3:inline-block};$0" },
-		{ "trigger": "db", "contents": "display:block;$0" },
-		{ "trigger": "di", "contents": "display:inline;$0" },
-		{ "trigger": "dib", "contents": "display:inline-block;$0" },
-		{ "trigger": "dn", "contents": "display:none;$0" },
+    /* visibility & display */
+    { "trigger": "d|dis|display", "contents": "display:${1:block}${2:none}${3:inline-block};$0" },
+    { "trigger": "db", "contents": "display:block;$0" },
+    { "trigger": "di", "contents": "display:inline;$0" },
+    { "trigger": "dib", "contents": "display:inline-block;$0" },
+    { "trigger": "dn", "contents": "display:none;$0" },
 
-		{ "trigger": "v|vis", "contents": "visibility:${1:visible}${2:hidden};$0" },
+    { "trigger": "v|vis", "contents": "visibility:${1:visible}${2:hidden};$0" },
 
-		/* text */
-		{ "trigger": "c|col|color", "contents": "color:#${1:000};$0" },
-		{ "trigger": "lh|line", "contents": "line-height:$1;$0" },
-		{ "trigger": "lhh", "contents": "line-height:$1;\nheight:$1;$0" },
+    /* text */
+    { "trigger": "c|col|color", "contents": "color:#${1:000};$0" },
+    { "trigger": "lh|line", "contents": "line-height:$1;$0" },
+    { "trigger": "lhh", "contents": "line-height:$1;\nheight:$1;$0" },
 
-		/* floats */
-		{ "trigger": "f|float", "contents": "float:${1:left}${2:right}${3:none}$0;" },
-		{ "trigger": "fl|fleft", "contents": "float:left;$0" },
-		{ "trigger": "fr|fright", "contents": "float:right;$0" },
-		{ "trigger": "cl|clear", "contents": "clear:${1:left}${2:right}${3:none};$0" },
+    { "trigger": "rgb|rgba", "contents": "rgb${1:a}(${2:0}, ${3:0}, ${4:0}${5:, ${6:1}})$0" },
 
-		{ "trigger": "ta", "contents": "text-align:${1:left}${2:center}${3:right};$0" },
-		{ "trigger": "tac", "contents": "text-align:center;$0" },
-		{ "trigger": "tal", "contents": "text-align:left;$0" },
-		{ "trigger": "tar", "contents": "text-align:right;$0" },
-		{ "trigger": "td", "contents": "text-decoration:${1:none}${2:underline};$0" },
-		{ "trigger": "tt", "contents": "text-transform:${1:uppercase}${2:lowercase};$0" },
-		{ "trigger": "ti|hi", "contents": "text-indent:${1:-9999px};$0" },
-		
-		/* fonts */
-		{ "trigger": "f|font", "contents": "font:${1:${2:400}${3:700}} $4px${5:/$6} $7;$0" },
-		{ "trigger": "ff", "contents": "${1:${2:Arial, Helvetica, Verdana}${3:Verdana, Arial, Helvetica}, Sans Serif}${4:Georgia, Cambria, Palatino, Serif}${5:Consolas, \"Lucida Console\", \"Courier New\", Monospace}${6:\"Trebuchet MS\", Helvetica, Tahoma, Sans-serif}$0" },
-		{ "trigger": "fz", "contents": "font-size:$1px;$0" },
-		{ "trigger": "fs", "contents": "font-style:${1:normal}${2:italic};$0" },
-		{ "trigger": "fw", "contents": "font-weight:${1:400}${2:700};$0" },
 
-		/* background */
-		{ "trigger": "bg", "contents": "background:$1;$0" },
-		{ "trigger": "bgp", "contents": "background-position:$1${2:px} $3${4:px};$0" },
-		{ "trigger": "bgi", "contents": "background-image:url(${1});$0" },
-		{ "trigger": "bgc", "contents": "background-color:#${1:000};$0" },
-		{ "trigger": "bgg", "contents": "background:${1:url($2) ${3:${4:no-}repeat${5:-x/y}} ${6:0}${7:px} ${8:0}${9:px}};$0" },
-		
-		/* lists */
-		{ "trigger": "ls", "contents": "list-style:${1:none}${2:disc}${3:decimal};$0" },
+    /* floats */
+    { "trigger": "f|float", "contents": "float:${1:left}${2:right}${3:none}$0;" },
+    { "trigger": "fl|fleft", "contents": "float:left;$0" },
+    { "trigger": "fr|fright", "contents": "float:right;$0" },
+    { "trigger": "cl|clear", "contents": "clear:${1:left}${2:right}${3:none};$0" },
 
-		/* box model css3 */
-		{ "trigger": "bs", "contents": "-moz-box-shadow:$1px $2px $3px #$4;\n-webkit-box-shadow:$1px $2px $3px #$4;\nbox-shadow:$1px $2px $3px #$4;$0" },
-		{ "trigger": "rad", "contents": "-moz-border-radius:$1px;\nborder-radius:${1:}px;$0" },
+    { "trigger": "ta", "contents": "text-align:${1:left}${2:center}${3:right};$0" },
+    { "trigger": "tac", "contents": "text-align:center;$0" },
+    { "trigger": "tal", "contents": "text-align:left;$0" },
+    { "trigger": "tar", "contents": "text-align:right;$0" },
+    { "trigger": "td", "contents": "text-decoration:${1:none}${2:underline};$0" },
+    { "trigger": "tt", "contents": "text-transform:${1:uppercase}${2:lowercase};$0" },
+    { "trigger": "ti|hi", "contents": "text-indent:${1:-9999px};$0" },
+    
+    /* fonts */
+    { "trigger": "f|font", "contents": "font:${1:${2:400}${3:700}} $4px${5:/$6} $7;$0" },
+    { "trigger": "ff", "contents": "${1:${2:Arial, Helvetica, Verdana}${3:Verdana, Arial, Helvetica}, Sans Serif}${4:Georgia, Cambria, Palatino, Serif}${5:Consolas, \"Lucida Console\", \"Courier New\", Monospace}${6:\"Trebuchet MS\", Helvetica, Tahoma, Sans-serif}$0" },
+    { "trigger": "fz", "contents": "font-size:$1px;$0" },
+    { "trigger": "fs", "contents": "font-style:${1:normal}${2:italic};$0" },
+    { "trigger": "fw", "contents": "font-weight:${1:400}${2:700};$0" },
 
-		/* various & unsorted */
-		{ "trigger": "o|ou", "contents": "outline:${1:none};$0" },
-		{ "trigger": "op|opac|opacity", "contents": "filter:alpha(opacity=${2:});\nopacity:${1:0.5};$0" },
-		{ "trigger": "ani|trans|transition", "contents": "-webkit-transition:${1:all} 0.${2:3s} ease;\n-moz-transition:${1:all} 0.${2:3s} ease;\n-o-transition:${1:all} 0.${2:3s} ease;\ntransition:${1:all } 0.${2:3s} ease;$0" },
-		{ "trigger": "cur", "contents": "cursor:${1:pointer};$0" },
-		{ "trigger": "ts", "contents": "text-shadow:$1px $2px $3px #$4;$0" },
-		{ "trigger": "va", "contents": "vertical-align:${1:top}${2:middle}${3:bottom}${4:baseline};$0" }
+    /* background */
+    { "trigger": "bg", "contents": "background:$1;$0" },
+    { "trigger": "bgp", "contents": "background-position:$1${2:px} $3${4:px};$0" },
+    { "trigger": "bgi", "contents": "background-image:url(${1});$0" },
+    { "trigger": "bgc", "contents": "background-color:#${1:000};$0" },
+    { "trigger": "bgg", "contents": "background:${1:url($2) ${3:${4:no-}repeat${5:-x/y}} ${6:0}${7:px} ${8:0}${9:px}};$0" },
+    
+    /* lists */
+    { "trigger": "ls", "contents": "list-style:${1:none}${2:disc}${3:decimal};$0" },
 
-	]
+    /* box model css3 */
+    { "trigger": "bs", "contents": "-moz-box-shadow:$1px $2px $3px #$4;\n-webkit-box-shadow:$1px $2px $3px #$4;\nbox-shadow:$1px $2px $3px #$4;$0" },
+    { "trigger": "rad", "contents": "-moz-border-radius:$1px;\nborder-radius:${1:}px;$0" },
+
+    /* various & unsorted */
+    { "trigger": "o|ou", "contents": "outline:${1:none};$0" },
+    { "trigger": "op|opac|opacity", "contents": "filter:alpha(opacity=${2:});\nopacity:${1:0.5};$0" },
+    { "trigger": "ani|trans|transition", "contents": "-webkit-transition:${1:all} 0.${2:3s} ease;\n-moz-transition:${1:all} 0.${2:3s} ease;\n-o-transition:${1:all} 0.${2:3s} ease;\ntransition:${1:all } 0.${2:3s} ease;$0" },
+    { "trigger": "cur", "contents": "cursor:${1:pointer};$0" },
+    { "trigger": "ts", "contents": "text-shadow:$1px $2px $3px #$4;$0" },
+    { "trigger": "va", "contents": "vertical-align:${1:top}${2:middle}${3:bottom}${4:baseline};$0" }
+
+  ]
 }

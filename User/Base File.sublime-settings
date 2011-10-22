@@ -1,4 +1,10 @@
 {
+	"alignment_chars":
+	[
+		"=",
+		"-",
+		":"
+	],
 	"auto_match_angle_brakets_enabled": true,
 	"auto_match_tilda_enabled": true,
 	"caret_style": "phase",
@@ -15,19 +21,21 @@
 	[
 		"directwrite"
 	],
-	"font_size": 10,
+	"font_size": 11,
 	"highlight_line": true,
 	"indent_guide_options":
 	[
 		"draw_normal",
 		"draw_active",
-		"stippled"
+		"draw_stack",
+		"normal_stippled",
+		"stack_stippled"
 	],
 	"line_padding_bottom": 1.5,
 	"line_padding_top": 1.5,
 	"match_brackets_angle": false,
 	"match_brackets_content": true,
-	"mid_line_tabs": true,
+	"mid_line_tabs": false,
 	"rulers":
 	[
 		0,
@@ -39,9 +47,10 @@
 	"sort_css_on_save": false,
 	"tab_completion": true,
 	"tab_size": 2,
-	"translate_tabs_to_spaces": false,
+	"translate_tabs_to_spaces": true,
 	"use_tab_stops": true,
 	"wide_caret": true,
 	"word_separators": "./\\()\"'-:,.;<>~!@#$%^&*|+=[]{}`~?",
 	"word_wrap": false
+	//,"fold_buttons": false
 }

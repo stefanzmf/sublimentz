@@ -3,9 +3,6 @@ This is a fork of pyparadigm's [SublimeBrackets](https://github.com/pyparadigm/S
 I forked this to fix some issues I had and to add some features I wanted.  I also wanted to improve the efficiency of the matching.
 I also merged in pyparadigm's SublimeTagmatcher as well.  This cuts down on the parallel searching that is now streamlined in one search.
 
-# Note
-The 9/22/11 commit will require you to re-configure your user settings.  I apologize for this, but it was unavoidable. I hope to not have to change existing setting names or types again.  I think I am finally settling down on major code changes to architecture.
-
 # Installation 
 * Latest version: [Click here to download.](https://github.com/facelessuser/BracketHighlighter/zipball/master "Click here to download lastest version.")
 - Must be running **Sublime Text 2 Build 2108** or higher.
@@ -21,6 +18,7 @@ The 9/22/11 commit will require you to re-configure your user settings.  I apolo
 - When using on demand shortcut, show line count and char count between match in the status bar
 - Shortcuts for moving cursor to beginning or end of bracketed content (will focus on beginning or end bracket if not currently multi-selecting)
 - Shortcut for selecting all of the bracketed content
+- Shortcut for chaning quote style (accounts for escaped quotes as well)
 - Works with multi-select
 
 # Options
