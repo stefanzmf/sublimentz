@@ -31,17 +31,17 @@
 				<string>#9D550FB0</string>
 
 				<key>bracketsForeground</key>
-				<string>#00FF00</string>
+				<string>#00ff00</string>
 				<key>bracketsOptions</key>
-				<string>foreground underline</string>
+				<string></string>
 
 				<key>bracketContentsForeground</key>
 				<string>#F8F8F2A5</string>
 				<key>bracketContentsOptions</key>
-				<string>foreground underline</string>
+				<string></string>
 
 				<key>tagsOptions</key>
-				<string>underline</string>
+				<string>stippled_underline</string>
 			</dict>
 		</dict>
 		<dict>

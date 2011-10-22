@@ -1,4 +1,5 @@
 [
+	{ "keys": ["ctrl+alt+shift+a"], "command": "alignment" },
 		{
 		"keys"   :	["tab"], 
 		"command":	"insert_snippet",
@@ -56,7 +57,7 @@
 
 	{ "keys": ["ctrl+shift+t"], "command": "open_recently_closed_file", "args": {"show_quick_panel": true}},
 	//{ "keys": ["ctrl+alt+shift+t"], "command": "open_recently_closed_file" },
-	{ "keys": ["ctrl+t"], "command": "new_file" },
+	{ "keys": ["ctrl+t"], "command": "reveal_in_side_bar" },
 	{ "keys": ["ctrl+alt+shift+n"], "command": "new_window" },
 
 	// switching tab quickly
@@ -150,6 +151,9 @@
 			{ "key": "following_text", "operator": "regex_contains", "operand": "^`", "match_all": true }
 		]
 	},
+
+	{ "keys": ["ctrl+alt+z"], "command": "soft_undo" },
+	{ "keys": ["ctrl+alt+shift+z"], "command": "soft_redo" },
 
 	{
 		"keys":["ctrl+shift+g"], "command": "toggle_setting", "args": {"setting": "draw_indent_guides"}

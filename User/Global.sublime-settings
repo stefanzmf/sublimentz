@@ -1,13 +1,11 @@
 {
+	"highlight_modified_tabs": true,
 	"ignored_packages":
 	[
-		"Vintage",
 		"ASP",
-		"SublimeBrackets",
-		"SublimeTagmatcher",
-		"ActionScript",
-		"SCSS",
-		"SublimeCodeIntel"
+		"SublimeCodeIntel",
+		"Vintage",
+		"ActionScript"
 	],
 	"new_window_settings":
 	{

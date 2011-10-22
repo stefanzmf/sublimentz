@@ -1,13 +1,19 @@
 {
-	"auto_upgrade_last_run": 1315994617,
+	"auto_upgrade_last_run": 1319195990,
 	"git_binary": "C:\\cygwin\\git\\bin\\git.exe",
 	"repositories":
 	[
 		"https://github.com/pyparadigm/SublimeTagmatcher",
 		"https://github.com/notanumber/gitst2",
-		"https://github.com/pyparadigm/SublimeBrackets",
 		"https://github.com/ehamiter/ST2-Color-Console",
 		"https://github.com/jdc0589/JsFormat",
-		"https://bitbucket.org/scottbessler/sublimetextcaseconversion"
+		"https://bitbucket.org/scottbessler/sublimetextcaseconversion",
+		"https://github.com/facelessuser/BracketHighlighter",
+		"https://github.com/wuub/SublimeREPL",
+		"https://github.com/kemayo/sublime-text-2-git",
+		"https://github.com/spadgos/sublime-jsdocs",
+		"https://github.com/weslly/sublime-colorpicker",
+		"https://github.com/titoBouzout/SideBarEnhancements",
+		"https://github.com/SublimeText/TagIndent"
 	]
 }
