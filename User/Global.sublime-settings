@@ -4,8 +4,8 @@
 	[
 		"ASP",
 		"SublimeCodeIntel",
-		"Vintage",
-		"ActionScript"
+		"ActionScript",
+		"Vintage"
 	],
 	"new_window_settings":
 	{
@@ -15,9 +15,11 @@
 		"status_bar_visible": true
 	},
 	"overlay_scroll_bars": "enabled",
+	"scroll_speed": 0.5,
 	"shift_tab_unindent": true,
 	"show_tab_close_buttons": false,
 	"theme": "Soda Dark.sublime-theme",
+	"tree_animation_enabled": false,
 	"use_simple_full_screen": true,
 	"word_highlights_draw_outlined": false,
 	"word_highlights_when_selection_is_empty": false

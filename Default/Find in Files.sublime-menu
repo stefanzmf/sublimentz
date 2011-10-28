@@ -1,0 +1,6 @@
+[
+    { "command": "clear_location", "caption": "Clear" },
+    { "command": "add_directory", "caption": "Add Directory" },
+    { "command": "add_include_filter" },
+    { "command": "add_exclude_filter" }
+]

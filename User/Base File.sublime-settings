@@ -21,7 +21,7 @@
 	[
 		"directwrite"
 	],
-	"font_size": 11,
+	"font_size": 12,
 	"highlight_line": true,
 	"indent_guide_options":
 	[
@@ -52,5 +52,4 @@
 	"wide_caret": true,
 	"word_separators": "./\\()\"'-:,.;<>~!@#$%^&*|+=[]{}`~?",
 	"word_wrap": false
-	//,"fold_buttons": false
 }

@@ -1,5 +1,5 @@
 {
-	"auto_upgrade_last_run": 1319285168,
+	"auto_upgrade_last_run": 1319779231,
 	"git_binary": "C:\\cygwin\\git\\bin\\git.exe",
 	"repositories":
 	[
@@ -13,6 +13,7 @@
 		"https://github.com/kemayo/sublime-text-2-git",
 		"https://github.com/spadgos/sublime-jsdocs",
 		"https://github.com/titoBouzout/SideBarEnhancements",
-		"https://github.com/SublimeText/TagIndent"
+		"https://github.com/SublimeText/TagIndent",
+		"https://github.com/BarbUk/Sublime-php-beautifier"
 	]
 }
