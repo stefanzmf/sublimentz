@@ -1,6 +1,6 @@
 <snippet>
     <content><![CDATA[${1:method_name}: function(${3:attribute}){
-  var self = this;
+  var \$t = this;
 	$0
 }${10:,} // $1]]></content>
     <tabTrigger>:f</tabTrigger>

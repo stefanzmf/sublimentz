@@ -51,5 +51,6 @@
 	"use_tab_stops": true,
 	"wide_caret": true,
 	"word_separators": "./\\()\"'-:,.;<>~!@#$%^&*|+=[]{}`~?",
-	"word_wrap": false
+	"word_wrap": false,
+	"fade_fold_buttons": false
 }
