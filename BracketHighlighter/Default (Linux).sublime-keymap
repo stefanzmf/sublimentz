@@ -79,5 +79,17 @@
 		{
 			"plugin": {"type": ["quote"],"command" : "swapquotes.swap_quotes"}
 		}
+	},
+	{
+		"keys": ["ctrl+shift+b","ctrl+shift+j"],
+		"command": "swap_brackets"
+	},
+	{
+		"keys": ["ctrl+shift+b","ctrl+shift+["],
+		"command": "bracket_highlighter_key",
+		"args":
+		{
+			"plugin": {"type": ["quote", "tag", "bracket"],"command" : "foldbracket.fold_bracket"}
+		}
 	}
 ]

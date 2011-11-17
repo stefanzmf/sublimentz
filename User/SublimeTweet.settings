@@ -1,0 +1,8 @@
+{
+    "previously_shown_tweets": [], 
+    "twitter_access_token_key": null, 
+    "twitter_access_token_secret": null, 
+    "twitter_have_token": false, 
+    "twitter_proxy_config": null, 
+    "use_proxy": false
+}

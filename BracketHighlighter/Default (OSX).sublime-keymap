@@ -73,11 +73,23 @@
 		}
 	},
 	{
-		"keys": ["super+shift+b","super+shift+q"],
+		"keys": ["super+shift+b","super+shift+w"],
 		"command": "bracket_highlighter_key",
 		"args":
 		{
 			"plugin": {"type": ["quote"],"command" : "swapquotes.swap_quotes"}
+		}
+	},
+	{
+		"keys": ["super+shift+b","super+shift+j"],
+		"command": "swap_brackets"
+	},
+	{
+		"keys": ["super+shift+b","super+shift+["],
+		"command": "bracket_highlighter_key",
+		"args":
+		{
+			"plugin": {"type": ["quote", "tag", "bracket"],"command" : "foldbracket.fold_bracket"}
 		}
 	}
 ]

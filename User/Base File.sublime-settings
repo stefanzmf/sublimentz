@@ -15,13 +15,14 @@
 	"disable_auto_insert": true,
 	"draw_minimap_border": true,
 	"draw_white_space": "all",
+	"fade_fold_buttons": false,
 	"find_selected_text": true,
 	"font_face": "Monaco",
 	"font_options":
 	[
 		"directwrite"
 	],
-	"font_size": 12,
+	"font_size": 13,
 	"highlight_line": true,
 	"indent_guide_options":
 	[
@@ -51,6 +52,5 @@
 	"use_tab_stops": true,
 	"wide_caret": true,
 	"word_separators": "./\\()\"'-:,.;<>~!@#$%^&*|+=[]{}`~?",
-	"word_wrap": false,
-	"fade_fold_buttons": false
+	"word_wrap": false
 }
