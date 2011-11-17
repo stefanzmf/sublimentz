@@ -108,7 +108,8 @@ class BracketHighlighterCommand(sublime_plugin.EventListener):
 
     def init_match(self):
         # Current language
-        language = basename(self.view.settings().get('syntax')).replace('.tmLanguage', '').lower()
+        syntax = self.view.settings().get('syntax')
+        language = basename(syntax).replace('.tmLanguage', '').lower() if syntax != None else "plain text"
         # Reset objects
         self.sels = []
         self.targets = []
@@ -238,9 +239,10 @@ class BracketHighlighterCommand(sublime_plugin.EventListener):
         return (offset, allow_quote_match)
 
     def match(self, view, force_match=True):
+        if view == None:
+            return
         # Setup views
         self.view = view
-        self.window = view.window()
         self.last_view = view
         self.multi_select = (len(view.sel()) > 1)
 

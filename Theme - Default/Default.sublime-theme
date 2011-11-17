@@ -245,7 +245,6 @@
         [
             { "class": "tree_row", "attributes": ["hover"] }
         ],
-        // "attributes": ["hover"],
         "layer0.opacity": 0.0,
         "layer1.opacity": 1.0
     },

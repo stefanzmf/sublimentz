@@ -1,5 +1,5 @@
 {
-	"auto_upgrade_last_run": 1319195990,
+	"auto_upgrade_last_run": 1321300466,
 	"git_binary": "C:\\cygwin\\git\\bin\\git.exe",
 	"repositories":
 	[
@@ -12,8 +12,9 @@
 		"https://github.com/wuub/SublimeREPL",
 		"https://github.com/kemayo/sublime-text-2-git",
 		"https://github.com/spadgos/sublime-jsdocs",
-		"https://github.com/weslly/sublime-colorpicker",
 		"https://github.com/titoBouzout/SideBarEnhancements",
-		"https://github.com/SublimeText/TagIndent"
+		"https://github.com/BarbUk/Sublime-php-beautifier",
+		"https://github.com/jfromaniello/Grandson-of-Obsidian",
+		"https://github.com/a-sk/sublime-css-colors"
 	]
 }
