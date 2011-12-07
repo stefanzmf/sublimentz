@@ -11,6 +11,10 @@ Clone this repository in to the Sublime Text 2 "Packages" directory, which is lo
 "Preferences" -> "Browse Packages" option in sublime takes you.
 
 #### Package Control
+JsFormat is now included in the default repository channel for Package Control. It should show up in your install list
+with no changes.
+
+If it does not show up, or you are on an older version of Package Control:
 Add https://github.com/jdc0589/JsFormat as a Package Control repository. JsFormat will show up in the
 package install list.
 
@@ -20,5 +24,6 @@ package install list.
 The default key binding is "ctrl+alt+f"
 
 ## Updates
+* 12/3/2011 - Indentation character/count is now pulled from the current sublime settings
 * 8/25/2011 - Added sublime-commands file. "Format: Javascript" now appears in the command palette
 * 8/25/2011 - scrolls back to whatever line you were on prior to formatting the file (middle of screen) rather than leaving the view position at the top of the file after formatting.

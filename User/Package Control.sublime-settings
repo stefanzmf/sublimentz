@@ -1,5 +1,5 @@
 {
-	"auto_upgrade_last_run": 1321300466,
+	"auto_upgrade_last_run": 1321590514,
 	"git_binary": "C:\\cygwin\\git\\bin\\git.exe",
 	"repositories":
 	[
@@ -15,6 +15,9 @@
 		"https://github.com/titoBouzout/SideBarEnhancements",
 		"https://github.com/BarbUk/Sublime-php-beautifier",
 		"https://github.com/jfromaniello/Grandson-of-Obsidian",
-		"https://github.com/a-sk/sublime-css-colors"
+		"https://github.com/a-sk/sublime-css-colors",
+		"https://github.com/SublimeText/VintageEx",
+		"https://github.com/netpro2k/SublimeBlockCursor",
+		"https://github.com/alek-sys/ChangeTracker"
 	]
 }

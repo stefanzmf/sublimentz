@@ -546,7 +546,7 @@
                 [
                     { "command": "set_line_ending", "args": {"type": "windows"}, "caption": "Windows", "checkbox": true },
                     { "command": "set_line_ending", "args": {"type": "unix"}, "caption": "Unix", "checkbox": true },
-                    { "command": "set_line_ending", "args": {"type": "mac"}, "caption": "Mac OS 9", "checkbox": true }
+                    { "command": "set_line_ending", "args": {"type": "cr"}, "caption": "Mac OS 9", "checkbox": true }
                 ]
             },
             { "caption": "-", "id": "settings" },
