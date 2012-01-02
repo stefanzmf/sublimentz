@@ -3,24 +3,27 @@ import sublime_plugin
 
 import sys
 import os
-
+    
+# We use several commands implemented in Vintange, so make it available here.
 sys.path.append(os.path.join(sublime.packages_path(), 'Vintage'))
 
 import re
 import subprocess
-import tempfile
-
-try:
-    import ctypes
-except ImportError:
-    ctypes = None
-
-import ex_range
 
 from vintage import g_registers
 
+import ex_range
+import shell
+from plat.windows import get_oem_cp
+
 
 GLOBAL_RANGES = []
+
+
+def is_any_buffer_unsaved(window):
+    for v in window.views():
+        if v.is_dirty():
+            return True
 
 
 def handle_not_implemented():
@@ -41,26 +44,6 @@ def set_register(text, register):
             g_registers[reg] += text
         else:
             g_registers[reg] = text
-
-
-def filter_region(txt, command):
-    try:
-        contents = tempfile.NamedTemporaryFile(suffix='.txt', delete=False)
-        contents.write(txt.encode('utf-8'))
-        contents.close()
-
-        script = tempfile.NamedTemporaryFile(suffix='.bat', delete=False)
-        script.write('@echo off\ntype %s | %s' % (contents.name, command))
-        script.close()
-
-        p = subprocess.Popen(['cmd.exe', '/C', script.name],
-                                                    stdout=subprocess.PIPE)
-
-        rv = p.communicate()
-        return rv[0].decode(get_oem_cp()).replace('\r\n', '\n')[:-1]
-    finally:
-        os.remove(script.name)
-        os.remove(contents.name)
 
 
 def gather_buffer_info(v):
@@ -89,7 +72,9 @@ def gather_buffer_info(v):
 
 
 def get_region_by_range(view, text_range, split_visual=False):
-    # xxx move this further down into the range parsing?
+    # If GLOBAL_RANGES exists, the ExGlobal command has been run right before
+    # the current command, and we know we must process these lines.
+    # XXX move this further down into the range parsing?
     global GLOBAL_RANGES
     if GLOBAL_RANGES:
         rv = GLOBAL_RANGES[:]
@@ -112,19 +97,21 @@ def get_region_by_range(view, text_range, split_visual=False):
     return view.split_by_newlines(r)
 
 
-def calculate_address(view, text_range):
-    """calculates single line address based on a range.
+def compute_address(view, text_range):
+    """Computes a single-line address based on ``text_range``, which is a
+    string that should be a valid Vi(m) address.
+
+    Return values:
+        - SUCCESS: address (positive integer)
+        - ERROR: -1 (can't compute valid address)
     """
-    # doublecheck allowed ranges with vim
-    # xxx strip in the parsing phase instead
+    # XXX strip in the parsing phase instead
+    text_range = text_range.strip()
+    # Note that some address error checking is also performed at the parsing
+    # stage, so that '%' doesn't reach here, for example.
     a, b = ex_range.calculate_range(view, text_range.strip())
     address = (max(a, b) if all((a, b)) else (a or b)) or 0
     return address - 1
-
-
-def get_oem_cp():
-    codepage = ctypes.windll.kernel32.GetOEMCP()
-    return str(codepage)
 
 
 def get_startup_info():
@@ -154,33 +141,21 @@ class ExGoto(sublime_plugin.TextCommand):
 
 
 class ExShellOut(sublime_plugin.TextCommand):
+    """Ex command(s): :!cmd, :'<,>'!cmd
+
+    Run cmd in a system's shell or filter selected regions through external
+    command.
+    """
     def run(self, edit, range='', shell_cmd=''):
-        if range:
-            if sublime.platform() == 'windows':
-                for r in get_region_by_range(self.view, range):
-                    rv = filter_region(self.view.substr(r), shell_cmd)
-                    self.view.replace(edit, r, rv)
-                return
-            elif sublime.platform() == 'linux':
-                for s in self.view.sel():
-                    shell = os.path.expandvars("$SHELL")
-                    p = subprocess.Popen([shell, '-c', shell_cmd],
-                                                        stdout=subprocess.PIPE)
-                    self.view.replace(edit, s, p.communicate()[0][:-1])
-                return
+        try:
+            if range:
+                shell.filter_thru_shell(
+                                view=self.view,
+                                regions=get_region_by_range(self.view, range),
+                                cmd=shell_cmd)
             else:
-                handle_not_implemented()
-        elif sublime.platform() == 'linux':
-            term = os.path.expandvars("$COLORTERM") or \
-                                                    os.path.expandvars("$TERM")
-            subprocess.Popen([term, '-e',
-                    "bash -c \"%s; read -p 'Press RETURN to exit.'\"" %
-                                                            shell_cmd]).wait()
-            return
-        elif sublime.platform() == 'windows':
-            subprocess.Popen(['cmd.exe', '/c', shell_cmd + '&& pause']).wait()
-            return 
-        else:
+                shell.run_and_wait(shell_cmd)
+        except NotImplementedError:
             handle_not_implemented()
 
 
@@ -221,8 +196,8 @@ class ExReadShellOut(sublime_plugin.TextCommand):
         if forced:
             if sublime.platform() == 'linux':
                 for s in self.view.sel():
-                    shell = os.path.expandvars("$SHELL")
-                    p = subprocess.Popen([shell, '-c', name],
+                    the_shell = os.path.expandvars("$SHELL")
+                    p = subprocess.Popen([the_shell, '-c', name],
                                                         stdout=subprocess.PIPE)
                     self.view.insert(edit, s.begin(), p.communicate()[0][:-1])
             elif sublime.platform() == 'windows':
@@ -246,7 +221,7 @@ class ExReadShellOut(sublime_plugin.TextCommand):
                     new_contents = '\n' + new_contents
                 self.view.insert(edit, target_point, new_contents)
                 return
-            # xxx read file "name"
+            # XXX read file "name"
             # we need proper filesystem autocompletion here
             else:
                 handle_not_implemented()
@@ -270,7 +245,7 @@ class ExPromptSelectOpenFile(sublime_plugin.TextCommand):
         for v in self.view.window().views():
             if v.file_name() and v.file_name().endswith(sought_fname[1]):
                 self.view.window().focus_view(v)
-            # xxx Base all checks on buffer id?
+            # XXX Base all checks on buffer id?
             elif sought_fname[1].isdigit() and \
                                         v.buffer_id() == int(sought_fname[1]):
                 self.view.window().focus_view(v)
@@ -281,13 +256,13 @@ class ExMap(sublime_plugin.TextCommand):
     # file
     def run(self, edit):
         if sublime.platform() == 'windows':
-            plat = 'Windows'
+            platf = 'Windows'
         elif sublime.platform() == 'linux':
-            plat = 'Linux'
+            platf = 'Linux'
         else:
-            plat = 'OSX'
+            platf = 'OSX'
         self.view.window().run_command('open_file', {'file':
-                                        '${packages}/User/Default (%s).sublime-keymap' % plat})        
+                                        '${packages}/User/Default (%s).sublime-keymap' % platf})
 
 
 class ExAbbreviate(sublime_plugin.TextCommand):
@@ -361,14 +336,9 @@ class ExNewFile(sublime_plugin.TextCommand):
         self.view.window().run_command('new_file')
 
 
-class ExAscii(sublime_plugin.TextCommand):
-    def run(self, edit, range='', forced=False):
-        handle_not_implemented()
-
-
 class ExFile(sublime_plugin.TextCommand):
     def run(self, edit, forced=False):
-        # xxx figure out what the right params are. vim's help seems to be
+        # XXX figure out what the right params are. vim's help seems to be
         # wrong
         if self.view.file_name():
             fname = self.view.file_name()
@@ -408,10 +378,7 @@ class ExFile(sublime_plugin.TextCommand):
 class ExMove(sublime_plugin.TextCommand):
     def run(self, edit, range='.', forced=False, address=''):
         assert range, "Need a range."
-        if int(address) != 0:
-            address = calculate_address(self.view, address)
-        else:
-            address = 0
+        address = compute_address(self.view, address)
 
         line_block = [] 
         for r in get_region_by_range(self.view, range):
@@ -445,10 +412,7 @@ class ExMove(sublime_plugin.TextCommand):
 class ExCopy(sublime_plugin.TextCommand):
     def run(self, edit, range='.', forced=False, address=''):
         assert range, "Need a range."
-        if int(address) != 0:
-            address = calculate_address(self.view, address)
-        else:
-            address = 0
+        address = compute_address(self.view, address)
 
         line_block = [] 
         for r in get_region_by_range(self.view, range):
@@ -535,7 +499,7 @@ class ExSubstitute(sublime_plugin.TextCommand):
 
 class ExDelete(sublime_plugin.TextCommand):
     def run(self, edit, range='.', register='', count=''):
-        # xxx somewhat different to vim's behavior
+        # XXX somewhat different to vim's behavior
         rs = get_region_by_range(self.view, range)
         self.view.sel().clear()
 
@@ -558,8 +522,38 @@ class ExDelete(sublime_plugin.TextCommand):
 
 
 class ExGlobal(sublime_plugin.TextCommand):
+    """Ex command(s): :global
+
+    :global filters lines where a pattern matches and then applies the supplied
+    action to all those lines.
+
+    Examples:
+        :10,20g/FOO/delete
+
+        This command deletes all lines between line 10 and line 20 where 'FOO'
+        matches.
+
+        :g:XXX:s!old!NEW!g
+
+        This command replaces all instances of 'old' with 'NEW' in every line
+        where 'XXX' matches.
+    
+    By default, :global searches all lines in the buffer.
+
+    If you want to filter lines where a pattern does NOT match, add an
+    exclamation point:
+        
+        :g!/DON'T TOUCH THIS/delete
+    """
     def run(self, edit, range='%', forced=False, pattern=''):
-        _, global_pattern, subcmd = pattern.split(pattern[0], 2)
+        try:
+            _, global_pattern, subcmd = pattern.split(pattern[0], 2)
+        except ValueError:
+            sublime.status_message("VintageEx: Bad :global pattern. (:%sglobal%s)" % (range, pattern))
+            return
+        
+        # Make sure we always have a subcommand to exectute. This is what
+        # Vim does too.
         subcmd = subcmd or 'print'
 
         rs = get_region_by_range(self.view, range)
@@ -569,10 +563,10 @@ class ExGlobal(sublime_plugin.TextCommand):
             if (match and not forced) or (not match and forced):
                 GLOBAL_RANGES.append(r)
 
-        self.view.run_command('vi_colon_input',
-                                    {'cmd_line': ':' + 
-                                        str(self.view.rowcol(r.a)[0] + 1) +
-                                                                    subcmd})
+        self.view.window().run_command('vi_colon_input',
+                              {'cmd_line': ':' +
+                                    str(self.view.rowcol(r.a)[0] + 1) +
+                                    subcmd})
 
                                                                     
 class ExPrint(sublime_plugin.TextCommand):
@@ -596,3 +590,77 @@ class ExPrint(sublime_plugin.TextCommand):
             v.settings().set('draw_white_space', 'all')
         for t, r in to_display:
             v.insert(edit, v.size(), (str(r) + ' ' + t + '\n').lstrip())
+
+
+# TODO: General note for all :q variants:
+#   ST has a notion of hot_exit, whereby it preserves all buffers so that they
+#   can be restored next time you open ST. With this option on, all :q
+#   commands should probably execute silently even if there are unsaved buffers.
+#   Sticking to Vim's behavior closely here makes for a worse experience
+#   because typically you don't start ST as many times.
+class ExQuitCommand(sublime_plugin.WindowCommand):
+    """Ex command(s): :quit
+    Closes the window.
+
+        * Don't close the window if there are dirty buffers
+          TODO:
+          (Doesn't make too much sense if hot_exit is on, though.)
+          Although ST's window command 'exit' would take care of this, it
+          displays a modal dialog, so spare ourselves that.
+    """
+    def run(self, range='.', forced=False, count=1, flags=''):
+        v = self.window.active_view()
+        if forced:
+            v.set_scratch(True)
+        if v.is_dirty():
+            sublime.status_message("There are unsaved changes!")
+            return
+         
+        self.window.run_command('close')
+        if len(self.window.views()) == 0:
+            self.window.run_command('close')
+
+
+class ExQuitAllCommand(sublime_plugin.WindowCommand):
+    """Ex command(s): :qall
+    Close all windows and then exit Sublime Text.
+
+    If there are dirty buffers, exit only if :qall!.
+    """
+    def run(self, range='.', forced=False):
+        if forced:
+            for v in self.window.views():
+                if v.is_dirty():
+                    v.set_scratch(True)
+        elif is_any_buffer_unsaved(self.window):
+            sublime.status_message("There are unsaved changes!")
+            return
+
+        self.window.run_command('close_all')
+        self.window.run_command('exit')
+
+
+class ExWriteAndQuitCommand(sublime_plugin.TextCommand):
+    """Ex command(s): :wq
+
+    Write and then close the active buffer.
+    """
+    def run(self, edit, range='.', forced=False):
+        # TODO: implement this
+        if forced:
+            handle_not_implemented()
+            return
+        if self.view.is_read_only():
+            sublime.status_message("Can't write a read-only buffer.")
+            return
+        if not self.view.file_name():
+            sublime.status_message("Can't save a file without name.")
+            return
+
+        self.view.run_command('save')
+        self.view.window().run_command('ex_quit')
+
+
+class ExBrowse(sublime_plugin.TextCommand):
+    def run(self, edit):
+        self.view.window().run_command('prompt_open_file')

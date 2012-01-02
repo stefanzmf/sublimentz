@@ -1,7 +1,9 @@
 import sublime
 import sublime_plugin
 
-from ex_command_parser import parse_command, EX_COMMANDS
+from ex_command_parser import parse_command
+from ex_command_parser import EX_COMMANDS
+import ex_error
 
 
 COMPLETIONS = sorted([x[0] for x in EX_COMMANDS.keys()])
@@ -23,24 +25,20 @@ def update_command_line_history(item, slot_name):
 
 
 #______________________________________________________________________________
-class ViColonInput(sublime_plugin.TextCommand):
-    def __init__(self, view):
-        sublime_plugin.TextCommand.__init__(self, view)
-
-    def run_(self, args):
-        if args:
-            if 'event' in args:
-                del args['event']
-            return self.run(**args)
-        return self.run()
+class ViColonInput(sublime_plugin.WindowCommand):
+    def is_enabled(self):
+        return len(self.window.views()) > 0
         
+    def __init__(self, window):
+        sublime_plugin.WindowCommand.__init__(self, window)
+
     def run(self, initial_text=':', cmd_line=''):
         # non-interactive call
         if cmd_line:
             self.non_interactive = True
             self.on_done(cmd_line)
             return
-        v = self.view.window().show_input_panel('', initial_text,
+        v = self.window.show_input_panel('', initial_text,
                                                     self.on_done, None, None)
         v.set_syntax_file('Packages/VintageEx/Support/VintageEx Cmdline.tmLanguage')
         v.settings().set('gutter', False)
@@ -55,18 +53,16 @@ class ViColonInput(sublime_plugin.TextCommand):
         print ex_cmd
 
         if ex_cmd and ex_cmd.parse_errors:
-            sublime.status_message('VintageEx: %s' % ex_cmd.parse_errors[0])
+            ex_error.display_error(ex_cmd.parse_errors[0])
             return
         if ex_cmd and ex_cmd.name:
             if ex_cmd.range:
                 ex_cmd.args['range'] = ex_cmd.range
             if ex_cmd.forced:
                 ex_cmd.args['forced'] = ex_cmd.forced
-            self.view.run_command(ex_cmd.command, ex_cmd.args)
+            self.window.run_command(ex_cmd.command, ex_cmd.args)
         else:
-            sublime.status_message('VintageEx: unknown command (%s)' % 
-                                                                    cmd_line)
-
+            ex_error.display_error(ex_error.ERR_UNKNOWN_COMMAND, cmd_line)
 
 #______________________________________________________________________________
 class ExCompletionsProvider(sublime_plugin.EventListener):

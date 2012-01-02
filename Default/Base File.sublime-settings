@@ -136,10 +136,8 @@
 	"draw_indent_guides": true,
 
 	// Controls how the indent guides are drawn, valid options are
-	// "draw_normal", "draw_active", "draw_stack" and "normal_stippled",
-	// "active_stippled" and "stack_stippled"
-	"indent_guide_options": ["draw_normal", "draw_active", "draw_stack",
-		"normal_stippled", "stack_stippled", "active_stippled"],
+	// "draw_normal" and "draw_active".
+	"indent_guide_options": ["draw_normal"],
 
 	// Set to true to removing trailing white space on save
 	"trim_trailing_white_space_on_save": false,
@@ -156,6 +154,10 @@
 	// ASCII, UTF-8 and UTF-16 encodings will be automatically detected.
 	"fallback_encoding": "Western (Windows 1252)",
 
+	// Encoding used when saving new files. Existing files ignore this, instead
+	// preserving the encoding they were opened with.
+	"default_encoding": "UTF-8",
+
 	// Determines what character(s) are used to terminate each line in new files.
 	// Valid values are 'system' (whatever the OS uses), 'windows' (CRLF) and
 	// 'unix' (LF only).
@@ -166,6 +168,21 @@
 	// Shift+tab can be used to insert an explicit tab when tab_completion is
 	// enabled.
 	"tab_completion": true,
+
+	// Enable auto complete to be triggered automatically when typing.
+	"auto_complete": true,
+
+	// The maximum file size where auto complete will be automatically triggered.
+	"auto_complete_size_limit": 4194304,
+
+	// The delay, in ms, before the auto complete window is shown after typing
+	"auto_complete_delay": 50,
+
+	// Controls what scopes auto complete will be triggered in
+	"auto_complete_selector": "source - comment",
+
+	// Additional situations to trigger auto complete in
+	"auto_complete_triggers": [ {"selector": "text.html", "characters": "<"} ],
 
 	// By default, shift+tab will only unindent if the selection spans
 	// multiple lines. When pressing shift+tab at other times, it'll insert a

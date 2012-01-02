@@ -1,6 +1,25 @@
 {
 	"auto_upgrade_last_run": 1321590514,
 	"git_binary": "C:\\cygwin\\git\\bin\\git.exe",
+	"installed_packages":
+	[
+		"AAAPackageDev",
+		"alternative_autocompletion",
+		"AutoSelect",
+		"BracketHighlighter",
+		"BufferScroll",
+		"JSDocs",
+		"JsFormat",
+		"Package Control",
+		"PhpDoc",
+		"SideBarEnhancements",
+		"SublimeBlockCursor",
+		"sublimelint",
+		"SublimeREPL",
+		"Theme - Soda",
+		"VintageEx",
+		"WordHighlight"
+	],
 	"repositories":
 	[
 		"https://github.com/pyparadigm/SublimeTagmatcher",

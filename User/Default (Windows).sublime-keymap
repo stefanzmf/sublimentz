@@ -1,6 +1,6 @@
 [
 	{ "keys": ["ctrl+alt+shift+a"], "command": "alignment" },
-		{
+	{
 		"keys"   :	["tab"], 
 		"command":	"insert_snippet",
 		"args"   :	{ "contents": "\n" },
@@ -117,8 +117,8 @@
 	// the default `ctrl+shift+a` shortcut is binded to align
 	{ "keys": ["ctrl+alt+enter"], "command": "expand_selection", "args": {"to": "tag"} },
 
-	{ "keys": ["alt+shift+`"], "command": "open_terminal" },
-	{ "keys": ["ctrl+alt+shift+`"], "command": "open_terminal_project_folder" },
+	{ "keys": ["alt+shift+`"], "command": "open_terminal_project_folder" },
+	{ "keys": ["ctrl+alt+shift+`"], "command": "open_terminal" },
 
 	// pairing ` ` quotes
 	// dont forget to add "auto_match_tilda_enabled":true into base file.sublime-settings file!

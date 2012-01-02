@@ -1,16 +1,16 @@
 import sublime, sublime_plugin
 
-from sublime_lib.path import root_at_data
+from sublime_lib.path import root_at_packages
 
 
 BUILD_SYSTEM_SYNTAX = 'Packages/AAAPackageDev/Support/Sublime Text Build System.tmLanguage'
 
 
-# '2' differentiates this command from the one shipped with Sublime.
+# Adding "2" to avoid name clash with shipped command.
 class NewBuildSystem2Command(sublime_plugin.WindowCommand):
     def run(self):
         v = self.window.new_file()
-        v.settings().set('default_dir', root_at_data('Packages/User'))
+        v.settings().set('default_dir', root_at_packages('User'))
         v.set_syntax_file(BUILD_SYSTEM_SYNTAX)
         v.set_name('untitled.sublime-build')
 
