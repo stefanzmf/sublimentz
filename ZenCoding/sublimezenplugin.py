@@ -1,6 +1,8 @@
-#!/usr/bin/env python
 #coding: utf8
 #################################### IMPORTS ###################################
+
+# Std Libs
+import operator
 
 # Sublime Libs
 import sublime
@@ -67,6 +69,20 @@ __authors__     = ['"Sergey Chikuyonok" <serge.che@gmail.com>'
 
 zen_settings = sublime.load_settings('zen-coding.sublime-settings')
 
+
+OPMAP = {
+    sublime.OP_EQUAL     : operator.eq,
+    sublime.OP_NOT_EQUAL : operator.ne,
+}
+
+def eval_op(op, operand, operand2):
+    return OPMAP[op](operand, operand2)
+
+class ZenSettings(sublime_plugin.EventListener):
+    def on_query_context(self, view, key, op, operand, match_all):
+        if key.startswith('zen_setting'):
+            return eval_op(op, operand, zen_settings.get(key.split('.')[1]))
+
 ##################################### TODO #####################################
 """
 
@@ -104,7 +120,7 @@ load_settings()
 
 if int(sublime.version()) >= 2092:
     zen_settings.clear_on_change('zen_coding')
-    zen_settings.add_on_change('zen_coding', 
+    zen_settings.add_on_change('zen_coding',
                                lambda: load_settings(force_reload=1))
 
 ######################## REMOVE HTML/HTML_COMPLETIONS.PY #######################
@@ -118,12 +134,17 @@ def remove_html_completions():
         return
 
     completions = sublime_plugin.all_callbacks['on_query_completions']
-    if hc in completions: completions.remove(hc)
-    debug('on_query_completion: %r' % completions)
+    for i, instance in enumerate (completions):
+        if isinstance(instance, hc):
+            debug('on_query_completion: removing: %s' % hc)
+            del completions[i]
+
+    debug('on_query_completion: callbacks: %r' % completions)
 
 sublime.set_timeout(remove_html_completions, 2000)
 
 ########################## DYNAMIC ZEN CODING SNIPPETS #########################
+
 
 class ZenAsYouType(CommandsAsYouTypeBase):
     default_input = 'div'
@@ -132,7 +153,7 @@ class ZenAsYouType(CommandsAsYouTypeBase):
     def filter_input(self, abbr):
         try:
             return expand_abbr(abbr, super_profile='no_check_valid')
-        except ZenInvalidAbbreviation:
+        except Exception:
             "dont litter the console"
 
 class WrapZenAsYouType(CommandsAsYouTypeBase):
@@ -142,14 +163,16 @@ class WrapZenAsYouType(CommandsAsYouTypeBase):
     def run_command(self, view, cmd_input):
         try:
             ex = expand_abbr(cmd_input, super_profile='no_check_valid')
-            p = editor.get_profile_name() + '.no_check_valid'
-            if not ex: raise ZenInvalidAbbreviation('Empty expansion %r' % ex)
-        except ZenInvalidAbbreviation:
+            p  = editor.get_profile_name() + '.no_check_valid'
+            if not ex.strip():
+                raise ZenInvalidAbbreviation('Empty expansion %r' % ex)
+        except Exception:
             return False
 
         view.run_command (
             'run_zen_action',
-            dict(action="wrap_with_abbreviation", abbr=cmd_input, profile_name=p))
+            dict(action="wrap_with_abbreviation",
+            abbr=cmd_input, profile_name=p))
 
 ################################ RUN ZEN ACTION ################################
 
@@ -255,7 +278,7 @@ class ZenListener(sublime_plugin.EventListener):
         return [(prefix, '@=' + v, v) for v in values]
 
     def on_query_completions(self, view, prefix, locations):
-        if ( not self.correct_syntax(view) or 
+        if ( not self.correct_syntax(view) or
              zen_settings.get('disable_completions', False) ): return []
 
         black_list = zen_settings.get('completions_blacklist', [])
@@ -269,6 +292,9 @@ class ZenListener(sublime_plugin.EventListener):
         # A mapping of scopes, sub scopes and handlers, first matching of which
         # is used.
         COMPLETIONS = (
+
+            (CSS,  ( (CSS_SELECTOR,              self.css_selectors),
+                     (CSS_VALUE,                 self.css_property_values) )),
 
             (HTML, ( (HTML_INSIDE_TAG,           self.html_elements_attributes),
                      (HTML_INSIDE_TAG_ATTRIBUTE, self.html_attributes_values) ))
@@ -302,7 +328,7 @@ class ZenListener(sublime_plugin.EventListener):
 
                 if result:
                     return [
-                        (abbr, result if '<' not in result else abbr, result)]
+                        (abbr, abbr, result)]
 
         except ZenInvalidAbbreviation:
             pass
@@ -313,7 +339,7 @@ class ZenListener(sublime_plugin.EventListener):
         # TODO, before or after this, fuzz directly against the zen snippets
         # eg  `tjd` matching `tj:d` to expand `text-justify:distribute;`
 
-        if ( view.match_selector(pos, CSS_PROPERTY) and 
+        if ( view.match_selector(pos, CSS_PROPERTY) and
              not 'css_properties' in black_list ):
 
             # Use this to get non \w based prefixes

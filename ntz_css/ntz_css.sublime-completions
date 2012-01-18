@@ -98,7 +98,10 @@
     { "trigger": "ani|trans|transition", "contents": "-webkit-transition:${1:all} 0.${2:3s} ease;\n-moz-transition:${1:all} 0.${2:3s} ease;\n-o-transition:${1:all} 0.${2:3s} ease;\ntransition:${1:all } 0.${2:3s} ease;$0" },
     { "trigger": "cur", "contents": "cursor:${1:pointer};$0" },
     { "trigger": "ts", "contents": "text-shadow:$1px $2px $3px #$4;$0" },
-    { "trigger": "va", "contents": "vertical-align:${1:top}${2:middle}${3:bottom}${4:baseline};$0" }
+    { "trigger": "va", "contents": "vertical-align:${1:top}${2:middle}${3:bottom}${4:baseline};$0" },
 
+    /* media query */
+
+    { "trigger": "media|query", "contents": "@media all and ${1:(max-width: ${2:699}px)} ${5:and (min-width: ${6:520}px)}${10:, (min-width: ${11:1151}px)} {$0}" }
   ]
 }

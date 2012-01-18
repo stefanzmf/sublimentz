@@ -8,97 +8,142 @@ from itertools import takewhile
 import ex_error
 
 
-# Defines an ex command. This data is used to parse strings into ex commands.
-# More precisely, the invocations element defines possible arguments for the
-# corresponding command.
-#   
+# Data used to parse strings into ex commands and map them to an actual
+# Sublime Text command.
+#
 #   command
-#       The Sublime Text command to be executed. 
+#       The Sublime Text command to be executed.
 #   invocations
-#       Tuple of regexes representing valid calls for this command: arguments,
-#       bang, etc.
+#       Tuple of regexes representing valid calls for this command.
 #   error_on
 #       Tuple of error codes. The parsed command is checked for errors based
 #       on this information.
-#       For example: (ex_error.ERR_TRAILING_CHARS,)
+#       For example: on_error=(ex_error.ERR_TRAILING_CHARS,) would make the
+#       command fail if it was followed by any arguments.
 ex_cmd_data = namedtuple('ex_cmd_data', 'command invocations error_on')
 
-# Holds a parsed ex command.
+# Holds a parsed ex command data.
+# TODO: elaborate on params info.
 EX_CMD = namedtuple('ex_command', 'name command forced range args parse_errors')
 
-# This regex matches any type of range except open-ended /foo and ?bar
-# addresses. These are matched by EX_ONLY_RANGE_REGEXP instead. We don't need
-# to match them here, because they are not possible when a range precedes a
-# command.
-# FIXME: 2,del will be accepted, but I'm not sure what it should do.
-EX_RANGE_REGEXP = re.compile(r'''(?x)
-        ^(?:
-            (?P<laddress>
-                %| # % can only appear in left address or on its own
-                (?:[.$]|
-                (?:/.*?/|\?.*?\?){1,2}|\d+|[\'`][a-zA-Z0-9<>])
-            )
-                (?P<loffset>[-+]\d+)*
-        )
-        (?:
-            (?P<separator>[,;])
-            (?P<raddress>[.$%]|(?:/.*?/|\?.*?\?){1,2}|\d+|[\'`][a-zA-Z0-9<>])
-            (?P<roffset>[-+]\d+)*
-        )?
-    ''')
+# TODO: Allow escapes in search-based addresses, as in POSTFIX_ADDRESS.
+# Address that can only appear in a prefix range (before a command).
+PREFIX_ADDRESS = r'[.$%]|(?:/.*?/|\?.*?\?){1,2}|[+-]?\d+|[\'][a-zA-Z0-9<>]'
+# Address that can only appear after a command.
+POSTFIX_ADDRESS = r'[.$]|(?:/.*?(?<!\\)/|\?.*?(?<!\\)\?){1,2}|[+-]?\d+|[\'][a-zA-Z0-9<>]'
+ADDRESS_OFFSET = r'[-+]\d+'
+ADDRESS_SEPARATOR = r'[,;]'
+# Can only appear standalone.
+OPENENDED_SEARCH_ADDRESS = r'^[/?].*'
 
-EX_ONLY_RANGE_REGEXP = re.compile(r'''(?x)
-        ^(?:
-            (?P<laddress>
-                [$.]|
-                %$|
-                \d+|
-                /.*?(?<!\\)/|
-                \?.*?\?
-            )
-                (?P<loffset>[-+]\d+)*
-            (?: # optional right address
-                (?P<separator>[,;])
-                (?P<raddress>
-                    [%$.]|
-                    \d+|
-                    /.*?(?<!\\)/|
-                    \?.*?\?
-                )
-                (?P<roffset>[-+]\d+)*
-            )?
-        )|
-        (?P<openended>^[/?].*)
-        ''')
+# Can appear as prefix ranges or standalone.
+INCOMPLETE_RANGE_SEPARATOR = ','
 
-# Almost identical to above, but exclude '%'.
-# Note that Vim's help seems to be wrong about valid address. It says '%' is a
-# valid address, but in practice it doesn't work.
-# FIXME: add proper names like range, laddress, raddress, loffset, roffset
-EX_ADDRESS_REGEXP = re.compile(r'''(?x)
-                    ^(?P<address>
-                        (
-                            [$.]| # relative line symbol or...
-                            \d+| # absolute line number or...
-                            /.*?(?<!\\)/| # forward search, such as :/foo/ or...
-                            \?.*?(?<!\\)\? # reverse search, such as :?bar?
+# Matches ranges preceding commands.
+# TODO: +100,-100del should be valid ranges too.
+EX_PREFIX_RANGE = re.compile(
+                        r'''(?x)
+                            # Ranges missing a member, like 10, and ,10
+                            ^(?:
+                                (?P<incomplete>
+                                    (?:
+                                        (?P<inc_laddress>%(address)s)
+                                        (?P<inc_loffset>%(address_offset)s)*
+                                        (?P<suf_alt_separator>%(alt_separator)s)
+                                    )|
+                                    (?:
+                                        (?P<pref_alt_separator>%(alt_separator)s)
+                                        (?P<inc_raddress>%(address)s)
+                                        (?P<inc_roffset>%(address_offset)s)*
+                                    )
+                                )|
+                                    # A left address...
+                                    (?P<laddress>%(address)s)
+                                    # with optional offsets...
+                                    (?P<loffset>%(address_offset)s)*
+                                    # and an optional right address...
+                                    (?:
+                                       # (which includes the address separator)
+                                       (?P<separator>%(address_separator)s)
+                                       (?P<raddress>%(address)s)
+                                       # with optional offsets.
+                                       (?P<roffset>%(address_offset)s)*
+                                    )?
+                            )
+                            # We need to make sure that we match up to the separator, which
+                            # comes before the actual ex command. As far as I can tell, ex commands always
+                            # start with A-Za-z.
+                            (?=[a-zA-Z])
+                        ''' % {'address':           PREFIX_ADDRESS,
+                               'address_separator': ADDRESS_SEPARATOR,
+                               'address_offset':    ADDRESS_OFFSET,
+                               'alt_separator':     INCOMPLETE_RANGE_SEPARATOR,}
                         )
-                        ([-+]\d+)* # optional offset, like in :$-10
-                        (?: # optional right address
-                            ([,;]) # range separator
-                                (
-                                    # almost identical as above
-                                    [%$.]| # % only valid here
-                                    \d+|
-                                    /.*?(?<!\\)/|
-                                    \?.*?(?<!\\)\?
-                                )
-                                ([-+]\d+)*
-                        )?
-                    )
-                    |
-                    (^[/?].*)$ # covers cases like /foo and ?bar
-                ''')
+
+# Matches ranges that stand alone, without being followed by anything. They
+# simply represent an address to move the caret to.
+EX_STANDALONE_RANGE = re.compile(
+                            r'''(?x)
+                                ^(?:
+                                    # A full range consisting of...
+                                    (?P<incomplete>
+                                        (?:
+                                            (?P<inc_laddress>%(address)s)
+                                            (?P<inc_loffset>%(address_offset)s)*
+                                            (?P<suf_alt_separator>%(alt_separator)s)
+                                        )|
+                                        (?:
+                                            (?P<pref_alt_separator>%(alt_separator)s)
+                                            (?P<inc_raddress>%(address)s)
+                                            (?P<inc_roffset>%(address_offset)s)*
+                                        )
+                                    )|
+                                    (?:
+                                        # a left address...
+                                        (?P<laddress>%(address)s)
+                                        # optionally followed by offsets...
+                                        (?P<loffset>%(address_offset)s)*
+                                        # and an optional right address...
+                                        (?:
+                                            # (including the address separator)
+                                            (?P<separator>%(address_separator)s)
+                                            (?P<raddress>%(address)s)
+                                            # and any number of offsets...
+                                            (?P<roffset>%(address_offset)s)*
+                                        )?
+                                    )|
+                                    # or an openended search-based address.
+                                    (?P<openended>%(openended)s)
+                                )$
+                            ''' % {'address':           PREFIX_ADDRESS,
+                                   'address_separator': ADDRESS_SEPARATOR,
+                                   'address_offset':    ADDRESS_OFFSET,
+                                   'openended':         OPENENDED_SEARCH_ADDRESS,
+                                   'alt_separator':     INCOMPLETE_RANGE_SEPARATOR,}
+                            )
+
+# Matches addresses after commands, like :copy10.
+#
+# ** IMPORTANT **
+# Vim's documentation on valid addresses is wrong. For postfixed addresses,
+# as in :copy10,20, only the left end is parsed and used; the rest is discarded
+# and not even errors are thrown if the right end is bogus, like in :copy10XXX.
+EX_POSTFIX_ADDRESS = re.compile(
+                        r'''(?x)
+                            ^(?P<address>
+                                (?:
+                                 # A postfix address...
+                                 (?:%(address)s)
+                                 # optionally followed by offsets...
+                                 (?:%(offset)s)*
+                                )|
+                                # or an openended search-based address.
+                                %(openended)s
+                            )
+                        ''' %  {'address':      POSTFIX_ADDRESS,
+                                'offset':       ADDRESS_OFFSET,
+                                'openended':    OPENENDED_SEARCH_ADDRESS}
+                        )
 
 
 EX_COMMANDS = {
@@ -122,8 +167,8 @@ EX_COMMANDS = {
                                 command='ex_print_working_dir',
                                 invocations=(),
                                 error_on=(ex_error.ERR_NO_RANGE_ALLOWED,
-                                            ex_error.ERR_NO_BANG_ALLOWED,
-                                            ex_error.ERR_TRAILING_CHARS)
+                                          ex_error.ERR_NO_BANG_ALLOWED,
+                                          ex_error.ERR_TRAILING_CHARS)
                                 ),
     ('buffers', 'buffers'): ex_cmd_data(
                                 command='ex_prompt_select_open_file',
@@ -153,7 +198,8 @@ EX_COMMANDS = {
     ('quit', 'q'): ex_cmd_data(
                                 command='ex_quit',
                                 invocations=(),
-                                error_on=(ex_error.ERR_TRAILING_CHARS,)
+                                error_on=(ex_error.ERR_TRAILING_CHARS,
+                                          ex_error.ERR_NO_RANGE_ALLOWED,)
                                 ),
     ('qall', 'qa'): ex_cmd_data(
                                 command='ex_quit_all',
@@ -198,7 +244,7 @@ EX_COMMANDS = {
     ('move', 'move'): ex_cmd_data(
                                 command='ex_move',
                                 invocations=(
-                                   EX_ADDRESS_REGEXP,
+                                   EX_POSTFIX_ADDRESS,
                                 ),
                                 error_on=(ex_error.ERR_NO_BANG_ALLOWED,
                                           ex_error.ERR_INVALID_RANGE,)
@@ -206,7 +252,7 @@ EX_COMMANDS = {
     ('copy', 'co'): ex_cmd_data(
                                 command='ex_copy',
                                 invocations=(
-                                   EX_ADDRESS_REGEXP,
+                                   EX_POSTFIX_ADDRESS,
                                 ),
                                 error_on=(ex_error.ERR_NO_BANG_ALLOWED,
                                           ex_error.ERR_INVALID_RANGE,)
@@ -214,7 +260,7 @@ EX_COMMANDS = {
     ('t', 't'): ex_cmd_data(
                                 command='ex_copy',
                                 invocations=(
-                                   EX_ADDRESS_REGEXP,
+                                   EX_POSTFIX_ADDRESS,
                                 ),
                                 error_on=(ex_error.ERR_NO_BANG_ALLOWED,
                                           ex_error.ERR_INVALID_RANGE,)
@@ -267,6 +313,30 @@ EX_COMMANDS = {
                                           ex_error.ERR_NO_RANGE_ALLOWED,
                                           ex_error.ERR_TRAILING_CHARS,)
                                 ),
+    ('edit', 'e'): ex_cmd_data(
+                                command='ex_edit',
+                                invocations=(re.compile(r"^$"),),
+                                error_on=()
+                                ),
+    ('cquit', 'cq'): ex_cmd_data(
+                                command='ex_cquit',
+                                invocations=(),
+                                error_on=(ex_error.ERR_TRAILING_CHARS,
+                                          ex_error.ERR_NO_RANGE_ALLOWED,
+                                          ex_error.ERR_NO_BANG_ALLOWED,)
+                                ),
+    # TODO: implement all arguments, etc.
+    ('xit', 'x'): ex_cmd_data(
+                                command='ex_exit',
+                                invocations=(),
+                                error_on=()
+                                ),
+    # TODO: implement all arguments, etc.
+    ('exit', 'exi'): ex_cmd_data(
+                                command='ex_exit',
+                                invocations=(),
+                                error_on=()
+                                ),
 }
 
 
@@ -283,16 +353,14 @@ def find_command(cmd_name):
 
 
 def is_only_range(cmd_line):
-    try:
-        return EX_ONLY_RANGE_REGEXP.search(cmd_line) and \
-                    EX_RANGE_REGEXP.search(cmd_line).span()[1] == len(cmd_line)
-    except AttributeError:
-        return EX_ONLY_RANGE_REGEXP.search(cmd_line)
+    # Make sure we match a range standing alone (not followed by a command).
+    return EX_STANDALONE_RANGE.search(cmd_line) and \
+                not EX_PREFIX_RANGE.search(cmd_line)
 
 
 def get_cmd_line_range(cmd_line):
     try:
-        start, end = EX_RANGE_REGEXP.search(cmd_line).span()
+        start, end = EX_PREFIX_RANGE.search(cmd_line).span()
     except AttributeError:
         return None
     return cmd_line[start:end]
@@ -306,10 +374,17 @@ def parse_command(cmd):
     # strip :
     cmd_name = cmd[1:]
 
-    # In Vim, ":<enter>" more or less does nothing. 
+    # Do nothing if the command's just ":".
     if not cmd_name:
-        return
-    
+        return EX_CMD(
+                name='NOP',
+                command='ex_nop',
+                forced=False,
+                range='.',
+                args={},
+                parse_errors=None
+        )
+
     # first the odd commands
     if is_only_range(cmd_name):
         return EX_CMD(name=':',
@@ -326,7 +401,7 @@ def parse_command(cmd):
 
     if not (cmd_name.startswith('!') or cmd_name[0].isalpha()):
         return
-    
+
     if cmd_name.startswith('!'):
         args = cmd_name[1:]
         cmd_name = '!'
@@ -342,7 +417,7 @@ def parse_command(cmd):
     args = cmd_name[len(command):]
 
     bang = args.startswith('!')
-    if bang: 
+    if bang:
         args = args[1:]
 
     cmd_data = find_command(command)

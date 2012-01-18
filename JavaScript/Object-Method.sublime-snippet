@@ -1,7 +1,7 @@
 <snippet>
-    <content><![CDATA[${1:method_name}: function(${3:attribute}){
+    <content><![CDATA[${1:method_name}: function(${2: ${3:attribute} }){
   var \$t = this;
-	$0
+  $0
 }${10:,} // $1]]></content>
     <tabTrigger>:f</tabTrigger>
     <scope>source.js</scope>

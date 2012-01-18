@@ -1,233 +1,477 @@
+import re
 import unittest
 
-from ex_command_parser import EX_ADDRESS_REGEXP
-from ex_command_parser import EX_ONLY_RANGE_REGEXP
-from ex_command_parser import EX_RANGE_REGEXP
-from ex_range import partition_raw_range
+from ex_command_parser import ADDRESS_OFFSET
+from ex_command_parser import ADDRESS_SEPARATOR
+from ex_command_parser import EX_POSTFIX_ADDRESS
+from ex_command_parser import EX_PREFIX_RANGE
+from ex_command_parser import EX_STANDALONE_RANGE
+from ex_command_parser import OPENENDED_SEARCH_ADDRESS
+from ex_command_parser import POSTFIX_ADDRESS
+from ex_command_parser import PREFIX_ADDRESS
 from ex_range import EX_RANGE
+from ex_range import partition_raw_range
 
 
-class TestAddressParser(unittest.TestCase):
-    def testSimpleAddresses(self):
-        actual = EX_ADDRESS_REGEXP.search('$').groups()
-        expected = ('$', '$', None, None, None, None, None)
-        self.assertEquals(actual, expected)
+rx_ADDRESS_OFFSET = re.compile(ADDRESS_OFFSET)
+rx_ADDRESS_SEPARATOR = re.compile(ADDRESS_SEPARATOR)
+rx_OPENENDED_SEARCH_ADDRESS = re.compile(OPENENDED_SEARCH_ADDRESS)
+rx_POSTFIX_ADDRESS = re.compile(POSTFIX_ADDRESS)
+rx_PREFIX_ADDRESS = re.compile(PREFIX_ADDRESS)
 
-        actual = EX_ADDRESS_REGEXP.search('.').groups()
-        expected = ('.', '.', None, None, None, None, None)
-        self.assertEquals(actual, expected)
-        
-        # FIXME: not sure whether this is the correct behavior.
-        actual = EX_ADDRESS_REGEXP.match('%')
-        self.assertFalse(actual)
-        
-        self.assertFalse(EX_ADDRESS_REGEXP.match('a'))
-        self.assertFalse(EX_ADDRESS_REGEXP.match('aa'))
 
-        actual = EX_ADDRESS_REGEXP.search('1').groups()
-        expected = ('1', '1', None, None, None, None, None)
-        self.assertEquals(actual, expected)
-        
-        actual = EX_ADDRESS_REGEXP.search('123').groups()
-        expected = ('123', '123', None, None, None, None, None)
-        self.assertEquals(actual, expected)
-    
-    def testSimpleRanges(self):
-        # todo
-        ('%;.', ('%;.', '%', None, ';', '.', None, None))
-        # ('%,.', ('%,.', '%', None, ',', '.', None, None)),
-        tests = (
-                ('$,$', ('$,$', '$', None, ',', '$', None, None)),
-                ('.,.', ('.,.', '.', None, ',', '.', None, None)),
-                ('.,$', ('.,$', '.', None, ',', '$', None, None)),
-                ('$,.', ('$,.', '$', None, ',', '.', None, None)),
-                ('$;$', ('$;$', '$', None, ';', '$', None, None)),
-                ('.;.', ('.;.', '.', None, ';', '.', None, None)),
-                ('.;$', ('.;$', '.', None, ';', '$', None, None)),
-                ('$;.', ('$;.', '$', None, ';', '.', None, None)),
-                ('1,0', ('1,0', '1', None, ',', '0', None, None)),
-                ('10,10', ('10,10', '10', None, ',', '10', None, None)),
-                ('20,20', ('20,20', '20', None, ',', '20', None, None)),
-                ('.,100', ('.,100', '.', None, ',', '100', None, None)),
-                ('100,.', ('100,.', '100', None, ',', '.', None, None)),
+class RegexTestCaseMixin(object):
+    def assertRegexGroupWithManyCases(self, regex, values):
+        for value, expected in values:
+            self.assertEquals(regex.search(value).group(), expected)
+
+    def asserRegexCapturesWithManyCases(self, regex, values):
+        for actual, expected in values:
+            actual = regex.search(actual).groupdict()
+            self.assertEquals(actual, dict(zip(actual.keys(), expected)))
+
+class OpenendedSearchAddress(unittest.TestCase, RegexTestCaseMixin):
+    def testCanFindOpenendedSearchAddress(self):
+        values = (
+            ('/blah100 \\ 10,20', '/blah100 \\ 10,20'),
+            ('?blah100 \\ 10,20', '?blah100 \\ 10,20'),
         )
 
-        for t in tests:
-            self.assertEquals(EX_ADDRESS_REGEXP.search(t[0]).groups(), t[1])
+        self.assertRegexGroupWithManyCases(rx_OPENENDED_SEARCH_ADDRESS, values)
+
+
+class AddressSeparator(unittest.TestCase, RegexTestCaseMixin):
+    def testCanFindAddressSeparator(self):
+        values = (
+            (',', ','),
+            (';', ';'),
+        )
+
+        self.assertRegexGroupWithManyCases(rx_ADDRESS_SEPARATOR, values)
+
+
+class AddressOffset(unittest.TestCase, RegexTestCaseMixin):
+    def testCanFindOffsets(self):
+        values = (
+            ('+1', '+1'),
+            ('+100', '+100'),
+            ('-1', '-1'),
+            ('-100', '-100'),
+        )
+
+        self.assertRegexGroupWithManyCases(rx_ADDRESS_OFFSET, values)
+
+
+class PostfixAddress(unittest.TestCase, RegexTestCaseMixin):
+    def testSymbols(self):
+        values = (
+            ('$', '$'),
+            ('.', '.'),
+        )
+
+        self.assertRegexGroupWithManyCases(rx_POSTFIX_ADDRESS, values)
+
+    def testAddressBySearch(self):
+        values = (
+            ('/foo/', '/foo/'),
+            ('/foo\\//', '/foo\\//'),
+            ('/ foo /', '/ foo /'),
+            ('/foo//foo/', '/foo//foo/'),
+            ('?foo?', '?foo?'),
+            ('?foo\\??', '?foo\\??'),
+            ('?foo??foo?', '?foo??foo?'),
+            ('? foo ?', '? foo ?'),
+        )
+
+        self.assertRegexGroupWithManyCases(rx_POSTFIX_ADDRESS, values)
+
+    def testNumericAddresses(self):
+        values = (
+            ('1', '1'),
+            ('100', '100'),
+            ('+100', '+100'),
+            ('-100', '-100'),
+        )
+
+        self.assertRegexGroupWithManyCases(rx_POSTFIX_ADDRESS, values)
+
+    def testAddressByBookmark(self):
+        values = (
+            ("'1", "'1"),
+            ("'9", "'9"),
+            ("'a", "'a"),
+            ("'z", "'z"),
+            ("'A", "'A"),
+            ("'Z", "'Z"),
+            ("'<", "'<"),
+            ("'>", "'>"),
+        )
+
+        self.assertRegexGroupWithManyCases(rx_POSTFIX_ADDRESS, values)
+
+
+class PrefixAddress(unittest.TestCase, RegexTestCaseMixin):
+    def testSymbols(self):
+        values = (
+            ('$', '$'),
+            ('.', '.'),
+            ('%', '%'),
+        )
+
+        self.assertRegexGroupWithManyCases(rx_PREFIX_ADDRESS, values)
+
+    def testAddressBySearch(self):
+        values = (
+            ('/foo/', '/foo/'),
+            ('/ foo /', '/ foo /'),
+            ('/foo//foo/', '/foo//foo/'),
+            ('?foo?', '?foo?'),
+            ('?foo??foo?', '?foo??foo?'),
+            ('? foo ?', '? foo ?'),
+        )
+
+        self.assertRegexGroupWithManyCases(rx_PREFIX_ADDRESS, values)
+
+    def testNumericAddresses(self):
+        values = (
+            ('1', '1'),
+            ('100', '100'),
+            ('+100', '+100'),
+            ('-100', '-100'),
+        )
+
+        self.assertRegexGroupWithManyCases(rx_PREFIX_ADDRESS, values)
+
+    def testAddressByBookmark(self):
+        values = (
+            ("'1", "'1"),
+            ("'9", "'9"),
+            ("'a", "'a"),
+            ("'z", "'z"),
+            ("'A", "'A"),
+            ("'Z", "'Z"),
+            ("'<", "'<"),
+            ("'>", "'>"),
+        )
+
+        self.assertRegexGroupWithManyCases(rx_PREFIX_ADDRESS, values)
+
+
+class PostfixAddressParser(unittest.TestCase, RegexTestCaseMixin):
+    def testSimpleAddresses(self):
+        values = (
+            ('$', ('$',)),
+            ('.', ('.',)),
+            ('1', ('1',)),
+            ('100', ('100',)),
+            ('+100', ('+100',)),
+            ('-100', ('-100',)),
+            ('100XXX', ('100',)),
+            ("'a", ("'a",)),
+            ("'aXX", ("'a",)),
+            ("'z", ("'z",)),
+            ("'1", ("'1",)),
+            ("'9", ("'9",)),
+            ("'<", ("'<",)),
+            ("'>", ("'>",)),
+        )
+
+        self.asserRegexCapturesWithManyCases(EX_POSTFIX_ADDRESS, values)
+
+    def testInvaliSimpleAddresses(self):
+        values = ('%', 'a', 'aa', 'a10')
+
+        for value in values:
+            self.assertFalse(EX_POSTFIX_ADDRESS.match(value))
+
+    def testSimpleRanges(self):
+        values = (
+            ('$,$', ('$',)),
+            ('.,.', ('.',)),
+            ('.,$', ('.',)),
+            ('$,.', ('$',)),
+            ('1,0', ('1',)),
+            ('10,10', ('10',)),
+            ('20,20', ('20',)),
+            ('.,100', ('.',)),
+            ('100,.', ('100',)),
+            ('$;.', ('$',)),
+            ('$;$', ('$',)),
+            ('.;.', ('.',)),
+            ('.;$', ('.',)),
+            ('20,30XX', ('20',)),
+        )
+
+        self.asserRegexCapturesWithManyCases(EX_POSTFIX_ADDRESS, values)
 
     def testInvalidSimpleRanges(self):
-        values = ('%;.', '%,.')
+        values = ('%', '%;.', '%,.')
         for v in values:
-            self.assertFalse(EX_ADDRESS_REGEXP.match(v))
+            self.assertFalse(EX_POSTFIX_ADDRESS.match(v))
 
     def testSimpleRangesWithOffsets(self):
         values = (
-                ('$-10,$+5', ('$-10,$+5', '$', '-10', ',', '$', '+5', None)),
-                ('.+10,%-5', ('.+10,%-5', '.', '+10', ',', '%', '-5', None)),
-                ('10-10,10+50', ('10-10,10+50', '10', '-10', ',', '10', '+50', None)),
+                ('$-10,$+5', ('$-10',)),
+                ('.+10,%-5', ('.+10',)),
+                ('10-10,10+50', ('10-10',)),
+        )
+
+        self.asserRegexCapturesWithManyCases(EX_POSTFIX_ADDRESS, values)
+
+    def testRangesBySearching(self):
+        values = (
+                ('/foo/', ('/foo/',)),
+                ('/foo/,/bar/', ('/foo/',)),
+                ('/foo/,?bar?', ('/foo/',)),
+                ('?foo?,?bar?', ('?foo?',)),
+                ('?foo?,/bar/', ('?foo?',)),
+                ('/foo/;/bar/', ('/foo/',)),
+                ('/foo/;?bar?', ('/foo/',)),
+                ('?foo?;?bar?', ('?foo?',)),
+                ('?foo?;/bar/', ('?foo?',)),
+                ('?foo?', ('?foo?',)),
+                ('/foo bar/', ('/foo bar/',)),
+                ('/ foo bar /', ('/ foo bar /',)),
+                ('? foo bar ?', ('? foo bar ?',)),
+                )
+
+        self.asserRegexCapturesWithManyCases(EX_POSTFIX_ADDRESS, values)
+
+    def testSearchBasedAddressesWithEscapes(self):
+        values = (
+            ('/foo\//,$', ('/foo\//',)),
+            ('?foo\??,$', ('?foo\??',)),
+        )
+
+        self.asserRegexCapturesWithManyCases(EX_POSTFIX_ADDRESS, values)
+
+    def testOpenEndedSearches(self):
+        values = (
+            ('/foo bar', ('/foo bar',)),
+            ('?foo bar', ('?foo bar',)),
+        )
+
+        self.asserRegexCapturesWithManyCases(EX_POSTFIX_ADDRESS, values)
+
+
+class StandAloneRangeParser(unittest.TestCase):
+    def testSimpleAddresses(self):
+        values = (
+                '%',
+                '$',
+                '.',
+                '1',
+                '10',
+                '100',
+                '+100',
+                '-100',
+                )
+
+        for v in values:
+            self.assertTrue(EX_STANDALONE_RANGE.match(v))
+
+        self.assertFalse(EX_STANDALONE_RANGE.match('a'))
+
+    def testIncompleteRanges(self):
+        values = (
+            '100,',
+            '+100,',
+            '-100,',
+            ',100',
+            ',+100',
+            ',-100',
+            '100+100,',
+            ',100+100',
+            ',/foo/+100',
+            '/foo/+100,',
         )
 
         for v in values:
-            self.assertEquals(EX_ADDRESS_REGEXP.search(v[0]).groups(), v[1])
-
-    def testRangesSearching(self):
-        self.assertTrue(EX_ADDRESS_REGEXP.match('/foo/'))
-        self.assertTrue(EX_ADDRESS_REGEXP.match('/foo/,/bar/'))
-        self.assertTrue(EX_ADDRESS_REGEXP.match('/foo/,?bar?'))
-        self.assertTrue(EX_ADDRESS_REGEXP.match('?foo?,?bar?'))
-        self.assertTrue(EX_ADDRESS_REGEXP.match('?foo?,/bar/'))
-        self.assertTrue(EX_ADDRESS_REGEXP.match('/foo/;/bar/'))
-        self.assertTrue(EX_ADDRESS_REGEXP.match('/foo/;?bar?'))
-        self.assertTrue(EX_ADDRESS_REGEXP.match('?foo?;?bar?'))
-        self.assertTrue(EX_ADDRESS_REGEXP.match('?foo?;/bar/'))
-        self.assertTrue(EX_ADDRESS_REGEXP.match('?foo?'))
-        self.assertTrue(EX_ADDRESS_REGEXP.match('/foo bar/'))
-        self.assertTrue(EX_ADDRESS_REGEXP.match('/ foo bar /'))
-        self.assertTrue(EX_ADDRESS_REGEXP.match('? foo bar ?'))
-
-    def testRangesSearchingWithEscapes(self):
-        actual = EX_ADDRESS_REGEXP.search(r'/foo\//,$')
-        self.assertEquals(actual.group(), r'/foo\//,$')
-        actual = EX_ADDRESS_REGEXP.search(r'?foo\??,$')
-        self.assertEquals(actual.group(), r'?foo\??,$')
-
-    def testExtractRange(self):
-        foo = EX_ADDRESS_REGEXP.search(r'100,200delete')
-        self.assertEquals(foo.group(), '100,200')
-        foo = EX_ADDRESS_REGEXP.search('.,200delete')
-        self.assertEquals(foo.group(), '.,200')
-        foo = EX_ADDRESS_REGEXP.search(r'.+100,/foo/-20delete')
-        self.assertEquals(foo.group(), '.+100,/foo/-20')
-
-
-class TestOnlyRange(unittest.TestCase):
-    def testSimpleAddresses(self):
-        self.assertTrue(EX_ONLY_RANGE_REGEXP.match('%'))
-        self.assertTrue(EX_ONLY_RANGE_REGEXP.match('$'))
-        self.assertTrue(EX_ONLY_RANGE_REGEXP.match('.'))
-        self.assertTrue(EX_ONLY_RANGE_REGEXP.match('1'))
-        self.assertTrue(EX_ONLY_RANGE_REGEXP.match('10'))
-        self.assertTrue(EX_ONLY_RANGE_REGEXP.match('100'))
-        self.assertFalse(EX_ONLY_RANGE_REGEXP.match('a'))
-        self.assertFalse(EX_ONLY_RANGE_REGEXP.match(':'))
+            self.assertTrue(EX_STANDALONE_RANGE.match(v))
 
     def testAddressBySearchOnly(self):
-        self.assertTrue(EX_ONLY_RANGE_REGEXP.match('/foo/'))
-        self.assertTrue(EX_ONLY_RANGE_REGEXP.match('/bar/'))
-        self.assertTrue(EX_ONLY_RANGE_REGEXP.match('/100/'))
-        self.assertTrue(EX_ONLY_RANGE_REGEXP.match('?foo?'))
-        self.assertTrue(EX_ONLY_RANGE_REGEXP.match('?bar?'))
-        self.assertTrue(EX_ONLY_RANGE_REGEXP.match('?100?'))
-    
+        values =  ('/foo/',
+                    '/bar/',
+                    '/100/',
+                    '?foo?',
+                    '?bar?',
+                    '?100?',)
+
+        for v in values:
+            self.assertTrue(EX_STANDALONE_RANGE.match(v))
+
     def testAddressWithOffsets(self):
-        self.assertTrue(EX_ONLY_RANGE_REGEXP.match('/foo/+10'))
-        self.assertTrue(EX_ONLY_RANGE_REGEXP.match('/bar/-100'))
-        self.assertTrue(EX_ONLY_RANGE_REGEXP.match('/100/+100'))
-        self.assertTrue(EX_ONLY_RANGE_REGEXP.match('?foo?-10'))
-        self.assertTrue(EX_ONLY_RANGE_REGEXP.match('?bar?+10+10'))
-        self.assertTrue(EX_ONLY_RANGE_REGEXP.match('?100?+10-10'))
+        values = ('/foo/+10',
+                '/bar/-100',
+                '/100/+100',
+                '?foo?-10',
+                '?bar?+10+10',
+                '?100?+10-10',)
+
+        for v in values:
+            self.assertTrue(EX_STANDALONE_RANGE.match(v))
 
     def testSimpleRanges(self):
-        self.assertTrue(EX_ONLY_RANGE_REGEXP.match('.,$'))
-        self.assertTrue(EX_ONLY_RANGE_REGEXP.match('$,.'))
-        self.assertFalse(EX_ONLY_RANGE_REGEXP.match('%,.'))
-        self.assertTrue(EX_ONLY_RANGE_REGEXP.match('.,%'))
-        self.assertTrue(EX_ONLY_RANGE_REGEXP.match('$,%'))
-        self.assertFalse(EX_ONLY_RANGE_REGEXP.match('%,$'))
-        self.assertFalse(EX_ONLY_RANGE_REGEXP.match('a,$'))
-        # FIXME: This one is legal in Vim, but I don't what it does.
-        self.assertTrue(EX_ONLY_RANGE_REGEXP.match('.,a'))
-        self.assertTrue(EX_ONLY_RANGE_REGEXP.match('100,1'))
+        values = ('.,$',
+                    '$,.',
+                    '%,.',
+                    '.,%',
+                    '$,%',
+                    '%,$',
+                    # FIXME: This one is legal in Vim, but I don't what it does.
+                    '.,',
+                    ',.',
+                    '100,1',)
+
+        for v in values:
+            self.assertTrue(EX_STANDALONE_RANGE.match(v))
+
+        self.assertFalse(EX_STANDALONE_RANGE.match('a,$'))
+        self.assertFalse(EX_STANDALONE_RANGE.match('$,qwertyzt'))
 
     def testSimpleRangesWithOffsets(self):
-        self.assertTrue(EX_ONLY_RANGE_REGEXP.match('.,$-10'))
-        self.assertTrue(EX_ONLY_RANGE_REGEXP.match('$-10,.+1'))
-        self.assertFalse(EX_ONLY_RANGE_REGEXP.match('%-10,.-10'))
-        self.assertTrue(EX_ONLY_RANGE_REGEXP.match('.+10,%+1'))
-        # FIXME: This should be illegal.
-        self.assertFalse(EX_ONLY_RANGE_REGEXP.match('$+a,%'))
-        self.assertTrue(EX_ONLY_RANGE_REGEXP.match('100+100,1-100'))
-        # Not valid in Vim either.
-        self.assertFalse(EX_ONLY_RANGE_REGEXP.match('+100,-100'))
+        values = ('.,$-10',
+        '$-10,.+1',
+        '.+10,%+1',
+        '100+100,1-100',
+        '+100,-100',
+        # According to Vim, this should be illegal (command error).
+        '%-10,.-10',)
+
+        for v in values:
+            self.assertTrue(EX_STANDALONE_RANGE.match(v))
+
+        values = (
+                    # FIXME: This should be illegal.
+                    '$+a,%',)
+
+        for v in values:
+            self.assertFalse(EX_STANDALONE_RANGE.match(v))
 
     def testComplexRanges(self):
-        self.assertTrue(EX_ONLY_RANGE_REGEXP.match('/foo/,?bar?'))
-        self.assertTrue(EX_ONLY_RANGE_REGEXP.match('/foo/,/bar/'))
-        self.assertTrue(EX_ONLY_RANGE_REGEXP.match('?foo?,?bar?'))
-        self.assertTrue(EX_ONLY_RANGE_REGEXP.match('/foo/,$'))
-        self.assertTrue(EX_ONLY_RANGE_REGEXP.match('$,/foo/'))
-        self.assertTrue(EX_ONLY_RANGE_REGEXP.match('$,/foo/'))
+        values = ('/foo/,?bar?',
+                    '/foo/,/bar/',
+                    '?foo?,?bar?',
+                    '/foo/,$',
+                    '$,/foo/',
+                    '$,/foo/',)
+
+        for v in values:
+            self.assertTrue(EX_STANDALONE_RANGE.match(v))
 
 
 class TestRange(unittest.TestCase):
     def testSimpleAddresses(self):
-        self.assertTrue(EX_RANGE_REGEXP.match('%'))
-        self.assertTrue(EX_RANGE_REGEXP.match('$'))
-        self.assertTrue(EX_RANGE_REGEXP.match('.'))
-        self.assertTrue(EX_RANGE_REGEXP.match('1'))
-        self.assertTrue(EX_RANGE_REGEXP.match('10'))
-        self.assertTrue(EX_RANGE_REGEXP.match('100'))
-        self.assertFalse(EX_RANGE_REGEXP.match('a'))
-        self.assertFalse(EX_RANGE_REGEXP.match(':'))
+        values = (
+                    '%abc',
+                    '$abc',
+                    '.abc',
+                    '1abc',
+                    '10abc',
+                    '100abc',
+                )
+
+        for v in values:
+            self.assertTrue(EX_PREFIX_RANGE.match(v))
+
+        values = ('a',
+                    ':',)
+
+        for v in values:
+            self.assertFalse(EX_PREFIX_RANGE.match(v))
 
     def testAddressBySearchOnly(self):
-        self.assertTrue(EX_RANGE_REGEXP.match('/foo/'))
-        self.assertTrue(EX_RANGE_REGEXP.match('/bar/'))
-        self.assertTrue(EX_RANGE_REGEXP.match('/100/'))
-        self.assertTrue(EX_RANGE_REGEXP.match('?foo?'))
-        self.assertTrue(EX_RANGE_REGEXP.match('?bar?'))
-        self.assertTrue(EX_RANGE_REGEXP.match('?100?'))
-    
+        values = ('/foo/abc',
+                    '/bar/abc',
+                    '/100/abc',
+                    '?foo?abc',
+                    '?bar?abc',
+                    '?100?abc',)
+
+        for v in values:
+            self.assertTrue(EX_PREFIX_RANGE.match(v))
+
     def testAddressWithOffsets(self):
-        self.assertTrue(EX_RANGE_REGEXP.match('/foo/+10'))
-        self.assertTrue(EX_RANGE_REGEXP.match('/bar/-100'))
-        self.assertTrue(EX_RANGE_REGEXP.match('/100/+100'))
-        self.assertTrue(EX_RANGE_REGEXP.match('?foo?-10'))
-        self.assertTrue(EX_RANGE_REGEXP.match('?bar?+10+10'))
-        self.assertTrue(EX_RANGE_REGEXP.match('?100?+10-10'))
+        values = ('/foo/+10abc',
+                    '/bar/-100abc',
+                    '/100/+100abc',
+                    '?foo?-10abc',
+                    '?bar?+10+10abc',
+                    '?100?+10-10abc',)
+
+        for v in values:
+            self.assertTrue(EX_PREFIX_RANGE.match(v))
 
     def testSimpleRanges(self):
-        self.assertTrue(EX_RANGE_REGEXP.match('.,$'))
-        self.assertTrue(EX_RANGE_REGEXP.match('$,.'))
-        self.assertFalse(EX_RANGE_REGEXP.match('%,.'))
-        self.assertTrue(EX_RANGE_REGEXP.match('.,%'))
-        self.assertTrue(EX_RANGE_REGEXP.match('$,%'))
-        self.assertFalse(EX_RANGE_REGEXP.match('%,$'))
-        self.assertFalse(EX_RANGE_REGEXP.match('a,$'))
-        self.assertFalse(EX_RANGE_REGEXP.match('.,a'))
-        self.assertTrue(EX_RANGE_REGEXP.match('100,1'))
+        values = ('.,$abc',
+                    '$,.abc',
+                    '.,%abc',
+                    '$,%abc',
+                    '100,1abc',
+                    '%,.abc',
+                    '%,$abc',
+                    '.,abc',
+                )
+
+        for v in values:
+            self.assertTrue(EX_PREFIX_RANGE.match(v))
+
+        values = (
+                    'a,$',
+                )
+
+        for v in values:
+            self.assertFalse(EX_PREFIX_RANGE.match(v))
 
     def testSimpleRangesWithOffsets(self):
-        self.assertTrue(EX_RANGE_REGEXP.match('.,$-10'))
-        self.assertTrue(EX_RANGE_REGEXP.match('$-10,.+1'))
-        self.assertFalse(EX_RANGE_REGEXP.match('%-10,.-10-10'))
-        self.assertTrue(EX_RANGE_REGEXP.match('.+10+10,%+1'))
-        # This should be illegal.
-        self.assertFalse(EX_RANGE_REGEXP.match('$+a,%'))
-        self.assertTrue(EX_RANGE_REGEXP.match('100+100,1-100'))
-        # Not valid in Vim either.
-        self.assertFalse(EX_RANGE_REGEXP.match('+100,-100'))
+        values = ('.,$-10abc',
+                    '$-10,.+1abc',
+                    '.+10+10,%+1abc',
+                    '100+100,1-100abc',)
+
+        for v in values:
+            self.assertTrue(EX_PREFIX_RANGE.match(v))
+
+        values = (# This should be illegal.
+                  '$+a,%',
+                  # Not valid in Vim either.
+                  '+100,-100',
+                  '%-10,.-10-10',)
+
+        for v in values:
+            self.assertFalse(EX_PREFIX_RANGE.match(v))
 
     def testComplexRanges(self):
-        self.assertTrue(EX_RANGE_REGEXP.match('/foo/,?bar?'))
-        self.assertTrue(EX_RANGE_REGEXP.match('/foo/,/bar/'))
-        self.assertTrue(EX_RANGE_REGEXP.match('?foo?,?bar?'))
-        self.assertTrue(EX_RANGE_REGEXP.match('/foo/,$'))
-        self.assertTrue(EX_RANGE_REGEXP.match('$,/foo/'))
-        self.assertTrue(EX_RANGE_REGEXP.match('$,/foo/'))
+        values = ('/foo/,?bar?abc',
+                    '/foo/,/bar/abc',
+                    '?foo?,?bar?abc',
+                    '/foo/,$abc',
+                    '$,/foo/abc',
+                    '$,/foo/abc',)
+
+        for v in values:
+            self.assertTrue(EX_PREFIX_RANGE.match(v))
+
+    def testIncompleteRanges(self):
+        values = (
+            '100,abc',
+            ',100abc',
+            '/foo/+100,abc',
+            ',/foo/+100abc',
+        )
+
+        for v in values:
+            self.assertTrue(EX_PREFIX_RANGE.match(v))
 
 
 class TestPartitionRange(unittest.TestCase):
         def testDetectRanges(self):
-            actual = partition_raw_range('10,20abc')
-            expected = EX_RANGE('10', '0', ',', '20', '0')
-            self.assertEquals(actual, expected)
-            actual = partition_raw_range('10+10,20+10abc')
-            expected = EX_RANGE('10', '+10', ',', '20', '+10')
-            self.assertEquals(actual, expected)
-            actual = partition_raw_range('.,$abc')
-            expected = EX_RANGE('.', '0', ',', '$', '0')
-            self.assertEquals(actual, expected)
-            actual = partition_raw_range('.-10,$-5abc')
-            expected = EX_RANGE('.', '-10', ',', '$', '-5')
-            self.assertEquals(actual, expected)
+            values = (
+                ('10,20',        ('10', '0', ',', '20', '0')),
+                ('10+10,20+10',  ('10', '+10', ',', '20', '+10')),
+                ('.,$',          ('.', '0', ',', '$', '0')),
+                ('.-10,$-5',     ('.', '-10', ',', '$', '-5')),
+            )
+
+            for actual, expected in values:
+                self.assertEquals(partition_raw_range(actual), EX_RANGE(*expected))

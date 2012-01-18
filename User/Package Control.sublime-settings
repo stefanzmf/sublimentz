@@ -5,20 +5,31 @@
 	[
 		"AAAPackageDev",
 		"alternative_autocompletion",
+		"ApacheConf.tmLanguage",
 		"AutoSelect",
 		"BracketHighlighter",
 		"BufferScroll",
+		"Case Conversion",
+		"Format SQL",
+		"Goto-CSS-Declaration",
 		"JSDocs",
 		"JsFormat",
+		"Nettuts+ Fetch",
+		"Nettuts-Fetch",
 		"Package Control",
 		"PhpDoc",
+		"SFTP",
 		"SideBarEnhancements",
+		"sublime-jslint",
 		"SublimeBlockCursor",
 		"sublimelint",
 		"SublimeREPL",
 		"Theme - Soda",
+		"Todo Manager",
 		"VintageEx",
-		"WordHighlight"
+		"WordHighlight",
+		"Wordpress",
+		"ZenCoding"
 	],
 	"repositories":
 	[
@@ -37,6 +48,13 @@
 		"https://github.com/a-sk/sublime-css-colors",
 		"https://github.com/SublimeText/VintageEx",
 		"https://github.com/netpro2k/SublimeBlockCursor",
-		"https://github.com/alek-sys/ChangeTracker"
+		"https://github.com/alek-sys/ChangeTracker",
+		"https://github.com/rmaksim/Sublime-Text-2-Goto-CSS-Declaration",
+		"https://github.com/facelessuser/RegReplace.git",
+		"https://github.com/facelessuser/RegReplace",
+		"https://github.com/weslly/Nettuts-Fetch",
+		"https://github.com/tanepiper/sublime-todomanager.git",
+		"https://github.com/tanepiper/sublime-todomanager",
+		"https://bitbucket.org/sublimator/volcanoes"
 	]
 }

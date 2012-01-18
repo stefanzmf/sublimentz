@@ -3,16 +3,14 @@
 
 from collections import namedtuple
 
-from ex_command_parser import EX_RANGE_REGEXP
-from ex_command_parser import EX_ONLY_RANGE_REGEXP
-import ex_location
+from ex_command_parser import EX_STANDALONE_RANGE
 
 
 EX_RANGE = namedtuple('ex_range', 'left left_offset separator right right_offset')
 
 
 def partition_raw_only_range(range):
-    parts = EX_ONLY_RANGE_REGEXP.search(range).groupdict()
+    parts = EX_STANDALONE_RANGE.search(range).groupdict()
     if parts['openended']:
         return EX_RANGE(
                     left=parts['openended'],
@@ -20,6 +18,14 @@ def partition_raw_only_range(range):
                     separator='',
                     right='',
                     right_offset='0'
+                    )
+    elif parts['incomplete']:
+        return EX_RANGE(
+                    left=parts['inc_laddress'] or '.',
+                    left_offset=parts['inc_loffset'] or '0',
+                    separator=parts['suf_alt_separator'] or parts['pref_alt_separator'],
+                    right=parts['inc_raddress'] or '.',
+                    right_offset=parts['inc_loffset'] or '0',
                     )
     else:
         return EX_RANGE(
@@ -42,7 +48,20 @@ def partition_raw_range(range):
             right: $
             right_offset: -15
     """
-    parts = EX_RANGE_REGEXP.search(range).groupdict()
+    # At this point we can be sure that ``range`` is a valid prefix range.
+    # ``EX_PREFIX_RANGE`` won't match correctly here because the suffixed
+    # command has been stripped, so we use ``EX_STANDALONE_RANGE`` instead.
+    # parts = EX_PREFIX_RANGE.search(range).groupdict()
+    parts = EX_STANDALONE_RANGE.search(range).groupdict()
+    if parts['incomplete']:
+        return EX_RANGE(
+                    left=parts['inc_laddress'] or '.',
+                    left_offset=parts['inc_loffset'] or '0',
+                    separator=parts['suf_alt_separator'] or parts['pref_alt_separator'],
+                    right=parts['inc_raddress'] or '.',
+                    right_offset=parts['inc_loffset'] or '0',
+                    )
+
     return EX_RANGE(
                 left=parts['laddress'],
                 left_offset=parts['loffset'] or '0',
@@ -60,6 +79,10 @@ def calculate_range_part(view, range_part, start_line=None):
     """
     if range_part.isdigit():
         return int(range_part)
+
+    if range_part[0] in '+-':
+        return calculate_relative_ref(view, '.', start_line) + int(range_part)
+
     if range_part.startswith('/') or range_part.startswith('?'):
         # we need to strip the search marks. FIXME won't work in edge cases
         # like ?foo\/ (doublecheck with vim)
@@ -76,9 +99,9 @@ def calculate_range_part(view, range_part, start_line=None):
             return ex_location.reverse_search(view, search_term, end=end)
         return ex_location.search(view, search_term, start_line=start_line)
     if range_part in ('$', '.'):
-        return ex_location.calculate_relative_ref(view, range_part, start_line)
+        return calculate_relative_ref(view, range_part, start_line)
 
-        
+
 def calculate_range(view, raw_range, is_only_range=False):
     """Takes an unparsed :ex range as a string and returns the actual lines it
     refers to (1-based).
@@ -100,11 +123,12 @@ def calculate_range(view, raw_range, is_only_range=False):
 
     # In full ranges, '%' can appear in any (or both) sides and will make the
     # range span the whole buffer. (Examples: %,% or %,$ or 10;%)
+    # TODO:
+    # In Vim, %-10 is illegal and throws an error, but we simply ignore
+    # offsets with %.
     if parsed_range.left == '%' or parsed_range.right == '%':
         left, loffset = '1', '0'
         right, roffset = '$', '0'
-    # TODO: Vim allows incomplete ranges and substitutes missing addresses
-    # with ".". (Examples: ,100delete or 100,delete)
     elif parsed_range.separator:
         left, loffset = parsed_range.left, parsed_range.left_offset
         right, roffset = parsed_range.right, parsed_range.right_offset
@@ -112,7 +136,7 @@ def calculate_range(view, raw_range, is_only_range=False):
         left = calculate_range_part(view, parsed_range.left) + \
                                             int(parsed_range.left_offset)
         return left, left
-    
+
     # In ranges separated by ";", the right-hand address is calculated starting
     # at the left-side address, and not based on the caret's position.
     if parsed_range.separator == ';':
@@ -120,8 +144,21 @@ def calculate_range(view, raw_range, is_only_range=False):
         right = calculate_range_part(view, right, start_line=left - 1) + \
                                                                 int(roffset)
         # Vim asks the user before reversing ranges, but we won't because
-        # reversing the order will be the desired result most of the time.
+        # reversing the order will be the desired choice most of the time.
         return min(left, right), max(left, right)
 
     return calculate_range_part(view, left) + int(loffset), \
                calculate_range_part(view, right) + int(roffset)
+
+
+def calculate_relative_ref(view, where, start_line=None):
+    if where == '$':
+        return view.rowcol(view.size())[0] + 1
+    if where == '.':
+        if start_line:
+            return view.rowcol(view.text_point(start_line, 0))[0] + 1
+        return view.rowcol(view.sel()[0].begin())[0] + 1
+
+
+# Avoid circular import.
+import ex_location

@@ -1,7 +1,7 @@
 <snippet>
-    <content><![CDATA[${1:public }function ${2:FunctionName}( ${3:\$${4:value}${5: = ${6:''}}} ){
+    <content><![CDATA[p${1/(rotected)|.*/(?1:ublic)/}${1:ublic}${1/(r)|(I)|.*/(?1:otected)(?2:d)/} function ${10:FunctionName}( ${15:\$${20:value}${25: = ${30:''}}} ){
 	${0:# code...}
-} // $2]]></content>
+} // $10]]></content>
     <tabTrigger>fun</tabTrigger>
     <scope>source.php</scope>
     <description>function …</description>

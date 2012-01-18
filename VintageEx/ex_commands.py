@@ -13,6 +13,7 @@ import subprocess
 from vintage import g_registers
 
 import ex_range
+import ex_error
 import shell
 from plat.windows import get_oem_cp
 
@@ -103,15 +104,17 @@ def compute_address(view, text_range):
 
     Return values:
         - SUCCESS: address (positive integer)
-        - ERROR: -1 (can't compute valid address)
+        - ERROR: None (can't compute valid address)
     """
     # XXX strip in the parsing phase instead
     text_range = text_range.strip()
     # Note that some address error checking is also performed at the parsing
     # stage, so that '%' doesn't reach here, for example.
     a, b = ex_range.calculate_range(view, text_range.strip())
-    address = (max(a, b) if all((a, b)) else (a or b)) or 0
-    return address - 1
+    # FIXME: 0 should be a valid address?
+    if not (0 < a <= view.rowcol(view.size())[0] + 1):
+        return None
+    return a - 1
 
 
 def get_startup_info():
@@ -133,10 +136,8 @@ def ensure_line_block(view, r):
 
 class ExGoto(sublime_plugin.TextCommand):
     def run(self, edit, range=''):
-        assert range, 'Range required.'
         a, b = ex_range.calculate_range(self.view, range, is_only_range=True)
-        target = (max(a, b) if all((a, b)) else (a or b)) or 0
-        self.view.run_command('vi_goto_line', {'repeat': target})
+        self.view.run_command('vi_goto_line', {'repeat': b})
         self.view.show(self.view.sel()[0])
 
 
@@ -268,16 +269,15 @@ class ExMap(sublime_plugin.TextCommand):
 class ExAbbreviate(sublime_plugin.TextCommand):
     # for them moment, just open a completions file.
     def run(self, edit):
-        abbreviations_file = os.path.join(
-                                    sublime.packages_path(),
-                                    'User/Vintage Abbreviations.sublime-completions'
-                                    )
-        if not os.path.exists(abbreviations_file):
-            with open(abbreviations_file, 'w'):
-                pass
+        abbs_file_name = 'VintageEx Abbreviations.sublime-completions'
+        abbreviations = os.path.join(sublime.packages_path(),
+                                     'User/' + abbs_file_name)
+        if not os.path.exists(abbreviations):
+            with open(abbreviations, 'w') as f:
+                f.write('{\n\t"scope": "",\n\t"completions": [\n\t\n\t]\n}\n')
         
         self.view.window().run_command('open_file',
-                                            {'file': abbreviations_file})
+                                    {'file': "${packages}/User/%s" % abbs_file_name})
 
 
 class ExPrintWorkingDir(sublime_plugin.TextCommand):
@@ -377,8 +377,11 @@ class ExFile(sublime_plugin.TextCommand):
 
 class ExMove(sublime_plugin.TextCommand):
     def run(self, edit, range='.', forced=False, address=''):
-        assert range, "Need a range."
         address = compute_address(self.view, address)
+        if address is None:
+            # FIXME: Should be Invalid Address instead.
+            ex_error.display_error(ex_error.ERR_INVALID_ADDRESS)
+            return
 
         line_block = [] 
         for r in get_region_by_range(self.view, range):
@@ -411,8 +414,10 @@ class ExMove(sublime_plugin.TextCommand):
 
 class ExCopy(sublime_plugin.TextCommand):
     def run(self, edit, range='.', forced=False, address=''):
-        assert range, "Need a range."
         address = compute_address(self.view, address)
+        if address is None:
+            ex_error.display_error(ex_error.ERR_INVALID_ADDRESS)
+            return
 
         line_block = [] 
         for r in get_region_by_range(self.view, range):
@@ -492,6 +497,10 @@ class ExSubstitute(sublime_plugin.TextCommand):
         for r in reversed(target_region):
             # be explicit about replacing the line, because we might be looking
             # at a Ctrl+D sequence of regions (not spanning a whole line)
+            # TODO: Improve this: make sure view.line() doesn't extend past
+            # the desired line. For example, in VISUAL LINE MODE.
+            if self.view.substr(r.end() - 1) == '\n':
+                r = sublime.Region(r.begin(), r.end() - 1)
             line_text = self.view.substr(self.view.line(r))
             rv = re.sub(left, right, line_text, count=replace_count)
             self.view.replace(edit, self.view.line(r), rv)
@@ -664,3 +673,40 @@ class ExWriteAndQuitCommand(sublime_plugin.TextCommand):
 class ExBrowse(sublime_plugin.TextCommand):
     def run(self, edit):
         self.view.window().run_command('prompt_open_file')
+
+
+class ExEdit(sublime_plugin.TextCommand):
+    def run_(self, args):
+        self.run(args)
+
+    def run(self, forced=False):
+        # todo: restore active line_nr too
+        if forced or not self.view.is_dirty():
+            self.view.run_command('revert')
+            return
+        elif self.view.is_dirty():
+            ex_error.display_error(ex_error.ERR_UNSAVED_CHANGES)
+            return
+            
+        handle_not_implemented()
+
+
+class ExNop(sublime_plugin.TextCommand):
+    """Do nothing.
+    """
+    def run_(self, args):
+        pass
+
+
+class ExCquit(sublime_plugin.TextCommand):
+    def run(self, edit):
+        self.view.window().run_command('exit')
+
+
+class ExExit(sublime_plugin.TextCommand):
+    def run(self, edit):
+        w = self.view.window()
+        w.run_command('save')
+        w.run_command('close')
+        if len(self.window.views()) == 0:
+            w.run_command('close')

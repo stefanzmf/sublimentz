@@ -5,7 +5,8 @@
 		"-",
 		":"
 	],
-	"auto_complete_delay": 500,
+	"auto_complete_delay": 1000,
+	"auto_id_class": true,
 	"auto_match_angle_brakets_enabled": true,
 	"auto_match_tilda_enabled": true,
 	"caret_style": "phase",
@@ -23,15 +24,12 @@
 	[
 		"directwrite"
 	],
-	"font_size": 15,
+	"font_size": 14,
 	"highlight_line": true,
 	"indent_guide_options":
 	[
 		"draw_normal",
-		"draw_active",
-		"draw_stack",
-		"normal_stippled",
-		"stack_stippled"
+		"draw_active"
 	],
 	"line_padding_bottom": 1.5,
 	"line_padding_top": 1.5,

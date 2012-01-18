@@ -1,0 +1,7 @@
+[
+	// Input Sequencer command
+	{
+		"caption": "Remove duplicate new line",
+		"command": "ntz_remove_duplicate_new_lines"
+	}
+]

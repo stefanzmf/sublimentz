@@ -35,10 +35,14 @@ Under the Packages/WordHighlight sub-directory, edit the `Word Highlight.sublime
 	This makes words highlight when the insertion point is inside of them but when
 	they're not actually selected.
 
-*	`"selection_delay" : 0.04`
+*	`"highlight_word_under_cursor_when_selection_is_empty" : true`
 	
-	This delays highlighting all occurences using given time (in seconds) to let users move cursor 
-	around without being distracted with immediate highlights. Default value 0.04 means almost no delay.
+	When the previous option is enabled, this makes the word under the cursor to gain highlighting
+
+*	`"selection_delay" : 0`
+	
+	This delays highlighting all occurrences using given time (in miliseconds) to let users move cursor 
+	around without being distracted with immediate highlights. Default value 0 means almost no delay.
 
 *	`"color_scope_name" : "wordhighlight"`
 	
@@ -58,3 +62,12 @@ Under the Packages/WordHighlight sub-directory, edit the `Word Highlight.sublime
 					<string>#EDF2E9</string>
 				</dict>
 			</dict>
+
+* `"file_size_limit" : 4194304`
+	
+	Files bigger than this number will put WordHighlight on mode "highlight around view port" (a portion of the document)
+
+* `"when_file_size_limit_search_this_num_of_characters" : 20000`
+	
+	When a file is bigger than the previous setting. This controls how many characters below and above the  view port you want to search for words to highlight
+
