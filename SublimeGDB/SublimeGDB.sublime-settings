@@ -1,0 +1,59 @@
+{
+    // All options in here can also be specified in your project settings
+    // with a prepended "sublimegdb_". You probably want to
+    // have something like this in your project settings:
+    //
+    // "settings":
+    // {
+    //      "sublimegdb_workingdir": "/tath/to/your/project",
+    //      "sublimegdb_commandline":
+    //      [
+    //          "gdb",
+    //          "--interpreter=mi", // NOTE: This MUST be here for the plugin to work
+    //          "./your_executable_name"
+    //      ]
+    // }
+    //
+    "workingdir": "/tmp",
+
+    "commandline":
+    [
+        "gdb",
+        "--interpreter=mi", // NOTE: This MUST be here for the plugin to work
+        "./executable"
+    ],
+    "exec_cmd": "-exec-run",
+
+    "layout":
+    {
+        "cols": [0.0, 0.5, 1.0],
+        "rows": [0.0, 0.75, 1.0],
+        "cells": [[0, 0, 2, 1], [0, 1, 1, 2], [1, 1, 2, 2]]
+    },
+
+    // visual stuff
+    "breakpoint_scope": "keyword.gdb",
+    "breakpoint_icon": "circle",
+    "position_scope": "entity.name.class",
+    "position_icon": "bookmark",
+    "changed_variable_scope": "entity.name.class",
+    "changed_variable_icon": "",
+
+    // The group used for opening files
+    "file_group": 0,
+
+    "session_group": 1,
+    "session_open": true,
+
+    "console_group": 1,
+    "console_open": true,
+
+    "variables_group": 1,
+    "variables_open": true,
+
+    "callstack_group": 2,
+    "callstack_open": true,
+
+    "registers_group": 2,
+    "registers_open": false
+}

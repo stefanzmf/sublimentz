@@ -22,6 +22,8 @@
 		"SideBarEnhancements",
 		"sublime-jslint",
 		"SublimeBlockCursor",
+		"SublimeColorPickerWindowsOnly",
+		"SublimeGDB",
 		"sublimelint",
 		"SublimeREPL",
 		"Theme - Soda",
@@ -56,6 +58,8 @@
 		"https://github.com/weslly/Nettuts-Fetch",
 		"https://github.com/tanepiper/sublime-todomanager.git",
 		"https://github.com/tanepiper/sublime-todomanager",
-		"https://bitbucket.org/sublimator/volcanoes"
+		"https://bitbucket.org/sublimator/volcanoes",
+		"https://github.com/quarnster/SublimeGDB",
+		"https://github.com/animehunter/SublimeColorPickerWindowsOnly"
 	]
 }
