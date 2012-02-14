@@ -1,7 +1,0 @@
-[
-    { "keys": ["super+j"], "command": "jsdocs_join", "context":
-        [
-            { "key": "selector", "operator": "equal", "operand": "comment.block.documentation" }
-        ]
-    }
-]

@@ -1,9 +1,9 @@
 {
-	"auto_upgrade_last_run": 1321590514,
+	"auto_upgrade_last_run": 1329225078,
 	"git_binary": "C:\\cygwin\\git\\bin\\git.exe",
 	"installed_packages":
 	[
-		"AAAPackageDev",
+		"Alignment",
 		"alternative_autocompletion",
 		"ApacheConf.tmLanguage",
 		"AutoSelect",
@@ -11,7 +11,7 @@
 		"BufferScroll",
 		"Case Conversion",
 		"Format SQL",
-		"Goto-CSS-Declaration",
+		"Inc-Dec-Value",
 		"JSDocs",
 		"JsFormat",
 		"Nettuts+ Fetch",
@@ -23,9 +23,9 @@
 		"sublime-jslint",
 		"SublimeBlockCursor",
 		"SublimeColorPickerWindowsOnly",
-		"SublimeGDB",
 		"sublimelint",
-		"SublimeREPL",
+		"TagIndent",
+		"Terminal",
 		"Theme - Soda",
 		"Todo Manager",
 		"VintageEx",

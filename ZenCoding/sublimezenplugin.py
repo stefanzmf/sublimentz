@@ -3,6 +3,9 @@
 
 # Std Libs
 import operator
+import os
+
+from os.path import join, dirname
 
 # Sublime Libs
 import sublime
@@ -42,7 +45,7 @@ HTML_INSIDE_TAG_ATTRIBUTE = 'text.html meta.tag string'
 
 HTML_NOT_INSIDE_TAG       = 'text.html - meta.tag'
 
-CSS          = 'source.css, source.scss'
+CSS          = 'source.css, source.scss, source.stylus'
 CSS_PROPERTY = 'meta.property-list.css - meta.property-value.css'
 CSS_SELECTOR = 'meta.selector.css, source.css - meta, source.scss - meta'
 
@@ -122,9 +125,21 @@ if int(sublime.version()) >= 2092:
     zen_settings.add_on_change('zen_coding',
                                lambda: load_settings(force_reload=1))
 
+################################### ARBITRAGE ##################################
+
+try:
+    arbited
+except NameError:
+    arbited = True
+    if zen_settings.get('zenarbitrage'):
+        from zenarbitrage import doop
+        doop()
+
 ######################## REMOVE HTML/HTML_COMPLETIONS.PY #######################
 
 def remove_html_completions():
+    import sublime_plugin
+
     for completer in "TagCompletions", "HtmlCompletions":
         try:
             import html_completions
@@ -139,7 +154,8 @@ def remove_html_completions():
                 debug('on_query_completion: removing: %s' % cm)
                 del completions[i]
 
-        debug('on_query_completion: callbacks: %r' % completions)
+        # The funky loader
+        if debug: debug('on_query_completion: callbacks: %r' % completions)
 
 sublime.set_timeout(remove_html_completions, 2000)
 
@@ -249,7 +265,7 @@ class ZenListener(sublime_plugin.EventListener):
             elif selector.startswith('.'):
                 return []
                 # return []
-                return [(selector, v, v) for v in 
+                return [(selector, v, v) for v in
                      set(map(view.substr, [
                          r for r in view.find_by_selector('source.css '
                        'meta.selector.css entity.other.attribute-name.class.css')
@@ -279,7 +295,7 @@ class ZenListener(sublime_plugin.EventListener):
     def html_elements_attributes(self, view, prefix, pos):
         tag         = find_tag_name(view, pos)
         values      = HTML_ELEMENTS_ATTRIBUTES.get(tag, [])
-        return [(v,   '%s\t@%s' % (v,v), '%s="$1" ' % v) for v in values]
+        return [(v,   '%s\t@%s' % (v,v), '%s="$1"' % v) for v in values]
 
     def html_attributes_values(self, view, prefix, pos):
         attr        = find_attribute_name(view, pos)
@@ -300,7 +316,7 @@ class ZenListener(sublime_plugin.EventListener):
 
         # A mapping of scopes, sub scopes and handlers, first matching of which
         # is used.
-        COMPLETIONS = (  
+        COMPLETIONS = (
             (CSS_SELECTOR,              self.css_selectors),
             (CSS_VALUE,                 self.css_property_values),
             (HTML_INSIDE_TAG,           self.html_elements_attributes),
@@ -337,7 +353,7 @@ class ZenListener(sublime_plugin.EventListener):
 
                 abbr = zencoding.actions.basic.find_abbreviation(editor)
                 oq_debug('abbr: %r' % abbr)
-                if abbr and not view.match_selector( locations[0], 
+                if abbr and not view.match_selector( locations[0],
                                                      HTML_INSIDE_TAG ):
                     result = expand_abbr(abbr)
                     oq_debug('expand_abbr abbr: %r result: %r' % (abbr, result))

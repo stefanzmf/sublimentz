@@ -45,10 +45,8 @@
     { "caption": "Project: Close", "command": "close_project" },
     { "caption": "Project: Add Folder", "command": "prompt_add_folder" },
 
-    { "caption": "Preferences: File Settings - Default", "command": "open_file", "args": {"file": "${packages}/Default/Base File.sublime-settings"} },
-    { "caption": "Preferences: File Settings - User", "command": "open_file", "args": {"file": "${packages}/User/Base File.sublime-settings"} },
-    { "caption": "Preferences: Global Settings - Default", "command": "open_file", "args": {"file": "${packages}/Default/Global.sublime-settings"} },
-    { "caption": "Preferences: Global Settings - User", "command": "open_file", "args": {"file": "${packages}/User/Global.sublime-settings"} },
+    { "caption": "Preferences: Settings - Default", "command": "open_file", "args": {"file": "${packages}/Default/Preferences.sublime-settings"} },
+    { "caption": "Preferences: Settings - User", "command": "open_file", "args": {"file": "${packages}/User/Preferences.sublime-settings"} },
     { "caption": "Preferences: Browse Packages", "command": "open_dir", "args": {"dir": "$packages"} },
 
     {
