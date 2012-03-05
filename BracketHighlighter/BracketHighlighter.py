@@ -4,6 +4,7 @@ from Elements import is_tag, match
 import sublime
 import sublime_plugin
 from bracket_plugin import BracketPlugin
+import re
 
 BH_MATCH_TYPE_NONE = 0
 BH_MATCH_TYPE_SELECTION = 1
@@ -76,14 +77,22 @@ class BracketHighlighterCommand(sublime_plugin.EventListener):
         # Tag special options
         self.brackets_only = bool(self.settings.get('tag_brackets_only'))
 
+        # Match brackets in strings
+        self.match_string_brackets = bool(self.settings.get('match_string_brackets'))
+
     def init_brackets(self):
+        quote_open = "r s m t ' \""
+        quote_close = "' \""
+        if bool(self.settings.get('enable_forward_slash_regex_strings', False)):
+            quote_open += " /"
+            quote_close += " /"
         return {
             'bh_curly':  self.get_bracket_settings('curly', '{', '}'),
             'bh_round':  self.get_bracket_settings('round', '(', ')'),
             'bh_square': self.get_bracket_settings('square', '[', ']'),
             'bh_angle':  self.get_bracket_settings('angle', '<', '>'),
             'bh_tag':    self.get_bracket_settings('tag', '<', '>'),
-            'bh_quote':  self.get_bracket_settings('quote', "'", "'")
+            'bh_quote':  self.get_bracket_settings('quote', quote_open, quote_close)
         }
 
     def get_bracket_settings(self, bracket, opening, closing):
@@ -285,12 +294,6 @@ class BracketHighlighterCommand(sublime_plugin.EventListener):
         # Find left brace
         left = self.scout_left(start)
         if left != None:
-            for bracket in self.targets:
-                if self.view.substr(left) == self.brackets[bracket]['open']:
-                    self.bracket_type = bracket
-                    self.bracket_open = self.brackets[bracket]['open']
-                    self.bracket_close = self.brackets[bracket]['close']
-                    break
             # Find right brace
             right = self.scout_right(start + 1)
 
@@ -365,6 +368,9 @@ class BracketHighlighterCommand(sublime_plugin.EventListener):
                             foundBracket = True
                             break
                         else:
+                            self.bracket_type = bracket
+                            self.bracket_open = self.brackets[bracket]['open']
+                            self.bracket_close = self.brackets[bracket]['close']
                             return scout
 
                 if foundBracket == False:
@@ -543,16 +549,19 @@ class BracketHighlighterCommand(sublime_plugin.EventListener):
             # Calculate offset
             is_string = True
             offset = -1 if left_side_match == False else 0
-            (matched, start) = self.find_quotes(start + offset, sel)
+            (matched, start) = self.find_quotes(start, offset, sel)
         return (matched, start, is_string)
 
-    def find_quotes(self, start, sel):
+    def find_quotes(self, start, offset, sel):
+        actual_start = start
+        start += offset
         begin = start
         end = start
         scout = start
         quote = None
         lastChar = None
         matched = False
+        viewSize = self.view.size() - 1
 
         # Left quote
         while scout >= 0:
@@ -564,16 +573,18 @@ class BracketHighlighterCommand(sublime_plugin.EventListener):
             if self.view.score_selector(scout, 'string') > 0:
                 if scout == 0:
                     begin = scout
-                    if char == "'" or char == '"':
-                        quote = char
+                    for char_type in self.brackets['bh_quote']['open'].split(' '):
+                        if lastChar == char_type:
+                            quote, begin = self.check_special_strings_start(lastChar, begin, viewSize)
                     break
                 else:
                     scout -= 1
                     lastChar = char
             else:
                 begin = scout + 1
-                if lastChar == "'" or lastChar == '"':
-                    quote = lastChar
+                for char_type in self.brackets['bh_quote']['open'].split(' '):
+                    if lastChar == char_type:
+                        quote, begin = self.check_special_strings_start(lastChar, begin, viewSize)
                 break
 
         # If quote fails continue off from furthest left
@@ -584,7 +595,6 @@ class BracketHighlighterCommand(sublime_plugin.EventListener):
         # Right quote
         if quote != None:
             scout = start
-            viewSize = self.view.size() - 1
             lastChar = None
             while scout <= viewSize:
                 if self.use_threshold:
@@ -595,17 +605,13 @@ class BracketHighlighterCommand(sublime_plugin.EventListener):
                 char = self.view.substr(scout)
                 if self.view.score_selector(scout, 'string') > 0:
                     if scout == viewSize:
-                        if char == quote and scout != begin:
-                            end = scout + 1
-                            matched = True
+                        matched, end = self.check_special_strings_end(char, quote, scout, begin, end)
                         break
                     else:
                         scout += 1
                         lastChar = char
                 else:
-                    if lastChar == quote and scout - 1 != begin:
-                        end = scout
-                        matched = True
+                    matched, end = self.check_special_strings_end(lastChar, quote, scout - 1, begin, end)
                     break
 
         if matched:
@@ -631,8 +637,192 @@ class BracketHighlighterCommand(sublime_plugin.EventListener):
             if self.count_lines:
                 self.lines += self.view.rowcol(end)[0] - self.view.rowcol(begin)[0] + 1
                 self.chars += end - 2 - begin
+
+            if self.match_string_brackets and start != begin and start != end + 1:
+                start = actual_start
+                offset = self.string_adjacent_adjust(start)
+                start += offset
+                if (self.adj_only and self.adj_bracket) or not self.adj_only:
+                    left = self.string_scout_left(start, begin)
+                    if left != None:
+                        right = self.string_scout_right(start + 1, end)
+                        if right != None:
+                            if self.brackets[self.bracket_type]['underline']:
+                                self.highlight_us[self.bracket_type].append(sublime.Region(left))
+                                self.highlight_us[self.bracket_type].append(sublime.Region(right))
+                            else:
+                                self.highlight_us[self.bracket_type].append(sublime.Region(left, left + 1))
+                                self.highlight_us[self.bracket_type].append(sublime.Region(right, right + 1))
             self.store_sel(regions)
         return (matched, begin - 1)
+
+    def check_special_strings_start(self, char, begin, view_size):
+        quote = None
+        pt = begin + 1
+        if char == 'r':
+            if self.view.score_selector(begin, 'source.python'):
+                # Python raw string support
+                if pt <= view_size:
+                    char = self.view.substr(pt)
+                    if char == "'" or char == '"':
+                        begin += 1
+                        quote = char
+        elif char == 'm' or char == 's':
+            if self.view.score_selector(begin, 'source.perl'):
+                # Perl match and substitution
+                if pt <= view_size:
+                    char = self.view.substr(pt)
+                    if char == "/":
+                        begin += 1
+                        quote = char
+        elif char == 't':
+            if self.view.score_selector(begin, 'source.perl'):
+                # Perl translations
+                if pt <= view_size:
+                    char = self.view.substr(pt)
+                    if char == "r" and (pt + 1) <= view_size:
+                        char = self.view.substr(pt + 1)
+                        if char == "/":
+                            begin += 2
+                            quote = char
+        else:
+            quote = char
+        return quote, begin
+
+    def check_special_strings_end(self, char, quote, scout, begin, end):
+        matched = False
+        string_end = end
+        lookback = 0
+        to_match = ""
+
+        if self.view.score_selector(scout, 'source.js') > 0 and quote == "/" and re.match("(i|g|m)", char):
+            # Javascript flags
+            lookback = 3
+            to_match = "(i|g|m)"
+        elif self.view.score_selector(scout, 'source.perl') > 0  and quote == "/" and re.match("(i|g|s|o|e|m)", char):
+            # Perl flags
+            lookback = 6
+            to_match = "(i|g|s|o|e|m)"
+        elif char == quote and scout != begin:
+            end = scout + 1
+            matched = True
+            return matched, end
+        else:
+            return matched, end
+
+        # Look back the max amount allowable by language to try and find "/"
+        lookback_adjust = lookback + 1
+        lookback_offset = scout + lookback - lookback_adjust
+        while lookback and lookback_offset > begin:
+            char = self.view.substr(lookback_offset)
+            if char == quote:
+                string_end = lookback_offset + 1
+                matched = True
+                break
+            elif re.match(to_match, char):
+                lookback -= 1
+                lookback_offset = scout + lookback - lookback_adjust
+            else:
+                break
+        return matched, string_end
+
+    def string_adjacent_adjust(self, scout):
+        # Offset cursor
+        offset = 0
+        self.adj_bracket = False
+        if offset == 0:
+            char1 = self.view.substr(scout - 1)
+            char1_escaped = self.string_escaped(scout - 1)
+            char2 = self.view.substr(scout)
+            char2_escaped = self.string_escaped(scout)
+            for bracket in self.targets:
+                if bracket == "bh_angle":
+                    continue
+                if char2 == self.brackets[bracket]['open'] and not char2_escaped:
+                    self.adj_bracket = True
+                if char1 == self.brackets[bracket]['open'] and not char1_escaped:
+                    offset = -1
+                    self.adj_bracket = True
+                    break
+                elif char1 == self.brackets[bracket]['close'] and not char1_escaped:
+                    offset = -2
+                    self.adj_bracket = True
+                elif char2 == self.brackets[bracket]['close'] and not char2_escaped and offset != -2:
+                    offset = -1
+                    self.adj_bracket = True
+        return offset
+
+    def string_escaped(self, scout):
+        escaped = False
+        start = scout
+        start -= 1
+        while self.view.substr(start) == "\\":
+            escaped = False if escaped else True
+            start -= 1
+        return escaped
+
+    def string_scout_left(self, scout, limit):
+        count = {}
+        for bracket in self.targets:
+            count[bracket] = 0
+
+        while scout >= limit:
+            if self.use_threshold:
+                self.search_left -= 1
+                if self.search_left < 0:
+                    return None
+
+            # Assign char.
+            char = self.view.substr(scout)
+            char_escaped = self.string_escaped(scout)
+            # Hit brackets.
+            foundBracket = False
+            for bracket in self.targets:
+                if bracket == "bh_angle":
+                    continue
+                if char == self.brackets[bracket]['open'] and not char_escaped:
+                    if count[bracket] > 0:
+                        count[bracket] -= 1
+                        foundBracket = True
+                        break
+                    else:
+                        self.bracket_type = bracket
+                        self.bracket_open = self.brackets[bracket]['open']
+                        self.bracket_close = self.brackets[bracket]['close']
+                        return scout
+
+            if foundBracket == False:
+                for bracket in self.targets:
+                    if bracket == "bh_angle":
+                        continue
+                    if char == self.brackets[bracket]['close'] and not char_escaped:
+                        count[bracket] += 1
+                        break
+            scout -= 1
+        return None
+
+    def string_scout_right(self, scout, limit):
+        brackets = 0
+
+        while scout < limit:
+            if self.use_threshold:
+                self.search_left -= 1
+                if self.search_left < 0:
+                    return None
+
+            # Assign char.
+            char = self.view.substr(scout)
+            char_escaped = self.string_escaped(scout)
+            # Hit brackets.
+            if char == self.bracket_close and not char_escaped:
+                if brackets > 0:
+                    brackets -= 1
+                else:
+                    return scout
+            elif char == self.bracket_open and not char_escaped:
+                brackets += 1
+            scout += 1
+        return None
 
     def check_debounce(self, debounce_id):
         if self.debounce_id != debounce_id:
@@ -649,7 +839,7 @@ class BracketHighlighterCommand(sublime_plugin.EventListener):
             self.match(sublime.active_window().active_view(), force_match)
 
     def debounce(self, debounce_type):
-        # Check if debunce not currently active, or if of same type,
+        # Check if debounce not currently active, or if of same type,
         # but let edit override selection for undos
         if (
             self.debounce_type == BH_MATCH_TYPE_NONE or

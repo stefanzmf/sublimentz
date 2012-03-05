@@ -1,7 +1,9 @@
 # About
 This is a fork of pyparadigm's SublimeBrackets and SublimeTagmatcher (both are no longer available).  I forked this to fix some issues I had and to add some features I wanted.  I also wanted to improve the efficiency of the matching.  This cuts down on the parallel searching that is now streamlined in one search.  Since then, many new features have been added as well.
 
-# Installation 
+![Options Screenshot](https://github.com/facelessuser/BracketHighlighter/raw/master/example.png)
+
+# Installation
 - Download is available in Package Control or you can [download](https://github.com/facelessuser/BracketHighlighter/zipball/master "download") or clone directly and drop into your Sublime Text 2 packages directory (plugin folder must be named BracketHighlighter)
 - You may need to restart Sublime Text 2 after installation
 
@@ -112,5 +114,23 @@ If you want more control of the colors, you can define your own scopes.
         </dict>
     </dict>
 
-# Screenshot
-![Options Screenshot](https://github.com/facelessuser/BracketHighlighter/raw/master/example.png)
+# Version 1.4.1
+- Make adjusment to regex modifier code to correctly count back modifiers in perl
+
+# Version 1.4
+- Account for perl regex, substitutions, and translations surrounded by "/" for string bracket matching
+- Account for regex modifiers when matching regex surrounded by "/" in javascript and perl
+
+# Version 1.3
+- Fixed escaped brackets in string handling.  Also a bit more efficient.
+
+# Version 1.2
+- Fix angle bracket avoidance when finding brackets inside strings, and make it cleaner
+
+# Version 1.1
+- Add python raw string support for quote highlighting
+- Add highlighting of brackets in strings; will work in all strings, but mainly meant for regex.  True by default
+- Add support for targetting regex strings like in javascript that are scoped as strings, but are not quoted, but use '/'s. True by default
+
+# Version 1.0
+- All previous work and releases

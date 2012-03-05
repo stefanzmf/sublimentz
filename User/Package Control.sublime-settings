@@ -1,5 +1,5 @@
 {
-	"auto_upgrade_last_run": 1329225078,
+	"auto_upgrade_last_run": 1330929599,
 	"git_binary": "C:\\cygwin\\git\\bin\\git.exe",
 	"installed_packages":
 	[
@@ -10,9 +10,9 @@
 		"BracketHighlighter",
 		"BufferScroll",
 		"Case Conversion",
+		"DocBlockr",
 		"Format SQL",
 		"Inc-Dec-Value",
-		"JSDocs",
 		"JsFormat",
 		"Nettuts+ Fetch",
 		"Nettuts-Fetch",
@@ -20,14 +20,15 @@
 		"PhpDoc",
 		"SFTP",
 		"SideBarEnhancements",
+		"SideBarGit",
 		"sublime-jslint",
 		"SublimeBlockCursor",
 		"SublimeColorPickerWindowsOnly",
 		"sublimelint",
+		"SublimeTODO",
 		"TagIndent",
 		"Terminal",
 		"Theme - Soda",
-		"Todo Manager",
 		"VintageEx",
 		"WordHighlight",
 		"Wordpress",
@@ -44,7 +45,6 @@
 		"https://github.com/facelessuser/BracketHighlighter",
 		"https://github.com/wuub/SublimeREPL",
 		"https://github.com/kemayo/sublime-text-2-git",
-		"https://github.com/spadgos/sublime-jsdocs",
 		"https://github.com/titoBouzout/SideBarEnhancements",
 		"https://github.com/BarbUk/Sublime-php-beautifier",
 		"https://github.com/jfromaniello/Grandson-of-Obsidian",
@@ -60,6 +60,8 @@
 		"https://github.com/tanepiper/sublime-todomanager",
 		"https://bitbucket.org/sublimator/volcanoes",
 		"https://github.com/quarnster/SublimeGDB",
-		"https://github.com/animehunter/SublimeColorPickerWindowsOnly"
+		"https://github.com/animehunter/SublimeColorPickerWindowsOnly",
+		"https://github.com/captainbrosset/cleanjs",
+		"https://github.com/mrmartineau/jQuery.git"
 	]
 }

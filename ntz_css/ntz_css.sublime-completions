@@ -2,6 +2,7 @@
   "scope": "source.css",
   "completions":
   [ 
+    { "trigger": "i", "contents": "!important" },
 
     { "trigger": "l|left", "contents": "left:$1;$0" },
     { "trigger": "r|right", "contents": "right:$1;$0" },
