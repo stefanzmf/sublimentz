@@ -13,6 +13,7 @@
 			{ "caption": "-" },
 			{ "caption": "Diff Remote File", "command": "sftp_diff_remote_file" },
 			{ "caption": "Rename Local and Remote Files", "command": "sftp_rename_local_and_remote_paths" },
+			{ "caption": "-" },
 			{ "caption": "Delete Local and Remote Files", "command": "sftp_delete_local_and_remote_paths" },
 			{ "caption": "Delete Remote File", "command": "sftp_delete_remote_path" },
 			{ "caption": "-" },

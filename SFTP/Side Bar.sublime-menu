@@ -13,6 +13,7 @@
 			{ "caption": "Diff Remote File", "command": "sftp_diff_remote_file", "args": {"paths": []} },
 			{ "caption": "Rename Local and Remote Files", "command": "sftp_rename_local_and_remote_paths", "args": {"files": []} },
 			{ "caption": "Rename Local and Remote Folders", "command": "sftp_rename_local_and_remote_paths", "args": {"dirs": []} },
+			{ "caption": "-" },
 			{ "caption": "Delete Local and Remote Files", "command": "sftp_delete_local_and_remote_paths", "args": {"files": []} },
 			{ "caption": "Delete Local and Remote Folders", "command": "sftp_delete_local_and_remote_paths", "args": {"dirs": []} },
 			{ "caption": "Delete Remote File", "command": "sftp_delete_remote_path", "args": {"files": []} },

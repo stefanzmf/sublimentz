@@ -1,5 +1,5 @@
 {
-	"auto_upgrade_last_run": 1330929599,
+	"auto_upgrade_last_run": 1331008262,
 	"git_binary": "C:\\cygwin\\git\\bin\\git.exe",
 	"installed_packages":
 	[
@@ -12,6 +12,7 @@
 		"Case Conversion",
 		"DocBlockr",
 		"Format SQL",
+		"Gist",
 		"Inc-Dec-Value",
 		"JsFormat",
 		"Nettuts+ Fetch",
@@ -62,6 +63,7 @@
 		"https://github.com/quarnster/SublimeGDB",
 		"https://github.com/animehunter/SublimeColorPickerWindowsOnly",
 		"https://github.com/captainbrosset/cleanjs",
-		"https://github.com/mrmartineau/jQuery.git"
+		"https://github.com/mrmartineau/jQuery.git",
+		"https://github.com/spadgos/sublime-jsdocs"
 	]
 }
