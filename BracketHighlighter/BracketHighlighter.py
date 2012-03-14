@@ -1,35 +1,51 @@
-from os.path import basename
-from random import randrange
+from os.path import basename, exists, join, normpath
 from Elements import is_tag, match
 import sublime
 import sublime_plugin
 from bracket_plugin import BracketPlugin
 import re
+from time import time, sleep
+import thread
 
 BH_MATCH_TYPE_NONE = 0
 BH_MATCH_TYPE_SELECTION = 1
 BH_MATCH_TYPE_EDIT = 2
 
 
+class Pref:
+    def load(self):
+        Pref.wait_time = 0.12
+        Pref.time = time()
+        Pref.modified = False
+        Pref.type = BH_MATCH_TYPE_SELECTION
+        Pref.ignore_all = False
+
+Pref().load()
+
+
 class BracketHighlighterKeyCommand(sublime_plugin.WindowCommand):
     def run(self, threshold=True, lines=False, adjacent=False, ignore={}, plugin={}):
-        BracketHighlighterCommand(
+        # Override events
+        Pref.ignore_all = True
+        Pref.modified = False
+        BracketHighlighter(
             threshold,
             lines,
             adjacent,
             ignore,
             plugin
         ).match(self.window.active_view())
+        # Reset event settings
+        Pref.ignore_all = False
+        Pref.time = time()
 
 
-class BracketHighlighterCommand(sublime_plugin.EventListener):
+class BracketHighlighter():
     # Initialize
     def __init__(self, override_thresh=False, count_lines=False, adj_only=None, ignore={}, plugin={}):
         self.settings = sublime.load_settings("BracketHighlighter.sublime-settings")
         self.settings.add_on_change('reload', lambda: self.setup())
         self.setup(override_thresh, count_lines, adj_only, ignore, plugin)
-        self.debounce_id = 0
-        self.debounce_type = 0
 
     def setup(self, override_thresh=False, count_lines=False, adj_only=None, ignore={}, plugin={}):
         self.last_id_view = None
@@ -44,7 +60,6 @@ class BracketHighlighterCommand(sublime_plugin.EventListener):
         self.ignore_angle = bool(self.settings.get('ignore_non_tags'))
         self.tag_type = self.settings.get('tag_type')
         self.new_select = False
-        self.debounce_delay = int(self.settings.get('debounce_delay', 1000))
 
         # On demand ignore
         self.ignore = ignore
@@ -96,23 +111,41 @@ class BracketHighlighterCommand(sublime_plugin.EventListener):
         }
 
     def get_bracket_settings(self, bracket, opening, closing):
+        # Style
+        highlight_style = self.settings.get(bracket + '_style', "none")
         style = sublime.HIDE_ON_MINIMAP
-        if self.settings.get(bracket + '_style') == "outline":
+        if highlight_style == "outline":
             style |= sublime.DRAW_OUTLINED
-        elif self.settings.get(bracket + '_style') == "none":
+        elif highlight_style == "none":
             style |= sublime.HIDDEN
-        elif self.settings.get(bracket + '_style') == "underline":
+        elif highlight_style == "underline":
             style |= sublime.DRAW_EMPTY_AS_OVERWRITE
+
+        # Icon
+        highlight_icon = self.settings.get(bracket + '_icon', "")
+        icon = ""
+        small_icon = ""
+        icon_path = self.settings.get("icon_path", "Theme - Default").replace('\\', '/').strip('/')
+        # Icon exist?
+        if (
+            exists(normpath(join(sublime.packages_path(), icon_path, highlight_icon + ".png"))) and
+            not highlight_icon == "none" and not highlight_icon == ""
+        ):
+            icon = "../%s/%s" % (icon_path, highlight_icon)
+            if exists(normpath(join(sublime.packages_path(), icon_path, highlight_icon + "_small.png"))):
+                small_icon = "../%s/%s" % (icon_path, highlight_icon + "_small")
+
         return {
-            'enable':    bool(self.settings.get(bracket + '_enable')),
-            'scope':     self.settings.get(bracket + '_scope'),
-            'style':     style,
-            'underline': (self.settings.get(bracket + '_style') == "underline"),
-            'icon':      self.settings.get(bracket + '_icon'),
-            'list':      map(lambda x: x.lower(), self.settings.get(bracket + '_language_list')),
-            'filter':    self.settings.get(bracket + '_language_filter'),
-            'open':      opening,
-            'close':     closing
+            'enable':     bool(self.settings.get(bracket + '_enable')),
+            'scope':      self.settings.get(bracket + '_scope'),
+            'style':      style,
+            'underline':  (highlight_style == "underline"),
+            'icon':       icon,
+            'small_icon': small_icon,
+            'list':       map(lambda x: x.lower(), self.settings.get(bracket + '_language_list')),
+            'filter':     self.settings.get(bracket + '_language_filter'),
+            'open':       opening,
+            'close':      closing
         }
 
     def init_match(self):
@@ -189,13 +222,14 @@ class BracketHighlighterCommand(sublime_plugin.EventListener):
 
     def highlight(self, view):
         # Perform highlight on brackets and tags
+        icon_type = "small_icon" if view.line_height() < 16 else "icon"
         for bracket in self.brackets:
             if bracket in self.highlight_us:
                 view.add_regions(
                     bracket,
                     self.highlight_us[bracket],
                     self.brackets[bracket]['scope'],
-                    self.brackets[bracket]['icon'],
+                    self.brackets[bracket][icon_type],
                     self.brackets[bracket]['style']
                 )
             else:
@@ -824,47 +858,68 @@ class BracketHighlighterCommand(sublime_plugin.EventListener):
             scout += 1
         return None
 
-    def check_debounce(self, debounce_id):
-        if self.debounce_id != debounce_id:
-            debounce_id = randrange(1, 999999)
-            self.debounce_id = debounce_id
-            sublime.set_timeout(
-                lambda: self.check_debounce(debounce_id=debounce_id),
-                self.debounce_delay
-            )
-        else:
-            self.debounce_id = 0
-            force_match = True if self.debounce_type == BH_MATCH_TYPE_EDIT else False
-            self.debounce_type = BH_MATCH_TYPE_NONE
-            self.match(sublime.active_window().active_view(), force_match)
+bh_match = BracketHighlighter().match
 
-    def debounce(self, debounce_type):
-        # Check if debounce not currently active, or if of same type,
-        # but let edit override selection for undos
-        if (
-            self.debounce_type == BH_MATCH_TYPE_NONE or
-            debounce_type == BH_MATCH_TYPE_EDIT or
-            self.debounce_type == debounce_type
-        ):
-            self.debounce_type = debounce_type
-            debounce_id = randrange(1, 999999)
-            if self.debounce_id == 0:
-                self.debounce_id = debounce_id
-                sublime.set_timeout(
-                    lambda: self.check_debounce(debounce_id=debounce_id),
-                    self.debounce_delay
-                )
-            else:
-                self.debounce_id = debounce_id
 
+class BracketHighlighterListenerCommand(sublime_plugin.EventListener):
+    # Manage when to kick off bracket matching.
+    # Try and reduce redundant requests by letting the
+    # background thread ensure certain needed match occurs
     def on_load(self, view):
-        self.debounce(BH_MATCH_TYPE_SELECTION)
+        if self.ignore_event(view):
+            return
+        Pref.type = BH_MATCH_TYPE_SELECTION
+        sublime.set_timeout(lambda: bh_run(), 0)
 
     def on_modified(self, view):
-        self.debounce(BH_MATCH_TYPE_EDIT)
+        if self.ignore_event(view):
+            return
+        Pref.type = BH_MATCH_TYPE_EDIT
+        Pref.modified = True
+        Pref.time = time()
 
     def on_activated(self, view):
-        self.debounce(BH_MATCH_TYPE_SELECTION)
+        if self.ignore_event(view):
+            return
+        Pref.type = BH_MATCH_TYPE_SELECTION
+        sublime.set_timeout(lambda: bh_run(), 0)
 
     def on_selection_modified(self, view):
-        self.debounce(BH_MATCH_TYPE_SELECTION)
+        if self.ignore_event(view):
+            return
+        if Pref.type != BH_MATCH_TYPE_EDIT:
+            Pref.type = BH_MATCH_TYPE_SELECTION
+        now = time()
+        if now - Pref.time > Pref.wait_time:
+            sublime.set_timeout(lambda: bh_run(), 0)
+        else:
+            Pref.modified = True
+            Pref.time = now
+
+    def ignore_event(self, view):
+        return (view.settings().get('is_widget') or Pref.ignore_all)
+
+
+# Kick off matching of brackets
+def bh_run():
+    Pref.modified = False
+    window = sublime.active_window()
+    view = window.active_view() if window != None else None
+    Pref.ignore_all = True
+    bh_match(view, True if Pref.type == BH_MATCH_TYPE_EDIT else False)
+    Pref.ignore_all = False
+    Pref.time = time()
+
+
+# Start thread that will ensure highlighting happens after a barage of events
+# Initial highlight is instant, but subsequent events in close succession will
+# be ignored and then accounted for with one match by this thread
+def bh_loop():
+    while True:
+        if Pref.modified == True and time() - Pref.time > Pref.wait_time:
+            sublime.set_timeout(lambda: bh_run(), 0)
+        sleep(0.5)
+
+if not 'running_bh_loop' in globals():
+    running_bh_loop = True
+    thread.start_new_thread(bh_loop, ())

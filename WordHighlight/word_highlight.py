@@ -4,7 +4,10 @@ import re
 import time
 
 settings = sublime.load_settings('Word Highlight.sublime-settings')
-settings_base = sublime.load_settings('Base File.sublime-settings')
+if int(sublime.version()) >= 2174:
+	settings_base = sublime.load_settings('Preferences.sublime-settings')
+else:
+	settings_base = sublime.load_settings('Base File.sublime-settings')
 
 class Pref:
 	def load(self):
@@ -75,7 +78,7 @@ class WordHighlightListener(sublime_plugin.EventListener):
 			now = time.time()
 			if now - Pref.timing > 0.08:
 				Pref.timing = now
-				self.highlight_occurences(view)
+				sublime.set_timeout(lambda:self.highlight_occurences(view), 0)
 			else:
 				Pref.timing = now
 

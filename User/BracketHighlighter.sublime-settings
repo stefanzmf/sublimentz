@@ -1,18 +1,2 @@
 {
-	"debounce_delay" : 80,
-		//Outline? (solid/outline/underline) ->
-	"quote_style" : "outline",
-	"curly_style" : "outline",
-	"round_style" : "outline",
-	"square_style": "outline",
-	"angle_style" : "outline",
-	"tag_style"   : "outline",
-
-	//Icon? (dot/circle/bookmark/cross)
-	"quote_icon" : "dot",
-	"curly_icon" : "dot",
-	"round_icon" : "dot",
-	"square_icon": "dot",
-	"angle_icon" : "dot",
-	"tag_icon"   : "dot"
 }

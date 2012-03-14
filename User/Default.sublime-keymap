@@ -17,6 +17,8 @@
 			{ "key": "overlay_visible", "operator": "equal", "operand": false }
 		]
 	},
+	{ "keys": ["ctrl+shift+k", "ctrl+shift+l"], "command": "lower_case" },
+
 	{ "keys": ["ctrl+alt+right"], "command": "next_view_in_stack" },
 	{ "keys": ["ctrl+alt+left"], "command": "prev_view_in_stack" },
 	{ "keys": ["ctrl+shift+tab"], "command": "prev_view" },

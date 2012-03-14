@@ -1,5 +1,5 @@
 {
-	"auto_upgrade_last_run": 1331008262,
+	"auto_upgrade_last_run": 1331700769,
 	"git_binary": "C:\\cygwin\\git\\bin\\git.exe",
 	"installed_packages":
 	[
@@ -19,6 +19,7 @@
 		"Nettuts-Fetch",
 		"Package Control",
 		"PhpDoc",
+		"RegReplace",
 		"SFTP",
 		"SideBarEnhancements",
 		"SideBarGit",
@@ -64,6 +65,8 @@
 		"https://github.com/animehunter/SublimeColorPickerWindowsOnly",
 		"https://github.com/captainbrosset/cleanjs",
 		"https://github.com/mrmartineau/jQuery.git",
-		"https://github.com/spadgos/sublime-jsdocs"
+		"https://github.com/spadgos/sublime-jsdocs",
+		"https://github.com/kuroir/Sublime-Magnificent-Theme",
+		"https://github.com/chriskempson/coda-textMate-theme.git"
 	]
 }
