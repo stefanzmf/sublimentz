@@ -188,6 +188,16 @@ Multi-pass cannot be paired with override actions (it will be ignored), but it c
         "args": {"replacements": ["example"], "multi_pass": true}
     },
 
+## Replace Only Under Selection(s)
+Sometimes you only want to search under selections.  This can be done by enabling the ```selection_only``` setting in the settings file.  By enabling this setting, regex targets will be limited to the current selection if and only if a selection exists.  Auto replace/highlight on save events ignore this setting.  If you have a command that you wish to ignore this setting, just set the ```no_selection``` argument to ```true```.  Highlight style will be forced to underline under selections if ```find_only``` is set to ensure they will show up.
+
+    // Ignore "selection_only" setting
+    {
+        "caption": "Reg Replace: Remove Trailing Spaces",
+        "command": "reg_replace",
+        "args": {"replacements": ["example"], "multi_pass": true, "no_selection": true}
+    },
+
 ## Regex Input Sequencer
 If you haven't created a command yet, but you want to quickly run a sequence, you can search for ```Reg Replace: RegEx Input Sequencer``` in the command palette and launch an input panel where you can enter the name of replacements separated by commas and press enter.
 
@@ -250,6 +260,10 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+# Version 1.6
+- Save under selection added (limits searches to selections if and only if selection exists)
+- Cleanup "highlight on save regions" when performing other regex searches
 
 # Version 1.5.2
 - Do each on save replace sequence separate allowing multi_pass to be only applied to specific sequence.

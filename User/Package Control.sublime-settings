@@ -1,5 +1,5 @@
 {
-	"auto_upgrade_last_run": 1331700769,
+	"auto_upgrade_last_run": 1331795089,
 	"git_binary": "C:\\cygwin\\git\\bin\\git.exe",
 	"installed_packages":
 	[
@@ -67,6 +67,7 @@
 		"https://github.com/mrmartineau/jQuery.git",
 		"https://github.com/spadgos/sublime-jsdocs",
 		"https://github.com/kuroir/Sublime-Magnificent-Theme",
-		"https://github.com/chriskempson/coda-textMate-theme.git"
+		"https://github.com/chriskempson/coda-textMate-theme.git",
+		"https://bitbucket.org/sublimator/volcanoes"
 	]
 }

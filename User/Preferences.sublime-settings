@@ -90,6 +90,8 @@
 		"draw_normal",
 		"draw_active"
 	],
+	"jsdocs_indentation_spaces": 2,
+	"jsdocs_spacer_between_sections": true,
 	"line_padding_bottom": 1.5,
 	"line_padding_top": 1.5,
 	"match_brackets_angle": false,
@@ -103,7 +105,12 @@
 		"status_bar_visible": true
 	},
 	"overlay_scroll_bars": "enabled",
-	"rulers": [ 0, 80, 150 ],
+	"rulers":
+	[
+		0,
+		80,
+		150
+	],
 	"scroll_speed": 0.5,
 	"shift_tab_unindent": true,
 	"show_active_indent_guides": true,
@@ -123,8 +130,4 @@
 	"word_highlights_when_selection_is_empty": false,
 	"word_separators": "./\\()\"'-:,.;<>~!@#$%^&*|+=[]{}`~?",
 	"word_wrap": "auto"
-
-	, "jsdocs_indentation_spaces": 2
-	,"jsdocs_spacer_between_sections": true
-
 }
