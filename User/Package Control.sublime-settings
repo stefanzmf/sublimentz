@@ -1,11 +1,13 @@
 {
-	"auto_upgrade_last_run": 1331795089,
+	"auto_upgrade_last_run": 1335210085,
 	"git_binary": "C:\\cygwin\\git\\bin\\git.exe",
 	"installed_packages":
 	[
+		"AdvancedNewFile",
 		"Alignment",
 		"alternative_autocompletion",
 		"ApacheConf.tmLanguage",
+		"ASCII Decorator",
 		"AutoSelect",
 		"BracketHighlighter",
 		"BufferScroll",
@@ -13,20 +15,25 @@
 		"DocBlockr",
 		"Format SQL",
 		"Gist",
+		"Gobble",
 		"Inc-Dec-Value",
 		"JsFormat",
 		"Nettuts+ Fetch",
 		"Nettuts-Fetch",
+		"orgmode",
 		"Package Control",
 		"PhpDoc",
 		"RegReplace",
 		"SFTP",
 		"SideBarEnhancements",
 		"SideBarGit",
+		"SortTabs",
 		"sublime-jslint",
 		"SublimeBlockCursor",
+		"SublimeCodeIntel",
 		"SublimeColorPickerWindowsOnly",
 		"sublimelint",
+		"SublimeMarkdown",
 		"SublimeTODO",
 		"TagIndent",
 		"Terminal",
@@ -68,6 +75,10 @@
 		"https://github.com/spadgos/sublime-jsdocs",
 		"https://github.com/kuroir/Sublime-Magnificent-Theme",
 		"https://github.com/chriskempson/coda-textMate-theme.git",
-		"https://bitbucket.org/sublimator/volcanoes"
+		"https://bitbucket.org/sublimator/volcanoes",
+		"https://github.com/danielmagnussons/orgmode",
+		"https://github.com/skyronic/Gobble",
+		"https://github.com/bizoo/SortTabs",
+		"https://github.com/erinata/SublimeMarkdown"
 	]
 }

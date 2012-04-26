@@ -1,9 +1,9 @@
-import subprocess
-import os
-import tempfile
-
 import sublime
 import re
+import persist
+import util
+
+from Queue import Queue
 
 from highlight import Highlight
 
@@ -19,16 +19,27 @@ class Linter:
 	language = ''
 	cmd = ()
 	regex = ''
+	tab_size = 1
+	
+	scope = 'keyword'
+	selector = None
+	outline = True
+	needs_api = False
 
 	languages = {}
 	linters = {}
+	errors = None
+	highlight = None
 
-	def __init__(self, view, syntax, filename='untitled'):
+	def __init__(self, view, syntax, filename=None):
 		self.view = view
 		self.syntax = syntax
 		self.filename = filename
+
 		if self.regex:
 			self.regex = re.compile(self.regex)
+
+		self.highlight = Highlight(scope=self.scope)
 
 	@classmethod
 	def add_subclass(cls, sub, name, attrs):
@@ -42,10 +53,17 @@ class Linter:
 		find a linter for a specified view if possible, then add it to our mapping of view <--> lint class and return it
 		each view has its own linter to make it feasible for linters to store persistent data about a view
 		'''
-		id = view.id()
+		try:
+			vid = view.id()
+		except RuntimeError:
+			pass
 
 		settings = view.settings()
 		syn = settings.get('syntax')
+		if not syn:
+			cls.remove(vid)
+			return
+
 		match = syntax_re.search(syn)
 
 		if match:
@@ -54,23 +72,29 @@ class Linter:
 			syntax = syn
 
 		if syntax:
-			if id in cls.linters and cls.linters[id]:
-				if tuple(cls.linters[id])[0].syntax == syntax:
+			if vid in cls.linters and cls.linters[vid]:
+				if tuple(cls.linters[vid])[0].syntax == syntax:
 					return
 
 			linters = set()
-			for entry in cls.languages.values():
+			for name, entry in cls.languages.items():
 				if entry.can_lint(syntax):
-					linter = entry(view, syntax)
+					linter = entry(view, syntax, view.file_name())
 					linters.add(linter)
 
 			if linters:
-				cls.linters[id] = linters
-			else:
-				if id in cls.linters:
-					del cls.linters[id]
-					
-			return linters
+				cls.linters[vid] = linters
+				return linters
+
+		cls.remove(vid)
+
+	@classmethod
+	def remove(cls, vid):
+		if vid in cls.linters:
+			for linter in cls.linters[vid]:
+				linter.clear()
+
+			del cls.linters[vid]
 
 	@classmethod
 	def reload(cls, mod):
@@ -80,9 +104,11 @@ class Linter:
 		for id, linters in cls.linters.items():
 			for linter in linters:
 				if linter.__module__ == mod:
+					linter.clear()
 					cls.linters[id].remove(linter)
-					linter = cls.languages[linter.name](linter.view, linter.syntax)
+					linter = cls.languages[linter.name](linter.view, linter.syntax, linter.filename)
 					cls.linters[id].add(linter)
+					linter.draw()
 
 		return
 
@@ -91,53 +117,105 @@ class Linter:
 		return view.substr(sublime.Region(0, view.size())).encode('utf-8')
 
 	@classmethod
-	def lint_view(cls, view_id, code, callback):
+	def lint_view(cls, view_id, filename, code, sections, callback):
 		if view_id in cls.linters:
+			selectors = Linter.get_selectors(view_id)
+
 			linters = tuple(cls.linters[view_id])
 			for linter in linters:
-				linter.lint(code)
+				if not linter.selector:
+					linter.filename = filename
+					linter.pre_lint(code)
+
+			for sel, linter in selectors:
+				if sel in sections:
+					highlight = Highlight(code, scope=linter.scope, outline=linter.outline)
+					errors = {}
+
+					for line_offset, left, right in sections[sel]:
+						highlight.shift(line_offset, left)
+						linter.pre_lint(code[left:right], highlight=highlight)
+
+						for line, error in linter.errors.items():
+							errors[line+line_offset] = error
+
+					linter.errors = errors
 
 			# merge our result back to the main thread
 			sublime.set_timeout(lambda: callback(linters[0].view, linters), 0)
 
 	@classmethod
-	def get_view(self, view_id):
-		if view_id in self.linters:
-			return tuple(self.linters[view_id])[0].view
+	def get_view(cls, view_id):
+		if view_id in cls.linters:
+			return tuple(cls.linters[view_id])[0].view
 
+	@classmethod
+	def get_linters(cls, view_id):
+		if view_id in cls.linters:
+			return tuple(cls.linters[view_id])
 
-	def lint(self, code=None):
+		return ()
+
+	@classmethod
+	def get_selectors(cls, view_id):
+		return [(linter.selector, linter) for linter in cls.get_linters(view_id) if linter.selector]
+
+	def pre_lint(self, code, highlight=None):
+		self.errors = {}
+		self.highlight = highlight or Highlight(code, scope=self.scope, outline=self.outline)
+
+		if not code: return
+		
+		# if this linter needs the api, we want to merge back into the main thread
+		# but stall this thread until it's done so we still have the return
+		if self.needs_api:
+			q = Queue()
+			def callback():
+				q.get()
+				self.lint(code)
+				q.task_done()
+
+			q.put(1)
+			sublime.set_timeout(callback, 1)
+			q.join()
+		else:
+			self.lint(code)
+
+	def lint(self, code):
 		if not (self.language and self.cmd and self.regex):
 			raise NotImplementedError
 
-		if code is None:
-			code = Linter.text(self.view)
-
-		self.highlight = Highlight(code)
-		self.errors = errors = {}
-
-		if not code: return
-
 		output = self.communicate(self.cmd, code)
-		print repr(output)
+		if output:
+			persist.debug('Output:', repr(output))
 
-		for line in output.splitlines():
-			line = line.strip()
+			for line in output.splitlines():
+				line = line.strip()
 
-			match, row, col, message, near = self.match_error(self.regex, line)
-			if match:
-				if row or row is 0:
-					if col or col is 0:
-						self.highlight.range(row, col)
-					elif near:
-						self.highlight.near(row, near)
-					else:
-						self.highlight.line(row)
+				match, row, col, message, near = self.match_error(self.regex, line)
+				if match:
+					if row or row is 0:
+						if col or col is 0:
+							# adjust column numbers to match the linter's tabs if necessary
+							if self.tab_size > 1:
+								start, end = self.highlight.full_line(row)
+								code_line = code[start:end]
+								diff = 0
+								for i in xrange(len(code_line)):
+									if code_line[i] == '\t':
+										diff += (self.tab_size - 1)
 
-				if row in errors:
-					errors[row].append(message)
-				else:
-					errors[row] = [message]
+									if col - diff <= i:
+										col = i
+										break
+
+							self.highlight.range(row, col)
+						elif near:
+							self.highlight.near(row, near)
+						else:
+							self.highlight.line(row)
+
+					self.error(row, message)
 
 	def draw(self, prefix='lint'):
 		self.highlight.draw(self.view, prefix)
@@ -149,14 +227,18 @@ class Linter:
 
 	@classmethod
 	def can_lint(cls, language):
-		if language.lower() == cls.language:
-			return True
-		else:
-			return False
+		language = language.lower()
+		if cls.language:
+			if language == cls.language:
+				return True
+			elif isinstance(cls.language, (tuple, list)) and language in cls.language:
+				return True
+			else:
+				return False
 
 	def error(self, line, error):
 		self.highlight.line(line)
-		
+
 		error = str(error)
 		if line in self.errors:
 			self.errors[line].append(error)
@@ -172,44 +254,22 @@ class Linter:
 			error, row, col, near = [items[k] for k in ('error', 'line', 'col', 'near')]
 
 			row = int(row) - 1
+			if col:
+				col = int(col) - 1
+
 			return match, row, col, error, near
 
 		return match, None, None, '', None
 
-	# popen methods
-
+	# popen wrappers
 	def communicate(self, cmd, code):
-		out = self.popen(cmd).communicate(code)
-		return (out[0] or '') + (out[1] or '')
+		return util.communicate(cmd, code)
 
 	def tmpfile(self, cmd, code, suffix=''):
-		f = tempfile.NamedTemporaryFile(suffix=suffix)
-		f.write(code)
-		f.flush()
+		return util.tmpfile(cmd, code, suffix)
 
-		cmd = tuple(cmd) + (f.name,)
-		out = self.popen(cmd).communicate('')
-		return (out[0] or '') + (out[1] or '')
+	def tmpdir(self, cmd, files, code):
+		return util.tmpdir(cmd, files, self.filename, code)
 
-	def popen(self, cmd):
-		if isinstance(cmd, basestring):
-			cmd = cmd,
-
-		info = None
-		if os.name == 'nt':
-			info = subprocess.STARTUPINFO()
-			info.dwFlags |= subprocess.STARTF_USESHOWWINDOW
-			info.wShowWindow = subprocess.SW_HIDE
-
-		env = os.environ
-		if os.name == 'posix':
-			for path in (
-				'/usr/bin', '/usr/local/bin',
-				'/usr/local/php/bin', '/usr/local/php5/bin'
-						):
-				if not path in env['PATH']:
-					env['PATH'] += (':' + path)
-
-		return subprocess.Popen(cmd, stdin=subprocess.PIPE,
-			stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-			startupinfo=info, env=env)
+	def popen(self, cmd, env=None):
+		return util.popen(cmd, env)

@@ -1,4 +1,5 @@
 {
+    "color_scheme": "Packages/orgmode/Color Scheme/Monokai Bright.tmTheme",
 	"word_wrap": true,
     "translate_tabs_to_spaces": true,
     "tab_size": 2,
@@ -7,6 +8,6 @@
     "detect_indentation": false,
     "line_numbers": false,
     "save_on_focus_lost": true,
-    "rulers": [80],
+    //"rulers": [80],
     "gutter": true
 }

@@ -37,6 +37,12 @@
 			<string>success.sftp</string>
 		</dict>
 		<dict>
+			<key>match</key>
+			<string>^UNREGISTERED: Please visit http://sublime.wbond.net/sftp</string>
+			<key>name</key>
+			<string>failure.sftp</string>
+		</dict>
+		<dict>
 			<key>captures</key>
 			<dict>
 				<key>1</key>

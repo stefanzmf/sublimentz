@@ -8,12 +8,15 @@ For more settings see headers of specific resolvers.
 import sys
 import re
 import os.path
-
 import sublime
 import sublime_plugin
 
 
 DEFAULT_OPEN_LINK_RESOLVERS = [
+    'http',
+    'https',
+    'prompt',
+    'redmine',
     'jira',
     'crucible',
     'fisheye',

@@ -36,16 +36,19 @@ class Resolver(AbstractLinkResolver):
         basename = os.path.basename(filepath)
         for pattern in self.force_load_patterns:
             if fnmatch(basename, pattern):
-                # print 'found in force_load_patterns'
+                print 'found in force_load_patterns'
                 return False
+        #danne  hack here
+        return True
+
         folder_exclude_patterns = self.settings.get('folder_exclude_patterns')
         if basename in folder_exclude_patterns:
-            # print 'found in folder_exclude_patterns'
+            print 'found in folder_exclude_patterns'
             return True
         file_exclude_patterns = self.settings.get('file_exclude_patterns')
         for pattern in file_exclude_patterns:
             if fnmatch(basename, pattern):
-                # print 'found in file_exclude_patterns'
+                print 'found in file_exclude_patterns'
                 return True
         return False
 
@@ -68,11 +71,16 @@ class Resolver(AbstractLinkResolver):
             testfile = os.path.join(cwd, filepath)
             if os.path.exists(testfile):  # See if it exists here...
                 filepath = testfile
-        filepath = ':'.join([drive, filepath]) if drive else filepath
-
-        if os.path.exists(filepath) and not self.file_is_excluded(filepath):
+        #danne  hack here
+        #filepath = ':'.join([drive, filepath]) if drive else filepath
+        filepath = ''.join([drive, filepath]) if drive else filepath
+        print 'filepath: '+filepath
+        #danne  hack here
+        #if os.path.exists(filepath) and not self.file_is_excluded(filepath):
+        if not self.file_is_excluded(filepath):
             if row: filepath += ':%s' % row
             if col: filepath += ':%s' % col
+            print 'file_is_excluded'
             self.view.window().open_file(filepath, sublime.ENCODED_POSITION)
             return True
 
@@ -84,5 +92,5 @@ class Resolver(AbstractLinkResolver):
 
     def execute(self, content):
         if content is not True:
-            # print 'normal open'
+            print 'normal open'
             return super(Resolver, self).execute(content)

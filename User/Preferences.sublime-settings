@@ -51,7 +51,7 @@
 		"directwrite",
 		"subpixel_antialias"
 	],
-	"font_size": 15,
+	"font_size": 14,
 	"highlight_line": true,
 	"highlight_modified_tabs": true,
 	"ignored_packages":
@@ -83,7 +83,8 @@
 		"Language - English",
 		"Haskell",
 		"ActionScript",
-		"Go"
+		"Go",
+		"SublimeCodeIntel"
 	],
 	"indent_guide_options":
 	[

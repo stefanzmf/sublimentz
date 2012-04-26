@@ -15,8 +15,8 @@ class Java(Linter):
 	def communicate(self, *args):
 		return self.tmpfile(*args, suffix='.java')
 
-	def popen(self, cmd):
-		return super(Java, self).popen(cmd)
+	def popen(self, cmd, env=None):
+		return super(Java, self).popen(cmd, env)
 
 class JavaScript(Linter):
 	language = 'javascript'
@@ -27,9 +27,9 @@ class Perl(Linter):
 	language = 'perl'
 	cmd = ('perl', '-c')
 	regex = r'(?P<error>.+?) at .+? line (?P<line>\d+)(, near "(?P<near>.+?)")?'
-	
+
 class PHP(Linter):
-	language = 'php'
+	language = ('php', 'html')
 	cmd = ('php', '-l', '-d display_errors=On')
 	regex = r'^Parse error:\s*(?P<type>parse|syntax) error,?\s*(?P<error>.+?)?\s+in\s+.+?\s*line\s+(?P<line>\d+)'
 

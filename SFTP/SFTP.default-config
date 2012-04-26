@@ -17,7 +17,7 @@
     ${13://}"port": "${14:22}",
     
     "remote_path": "${15:/example/path/}",
-    "ignore_regex": "${16:(\\\.sublime-project|\\\.sublime-workspace|sftp-config(-alt\\\d?)?\\\.json|sftp-settings\\\.json|\\\.svn|\\\.hg|\\\.git|\\\.bzr|_darcs|CVS|\\\.DS_Store|Thumbs\\\.db|desktop\\\.ini)}",
+    "ignore_regex": "${16:(\\\.sublime-project|\\\.sublime-workspace|sftp-config(-alt\\\d?)?\\\.json|sftp-settings\\\.json|/venv/|\\\.svn|\\\.hg|\\\.git|\\\.bzr|_darcs|CVS|\\\.DS_Store|Thumbs\\\.db|desktop\\\.ini)}",
     ${17://}"file_permissions": "${18:664}",
     ${19://}"dir_permissions": "${20:775}",
     

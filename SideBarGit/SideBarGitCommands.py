@@ -3,15 +3,16 @@ import sublime_plugin, sublime
 import os
 import re
 
-from SideBarSelection import SideBarSelection
-from SideBarGit import SideBarGit
-from Utils import Object, uniqueList
+from sidebar.SideBarSelection import SideBarSelection
+from sidebar.SideBarGit import SideBarGit
 
 try:
-	from BufferScroll import BufferScroll
-	BufferScroll = BufferScroll()
+	from BufferScroll import BufferScrollAPI
 except:
-	BufferScroll = False
+	BufferScrollAPI = False
+
+class Object():
+	pass
 
 #run last command again on a focused tab when pressing F5
 
@@ -21,7 +22,7 @@ class SideBarGitRefreshTabContentsByRunningCommandAgain(sublime_plugin.WindowCom
 		if not window:
 			return
 		view 	 =  window.active_view()
-		if not view:
+		if view is None:
 			return
 		if view.settings().has('SideBarGitIsASideBarGitTab'):
 			SideBarGit().run(
@@ -36,13 +37,37 @@ class SideBarGitRefreshTabContentsByRunningCommandAgain(sublime_plugin.WindowCom
 												view.settings().get('SideBarGitNoResults'),
 												view.settings().get('SideBarGitSyntaxFile')
 												)
-		else:
-			if BufferScroll:
-				BufferScroll.save(view, 'sidebar-git');
+		elif view.file_name():
+			if BufferScrollAPI:
+				BufferScrollAPI.save(view, 'sidebar-git');
 			view.run_command("revert")
-			if BufferScroll:
-				BufferScroll.restore(view, 'sidebar-git');
+			if BufferScrollAPI:
+				BufferScrollAPI.restore(view, 'sidebar-git');
 
+	def is_enabled(self):
+		window = sublime.active_window()
+		if not window:
+			return False
+		view 	 =  window.active_view()
+		if view is None:
+			return False
+		if view.settings().has('SideBarGitIsASideBarGitTab') or view.file_name():
+			return True
+
+
+def closed_affected_items(items):
+	closed_items = []
+	for item in items:
+		if not item.isDirectory():
+			closed_items += item.close_associated_buffers()
+	return closed_items
+
+def reopen_affected_items(closed_items):
+	for item in closed_items:
+		file_name, window, view_index = item
+		if window and os.path.exists(file_name):
+			view = window.open_file(file_name)
+			window.set_view_index(view, view_index[0], view_index[1])
 #Following code for selected files or folders
 
 class SideBarGitDiffAllChangesSinceLastCommitCommand(sublime_plugin.WindowCommand):
@@ -51,6 +76,20 @@ class SideBarGitDiffAllChangesSinceLastCommitCommand(sublime_plugin.WindowComman
 			object = Object()
 			object.item = item
 			object.command = ['git', 'diff', 'HEAD', '--no-color', '--', item.forCwdSystemName()]
+			object.title = 'Diff: '+item.name()+'.diff'
+			object.no_results = 'No differences to show'
+			object.syntax_file = 'Packages/Diff/Diff.tmLanguage'
+			object.word_wrap = False
+			SideBarGit().run(object)
+	def is_enabled(self, paths = []):
+		return SideBarSelection(paths).len() > 0
+
+class SideBarGitDiffAllChangesSinceLastCommitIgnoreWhiteSpaceCommand(sublime_plugin.WindowCommand):
+	def run(self, paths = []):
+		for item in SideBarSelection(paths).getSelectedItems():
+			object = Object()
+			object.item = item
+			object.command = ['git', 'diff', 'HEAD', '--no-color', '-w', '--', item.forCwdSystemName()]
 			object.title = 'Diff: '+item.name()+'.diff'
 			object.no_results = 'No differences to show'
 			object.syntax_file = 'Packages/Diff/Diff.tmLanguage'
@@ -284,7 +323,9 @@ class SideBarGitRevertTrackedCommand(sublime_plugin.WindowCommand):
 		if confirm == False:
 			SideBarGit().confirm('Discard changes to tracked on selected items? ', self.run, paths)
 		else:
-			for item in SideBarSelection(paths).getSelectedItems():
+			items = SideBarSelection(paths).getSelectedItems()
+			closed_items = closed_affected_items(items)
+			for item in items:
 				object = Object()
 				object.item = item
 				object.command = ['git', 'checkout', 'HEAD', '--', item.forCwdSystemName()]
@@ -292,6 +333,8 @@ class SideBarGitRevertTrackedCommand(sublime_plugin.WindowCommand):
 					failed = True
 			if not failed:
 				SideBarGit().status('Discarded changes to tracked on selected items')
+			reopen_affected_items(closed_items)
+
 	def is_enabled(self, paths = []):
 		return SideBarSelection(paths).len() > 0
 
@@ -459,7 +502,7 @@ class SideBarGitIgnoreAddCommand(sublime_plugin.WindowCommand):
 				ignore_entry = '/'+ignore_entry
 			content = item.contentUTF8().strip()+'\n'+ignore_entry
 			content = content.replace('\r\n', '\n')
-			content = "\n".join(uniqueList(content.split('\n')))
+			content = "\n".join(list(set(content.split('\n'))))
 
 			item.write(content.strip())
 			SideBarGit().status('Ignored file "'+ignore_entry+'" on '+item.path())
@@ -686,6 +729,7 @@ class SideBarGitCommitCommand(sublime_plugin.WindowCommand):
 	def run(self, paths = [], input = False, content = ''):
 		if input == False:
 			SideBarGit().prompt('Enter a commit message: ', '', self.run, paths)
+			sublime.active_window().run_command('toggle_setting', {"setting": "spell_check"})
 		elif content != '':
 			import sys
 			content = (content[0].upper() + content[1:]).encode(sys.getfilesystemencoding())
@@ -706,6 +750,7 @@ class SideBarGitCommitAllCommand(sublime_plugin.WindowCommand):
 	def run(self, paths = [], input = False, content = ''):
 		if input == False:
 			SideBarGit().prompt('Enter a commit message: ', '', self.run, paths)
+			sublime.active_window().run_command('toggle_setting', {"setting": "spell_check"})
 		elif content != '':
 			import sys
 			content = (content[0].upper() + content[1:]).encode(sys.getfilesystemencoding())
@@ -738,6 +783,7 @@ class SideBarGitAddCommitCommand(sublime_plugin.WindowCommand):
 	def run(self, paths = [], input = False, content = ''):
 		if input == False:
 			SideBarGit().prompt('Enter a commit message: ', '', self.run, paths)
+			sublime.active_window().run_command('toggle_setting', {"setting": "spell_check"})
 		elif content != '':
 			import sys
 			content = (content[0].upper() + content[1:]).encode(sys.getfilesystemencoding())
@@ -764,6 +810,7 @@ class SideBarGitAddCommitPushCommand(sublime_plugin.WindowCommand):
 	def run(self, paths = [], input = False, content = ''):
 		if input == False:
 			SideBarGit().prompt('Enter a commit message: ', '', self.run, paths)
+			sublime.active_window().run_command('toggle_setting', {"setting": "spell_check"})
 		elif content != '':
 			import sys
 			content = (content[0].upper() + content[1:]).encode(sys.getfilesystemencoding())

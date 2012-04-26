@@ -11,12 +11,12 @@
 		"command":	"insert_snippet",
 		"args"   :	{ "contents": "<${1:p}>${0:$SELECTION}</${1/\\s.*//}>" }
 	},
-	{
-		"keys"   :	["ctrl+b"], 
-		"command":	"insert_snippet",
-		"args"   :	{ "contents": "<strong>${1:$SELECTION}</strong>" },
-		"context":	[ { "key": "selector", "operator": "equal", "operand": "text.html" } ]
-	},
+	//{
+	//	"keys"   :	["ctrl+b"], 
+	//	"command":	"insert_snippet",
+	//	"args"   :	{ "contents": "<strong>${1:$SELECTION}</strong>" },
+	//	"context":	[ { "key": "selector", "operator": "equal", "operand": "text.html" } ]
+	//},
 	{
 		"keys"   :	["ctrl+i"], 
 		"command":	"insert_snippet",

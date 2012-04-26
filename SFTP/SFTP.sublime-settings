@@ -17,6 +17,12 @@
 	// what to disable. Sublime must be restarted after changing this setting.
 	"linux_enable_ssl": false,
 
+	// If the temp folder created for diff operations should be deleted when
+	// the diff completes. If this is set to false, the user is responsible
+	// for cleaning up temp folders. This only applies to situations when
+	// diff_command is set.
+	"delete_temp_diff_folder": true,
+
 	// If debug output should be printed to the console
 	// True or 1 outputs FTP/SFTP commands, 2 is more verbose
 	"debug": false
