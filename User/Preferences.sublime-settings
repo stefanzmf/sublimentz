@@ -6,12 +6,13 @@
 		":",
 		"=>"
 	],
-	"auto_complete_delay": 1500,
+	"auto_complete_delay": 2500,
 	"auto_id_class": true,
 	"auto_match_angle_brakets_enabled": true,
 	"auto_match_tilda_enabled": true,
-	"caret_style": "phase",
-	"color_scheme": "Packages/Color Scheme - Default/Monokai.tmTheme",
+	"bold_folder_labels": false,
+	"caret_style": "smooth",
+	"color_scheme": "Packages/User/Monokai.tmTheme",
 	"default_line_ending": "LF",
 	"delete_space_with_word": false,
 	"detect_slow_plugins": false,
@@ -91,10 +92,12 @@
 		"draw_normal",
 		"draw_active"
 	],
+	"indent_to_bracket": true,
 	"jsdocs_indentation_spaces": 2,
-	"jsdocs_spacer_between_sections": true,
+	"jsdocs_spacer_between_sections": false,
 	"line_padding_bottom": 1.5,
 	"line_padding_top": 1.5,
+	"margin": 2,
 	"match_brackets_angle": false,
 	"match_brackets_content": true,
 	"mid_line_tabs": false,
@@ -129,6 +132,5 @@
 	"wide_caret": true,
 	"word_highlights_draw_outlined": false,
 	"word_highlights_when_selection_is_empty": false,
-	"word_separators": "./\\()\"'-:,.;<>~!@#$%^&*|+=[]{}`~?",
 	"word_wrap": "auto"
 }

@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>name</key>
-	<string>Monokai2</string>
+	<string>Monokai ntz</string>
 	<key>settings</key>
 	<array>
 		<dict>
@@ -11,29 +11,56 @@
 			<dict>
 				<key>background</key>
 				<string>#272822</string>
+
 				<key>caret</key>
 				<string>#F8F8F0</string>
+
 				<key>foreground</key>
 				<string>#F8F8F2</string>
+
 				<key>invisibles</key>
 				<string>#3B3A32</string>
+
 				<key>lineHighlight</key>
 				<string>#3E3D32</string>
+
 				<key>selection</key>
 				<string>#49483E</string>
+
 				<key>findHighlight</key>
 				<string>#FFE792</string>
+
 				<key>findHighlightForeground</key>
 				<string>#000000</string>
+
 				<key>selectionBorder</key>
 				<string>#222218</string>
-        <key>bracketHighlight</key>
-        <string>#BB0000</string>
+
+				<key>activeGuide</key>
+				<string>#FFFFFFc0</string>
+
+				<key>stackGuide</key>
+				<string>#9D550FB0</string>
+
+				<key>guide</key>
+				<string>#9D550FB0</string>
+
+				<key>bracketsForeground</key>
+				<string>#00ff00</string>
+
+				<key>bracketsOptions</key>
+				<string></string>
+
+				<key>bracketContentsForeground</key>
+				<string>#F8F8F2A5</string>
+
+				<key>bracketContentsOptions</key>
+				<string></string>
+
+				<key>tagsOptions</key>
+				<string>stippled_underline</string>
 			</dict>
 		</dict>
-
-
-
 		<dict>
 			<key>name</key>
 			<string>Comment</string>
@@ -67,6 +94,7 @@
 				<string>#AE81FF</string>
 			</dict>
 		</dict>
+
 		<dict>
 			<key>name</key>
 			<string>Built-in constant</string>
@@ -215,7 +243,6 @@
 				<string>#A6E22E</string>
 			</dict>
 		</dict>
-
 		<dict>
 			<key>name</key>
 			<string>Library function</string>
@@ -351,109 +378,24 @@
 			</dict>
 		</dict>
 
-
-
-<dict>
-        <key>name</key>
-        <string>orgmode link</string>
-        <key>scope</key>
-        <string>orgmode.link</string>
-        <key>settings</key>
-        <dict>
-          <key>foreground</key>
-          <string>#FB9A4B</string>
-          <key>fontStyle</key>
-          <string>underline</string>
-       </dict>
-    </dict>
-    <dict>
-        <key>name</key>
-        <string>orgmode page</string>
-        <key>scope</key>
-        <string>orgmode.page</string>
-        <key>settings</key>
-        <dict>
-          <key>foreground</key>
-          <string>#FFFFAA</string>
-       </dict>
-    </dict>
-    <dict>
-        <key>name</key>
-        <string>orgmode break</string>
-        <key>scope</key>
-        <string>orgmode.break</string>
-        <key>settings</key>
-        <dict>
-          <key>foreground</key>
-          <string>#FFAAAA</string>
-       </dict>
-    </dict>
-    <dict>
-        <key>name</key>
-        <string>orgmode headline</string>
-        <key>scope</key>
-        <string>orgmode.headline</string>
-        <key>settings</key>
-        <dict>
-          <key>foreground</key>
-          <string>#9EFFFF</string>
-       </dict>
-    </dict>
-    <dict>
-        <key>name</key>
-        <string>orgmode tack</string>
-        <key>scope</key>
-        <string>orgmode.tack</string>
-        <key>settings</key>
-        <dict>
-          <key>foreground</key>
-          <string>#FFFFAA</string>
-       </dict>
-    </dict>
-    <dict>
-        <key>name</key>
-        <string>orgmode follow up</string>
-        <key>scope</key>
-        <string>orgmode.follow_up</string>
-        <key>settings</key>
-        <dict>
-          <key>foreground</key>
-          <string>#FFFFAA</string>
-       </dict>
-    </dict>
-    <dict>
-        <key>name</key>
-        <string>orgmode checkbox</string>
-        <key>scope</key>
-        <string>orgmode.checkbox</string>
-        <key>settings</key>
-        <dict>
-          <key>foreground</key>
-          <string>#FFFFAA</string>
-       </dict>
-    </dict>
-    <dict>
-        <key>name</key>
-        <string>orgmode checkbox summary</string>
-        <key>scope</key>
-        <string>orgmode.checkbox.summary</string>
-        <key>settings</key>
-        <dict>
-          <key>foreground</key>
-          <string>#FFFFAA</string>
-       </dict>
-    </dict>
-    <dict>
-        <key>name</key>
-        <string>orgmode tags</string>
-        <key>scope</key>
-        <string>orgmode.tags</string>
-        <key>settings</key>
-        <dict>
-          <key>foreground</key>
-          <string>#AAFFAA</string>
-       </dict>
-    </dict>
+		<dict>
+			<key>scope</key>
+			<string>constant.numeric.line-number.find-in-files - match</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#AE81FFA0</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>scope</key>
+			<string>entity.name.filename.find-in-files</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#E6DB74</string>
+			</dict>
+		</dict>
 
 	</array>
 	<key>uuid</key>

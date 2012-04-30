@@ -4,5 +4,6 @@
 	[
 		{ "trigger": "foreach|each", "contents": "foreach ( \\$${1:variable} as \\$${2:key}${3: => \\$${4:value}} ) {\n${0:# code...}\n}" }
     ,{ "trigger": "t", "contents": "\\$this" }
+    ,{ "trigger": "pp", "contents": "print_pre( $1 );" }
     ,{ "trigger": "wpconf", "contents": "\\$ntz_site_url = 'http://${1:domain.com}/';\ndefine( 'WP_SITEURL', \\$ntz_site_url );\ndefine( 'WP_HOME', \\$ntz_site_url );\ndefine( 'WP_CONTENT_URL', \\$ntz_site_url.'/wp-content' );\ndefine( 'WP_PLUGIN_URL', \\$ntz_site_url.'/wp-content/plugins' );"} ]
 }

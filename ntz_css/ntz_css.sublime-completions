@@ -90,12 +90,12 @@
     { "trigger": "ls", "contents": "list-style:${1:none}${2:disc}${3:decimal};$0" },
 
     /* box model css3 */
-    { "trigger": "bs", "contents": "-moz-box-shadow:$1px $2px $3px #$4;\n-webkit-box-shadow:$1px $2px $3px #$4;\nbox-shadow:$1px $2px $3px #$4;$0" },
-    { "trigger": "rad", "contents": "-moz-border-radius:$1px;\nborder-radius:${1:}px;$0" },
+    { "trigger": "bs", "contents": "-webkit-box-shadow:$1px $2px $3px #$4;\nbox-shadow:$1px $2px $3px #$4;$0" },
+    { "trigger": "rad", "contents": "border-radius:${1:}px;$0" },
 
     /* various & unsorted */
     { "trigger": "o|ou", "contents": "outline:${1:none};$0" },
-    { "trigger": "op|opac|opacity", "contents": "filter:alpha(opacity=${2:});\nopacity:${1:0.5};$0" },
+    { "trigger": "op|opac|opacity", "contents": "filter:alpha(opacity=$1${2});\nopacity:${1:.5};$0" },
     { "trigger": "ani|trans|transition", "contents": "-webkit-transition:${1:all} 0.${2:3s} ease;\n-moz-transition:${1:all} 0.${2:3s} ease;\n-o-transition:${1:all} 0.${2:3s} ease;\ntransition:${1:all } 0.${2:3s} ease;$0" },
     { "trigger": "cur", "contents": "cursor:${1:pointer};$0" },
     { "trigger": "ts", "contents": "text-shadow:$1px $2px $3px #$4;$0" },
