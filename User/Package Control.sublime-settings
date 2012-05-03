@@ -1,5 +1,5 @@
 {
-	"auto_upgrade_last_run": 1335761656,
+	"auto_upgrade_last_run": 1336025191,
 	"git_binary": "C:\\cygwin\\git\\bin\\git.exe",
 	"installed_packages":
 	[
@@ -18,22 +18,14 @@
 		"Gobble",
 		"Inc-Dec-Value",
 		"JsFormat",
-		"Nettuts+ Fetch",
-		"Nettuts-Fetch",
 		"orgmode",
 		"Package Control",
 		"PhpDoc",
-		"RegReplace",
 		"SCSS",
 		"SFTP",
 		"SideBarEnhancements",
 		"SideBarGit",
-		"SortTabs",
-		"sublime-jslint",
 		"SublimeBlockCursor",
-		"SublimeCodeIntel",
-		"SublimeColorPickerWindowsOnly",
-		"sublimelint",
 		"SublimeMarkdown",
 		"SublimeTODO",
 		"TagIndent",
@@ -42,7 +34,6 @@
 		"VintageEx",
 		"WordHighlight",
 		"Wordpress",
-		"zenburn",
 		"ZenCoding"
 	],
 	"repositories":
@@ -80,6 +71,7 @@
 		"https://github.com/danielmagnussons/orgmode",
 		"https://github.com/skyronic/Gobble",
 		"https://github.com/bizoo/SortTabs",
-		"https://github.com/erinata/SublimeMarkdown"
+		"https://github.com/erinata/SublimeMarkdown",
+		"https://github.com/krismolendyke/JavaScript"
 	]
 }

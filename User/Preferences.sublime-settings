@@ -7,6 +7,17 @@
 		"=>"
 	],
 	"auto_complete_delay": 2500,
+	"auto_complete_triggers":
+	[
+		{
+			"characters": "<",
+			"selector": "text.html"
+		},
+		{
+			"characters": "/",
+			"selector": "string.quoted.double.html,string.quoted.single.html, source.css"
+		}
+	],
 	"auto_id_class": true,
 	"auto_match_angle_brakets_enabled": true,
 	"auto_match_tilda_enabled": true,
@@ -59,8 +70,6 @@
 	[
 		"LaTeX",
 		"Java",
-		"Nettuts+ Fetch",
-		"Nettuts-Fetch",
 		"Lua",
 		"Wordpress",
 		"Matlab",
@@ -68,11 +77,9 @@
 		"C#",
 		"AppleScript",
 		"sublime_text2.ico",
-		"sublimelint",
 		"TCL",
 		"Groovy",
 		"D",
-		"zenburn",
 		"Lisp",
 		"C++",
 		"ASP",
@@ -84,8 +91,7 @@
 		"Language - English",
 		"Haskell",
 		"ActionScript",
-		"Go",
-		"SublimeCodeIntel"
+		"Go"
 	],
 	"indent_guide_options":
 	[

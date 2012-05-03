@@ -23,6 +23,9 @@
 	{ "keys": ["ctrl+alt+left"], "command": "prev_view_in_stack" },
 	{ "keys": ["ctrl+shift+tab"], "command": "prev_view" },
 
+	{ "keys": ["alt+left"], "command": "move", "args": {"by": "subwords", "forward": false} },
+	{ "keys": ["alt+right"], "command": "move", "args": {"by": "subword_ends", "forward": true} },
+
 	{ "keys": ["tab"], "command": "move", "args": { "by": "words", "forward": true }, "context":[{	"key": 	"following_text", "operator": "regex_contains", "operand": "^\\t", "match_all":true } ]},
 	{ "keys": ["tab"], "command": "indent", "context":[{ "key": "following_text", "operator": "regex_contains", "operand": "\\n", "match_all":true } ]},
 

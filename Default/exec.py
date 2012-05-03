@@ -105,7 +105,7 @@ class ExecCommand(sublime_plugin.WindowCommand, ProcessListener):
 
         # Default the to the current files directory if no working directory was given
         if (working_dir == "" and self.window.active_view()
-                        and self.window.active_view().file_name() != ""):
+                        and self.window.active_view().file_name()):
             working_dir = os.path.dirname(self.window.active_view().file_name())
 
         self.output_view.settings().set("result_file_regex", file_regex)
@@ -145,6 +145,12 @@ class ExecCommand(sublime_plugin.WindowCommand, ProcessListener):
             self.proc = AsyncProcess(cmd, merged_env, self, **kwargs)
         except err_type as e:
             self.append_data(None, str(e) + "\n")
+            self.append_data(None, "[cmd:  " + str(cmd) + "]\n")
+            self.append_data(None, "[dir:  " + str(os.getcwdu()) + "]\n")
+            if "PATH" in merged_env:
+                self.append_data(None, "[path: " + str(merged_env["PATH"]) + "]\n")
+            else:
+                self.append_data(None, "[path: " + str(os.environ["PATH"]) + "]\n")
             if not self.quiet:
                 self.append_data(None, "[Finished]")
 
