@@ -1,5 +1,5 @@
 {
-	"auto_upgrade_last_run": 1336025191,
+	"auto_upgrade_last_run": 1336654393,
 	"git_binary": "C:\\cygwin\\git\\bin\\git.exe",
 	"installed_packages":
 	[
@@ -72,6 +72,11 @@
 		"https://github.com/skyronic/Gobble",
 		"https://github.com/bizoo/SortTabs",
 		"https://github.com/erinata/SublimeMarkdown",
-		"https://github.com/krismolendyke/JavaScript"
+		"https://github.com/krismolendyke/JavaScript",
+		"http://sublime.wbond.net/testing/packages.json"
+	],
+	"repository_channels":
+	[
+		"http://sublime.wbond.net/repositories.json"
 	]
 }

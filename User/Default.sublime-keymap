@@ -1,4 +1,6 @@
 [
+	{ "keys": ["f2"], "command": "next_bookmark" },
+	{ "keys": ["f1"], "command": "side_bar_rename" },
 	{ "keys": ["super+`"], "command": "open_dir", "args": {"dir": "$file_path", "file": "$file_name"} },
 	{ "keys": ["ctrl+alt+shift+a"], "command": "alignment" },
 	{
