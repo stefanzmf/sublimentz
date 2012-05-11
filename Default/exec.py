@@ -3,6 +3,7 @@ import os, sys
 import thread
 import subprocess
 import functools
+import time
 
 class ProcessListener(object):
     def on_data(self, proc, data):
@@ -22,6 +23,8 @@ class AsyncProcess(object):
 
         self.listener = listener
         self.killed = False
+
+        self.start_time = time.time()
 
         # Hide the console window on Windows
         startupinfo = None
@@ -61,6 +64,9 @@ class AsyncProcess(object):
 
     def poll(self):
         return self.proc.poll() == None
+
+    def exit_code(self):
+        return self.proc.poll()
 
     def read_stdout(self):
         while True:
@@ -122,8 +128,11 @@ class ExecCommand(sublime_plugin.WindowCommand, ProcessListener):
         self.proc = None
         if not self.quiet:
             print "Running " + " ".join(cmd)
+            sublime.status_message("Building")
 
-        self.window.run_command("show_panel", {"panel": "output.exec"})
+        show_panel_on_build = sublime.load_settings("Preferences.sublime-settings").get("show_panel_on_build", True)
+        if show_panel_on_build:
+            self.window.run_command("show_panel", {"panel": "output.exec"})
 
         merged_env = env.copy()
         if self.window.active_view():
@@ -191,9 +200,21 @@ class ExecCommand(sublime_plugin.WindowCommand, ProcessListener):
 
     def finish(self, proc):
         if not self.quiet:
-            self.append_data(proc, "[Finished]")
+            elapsed = time.time() - proc.start_time
+            exit_code = proc.exit_code()
+            if exit_code == 0 or exit_code == None:
+                self.append_data(proc, ("[Finished in %.1fs]") % (elapsed))
+            else:
+                self.append_data(proc, ("[Finished in %.1fs with exit code %d]") % (elapsed, exit_code))
+
         if proc != self.proc:
             return
+
+        errs = self.output_view.find_all_results()
+        if len(errs) == 0:
+            sublime.status_message("Build finished")
+        else:
+            sublime.status_message(("Build finished with %d errors") % len(errs))
 
         # Set the selection to the start, so that next_result will work as expected
         edit = self.output_view.begin_edit()

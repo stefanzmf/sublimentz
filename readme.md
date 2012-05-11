@@ -4,4 +4,6 @@ Anyhow, these are my sublime settings that are as closest I could get to be like
 
 All you need to do is to copy all files into `%appdata%\Sublime Text 2\Packages` folder (on Windows) or `/Users/USERNAME/Library/Application Support/Sublime Text 2` (on Mac)
 
+Btw, don't expect very descriptive commits. I'm just using git more as a backup AND share, not viceversa.
+
 So... Enjoy :)
