@@ -21,7 +21,7 @@
 	"auto_id_class": true,
 	"auto_match_angle_brakets_enabled": true,
 	"auto_match_tilda_enabled": true,
-	"bold_folder_labels": false,
+	"bold_folder_labels": true,
 	"caret_style": "smooth",
 	"color_scheme": "Packages/User/Monokai.tmTheme",
 	"default_line_ending": "LF",
@@ -29,9 +29,9 @@
 	"detect_slow_plugins": false,
 	"dictionary": "Packages/Language - Romanian/ro_RO.dic",
 	"disable_auto_insert": true,
-	"draw_minimap_border": true,
+	"draw_minimap_border": false,
 	"draw_white_space": "all",
-	"fade_fold_buttons": false,
+	"fade_fold_buttons": true,
 	"file_exclude_patterns":
 	[
 		"*.pyc",
@@ -71,7 +71,6 @@
 		"LaTeX",
 		"Java",
 		"Lua",
-		"Wordpress",
 		"Matlab",
 		"Erlang",
 		"ASP",
@@ -84,7 +83,6 @@
 		"Lisp",
 		"C++",
 		"Clojure",
-		"BufferScroll",
 		"readme.md",
 		"OCaml",
 		"Graphviz",
@@ -106,10 +104,11 @@
 	"margin": 2,
 	"match_brackets_angle": false,
 	"match_brackets_content": true,
+	"match_selection": true,
 	"mid_line_tabs": false,
 	"new_window_settings":
 	{
-		"show_minimap": false,
+		"show_minimap": true,
 		"show_tabs": true,
 		"side_bar_visible": false,
 		"status_bar_visible": true
@@ -121,7 +120,7 @@
 		80,
 		150
 	],
-	"scroll_speed": 0.5,
+	"scroll_speed": 1,
 	"shift_tab_unindent": true,
 	"show_active_indent_guides": true,
 	"show_indent_guides": true,
@@ -136,7 +135,8 @@
 	"use_simple_full_screen": true,
 	"use_tab_stops": true,
 	"wide_caret": true,
-	"word_highlights_draw_outlined": false,
-	"word_highlights_when_selection_is_empty": false,
-	"word_wrap": "auto"
+	"word_wrap": "auto",
+  "indent_to_bracket": false,
+  "smart_indent": false
+
 }

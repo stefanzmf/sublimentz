@@ -58,6 +58,7 @@ class Pref():
 		Pref.synch_marks 						              = s.get('synch_marks', False)
 		Pref.synch_folds 						              = s.get('synch_folds', False)
 		Pref.synch_scroll 					              = s.get('synch_scroll', False)
+		Pref.typewriter_scrolling									= s.get('typewriter_scrolling', False)
 		Pref.current_view						              = -1
 		Pref.writing_to_disk				              = False
 
@@ -113,6 +114,15 @@ class BufferScroll(sublime_plugin.EventListener):
 	# save data for focused tab when saving
 	def on_pre_save(self, view):
 		self.save(view, 'on_pre_save')
+
+	# typewriter scrolling
+	def on_modified(self, view):
+		if Pref.typewriter_scrolling and len(view.sel()) == 1 and not view.settings().get('is_widget') and not view.is_scratch():
+			window = view.window();
+			if not window:
+				window = sublime.active_window()
+			view = window.active_view()
+			view.show_at_center(view.sel()[0].end())
 
 	# saving
 	def save(self, view, where = 'unknow'):
@@ -294,7 +304,7 @@ class BufferScroll(sublime_plugin.EventListener):
 
 		if view.is_loading():
 			Pref.synch_data_running = False
-			sublime.set_timeout(lambda: self.synch(view), 200)
+			sublime.set_timeout(lambda: self.synch(view, where), 200)
 		else:
 
 			self.save(view, 'synch')
@@ -490,16 +500,16 @@ class BufferScrollReFold(sublime_plugin.WindowCommand):
 					return True
 		return False
 
-# def synch_scroll_loop():
-# 	synch_scroll = BufferScrollAPI.synch_scroll
-# 	while True:
-# 		if Pref.synch_scroll and not Pref.synch_scroll_running:
-# 			Pref.synch_scroll_running = True
-# 			sublime.set_timeout(lambda:synch_scroll(), 0)
-# 		time.sleep(0.08)
-# if not 'running_synch_scroll_loop' in globals():
-# 	running_synch_scroll_loop = True
-# 	thread.start_new_thread(synch_scroll_loop, ())
+def synch_scroll_loop():
+	synch_scroll = BufferScrollAPI.synch_scroll
+	while True:
+		if Pref.synch_scroll and not Pref.synch_scroll_running:
+			Pref.synch_scroll_running = True
+			sublime.set_timeout(lambda:synch_scroll(), 0)
+		time.sleep(0.08)
+if not 'running_synch_scroll_loop' in globals():
+	running_synch_scroll_loop = True
+	thread.start_new_thread(synch_scroll_loop, ())
 
 def synch_data_loop():
 	synch = BufferScrollAPI.synch

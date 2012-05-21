@@ -103,15 +103,15 @@
 	
 	{ "keys": ["ctrl+alt+shift+enter"], "command": "google_it" },
 
-	{ "keys": ["ctrl+shift+w"], "command": "" },
-	{ "keys": ["insert"], "command": "" },
+	{ "keys": ["ctrl+shift+w"], "command": "noop" },
+	{ "keys": ["insert"], "command": "noop" },
 
 	//{ "keys": ["ctrl+u"], "command": "upper_case" },
 	//{ "keys": ["ctrl+shift+u"], "command": "lower_case" },
-	{ "keys": ["super+z"], "command": "convert_to_snake" },
-	{ "keys": ["super+x"], "command": "convert_to_camel" },
-	{ "keys": ["super+a"], "command": "convert_to_pascal" },
-
+//	{ "keys": ["ctrl+k", "ctrl+s"], "command": "convert_to_snake" },
+//	{ "keys": ["ctrl+k", "ctrl+s"], "command": "convert_to_camel" },
+//	{ "keys": ["ctrl+k", "ctrl+s"], "command": "convert_to_pascal" },
+//
 	{ "keys": ["alt+f4"], "command": "hot_exit" },
 
 	{ "keys": ["alt+backspace"], "command": "run_macro_file", "args": {"file": "Packages/User/delete_subword.sublime-macro"} },
