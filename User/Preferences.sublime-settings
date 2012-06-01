@@ -68,35 +68,34 @@
 	"highlight_modified_tabs": true,
 	"ignored_packages":
 	[
+		"Groovy",
 		"LaTeX",
-		"Java",
-		"Lua",
-		"Matlab",
-		"Erlang",
 		"ASP",
-		"C#",
+		"Java",
+		"D",
+		"Clojure",
+		"Language - English",
+		"Lisp",
 		"AppleScript",
 		"sublime_text2.ico",
-		"TCL",
-		"Groovy",
-		"D",
-		"Lisp",
-		"C++",
-		"Clojure",
-		"readme.md",
 		"OCaml",
-		"Graphviz",
-		"Language - English",
+		"Lua",
+		"TCL",
 		"Haskell",
+		"Matlab",
 		"ActionScript",
-		"Go"
+		"Go",
+		"Graphviz",
+		"Erlang",
+		"readme.md",
+		"Smart Match"
 	],
 	"indent_guide_options":
 	[
 		"draw_normal",
 		"draw_active"
 	],
-	"indent_to_bracket": true,
+	"indent_to_bracket": false,
 	"jsdocs_indentation_spaces": 2,
 	"jsdocs_spacer_between_sections": false,
 	"line_padding_bottom": 1.5,
@@ -125,6 +124,7 @@
 	"show_active_indent_guides": true,
 	"show_indent_guides": true,
 	"show_tab_close_buttons": false,
+	"smart_indent": false,
 	"sort_css_on_save": false,
 	"spell_check": false,
 	"tab_completion": true,
@@ -135,8 +135,5 @@
 	"use_simple_full_screen": true,
 	"use_tab_stops": true,
 	"wide_caret": true,
-	"word_wrap": "auto",
-  "indent_to_bracket": false,
-  "smart_indent": false
-
+	"word_wrap": "auto"
 }

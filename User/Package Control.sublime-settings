@@ -1,5 +1,5 @@
 {
-	"auto_upgrade_last_run": 1337520928,
+	"auto_upgrade_last_run": 1338569976,
 	"git_binary": "C:\\cygwin\\git\\bin\\git.exe",
 	"installed_packages":
 	[
@@ -11,9 +11,11 @@
 		"AutoSelect",
 		"BracketHighlighter",
 		"BufferScroll",
+		"Camaleon",
 		"Case Conversion",
 		"DocBlockr",
 		"Format SQL",
+		"Function Name Display",
 		"Gist",
 		"Gobble",
 		"Inc-Dec-Value",
@@ -26,11 +28,15 @@
 		"SFTP",
 		"SideBarEnhancements",
 		"SideBarGit",
+		"Smart Match",
 		"SublimeBlockCursor",
+		"SublimeClang",
 		"SublimeMarkdown",
 		"SublimeTODO",
+		"Synchronized File Scrolling",
 		"TagIndent",
 		"Terminal",
+		"Theme - Refresh",
 		"Theme - Soda",
 		"VintageEx",
 		"WordHighlight",
@@ -38,6 +44,7 @@
 	],
 	"repositories":
 	[
+		"https://github.com/BoundInCode/st2-refresh-theme.git"
 	],
 	"repository_channels":
 	[

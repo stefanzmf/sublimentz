@@ -3,7 +3,7 @@
 	{
 		"keys"   :	["ctrl+shift+enter"], 
 		"command":	"insert_snippet",
-		"args"   :	{ "contents": "<br/>" },
+		"args"   :	{ "contents": "<br>" },
 		"context":	[ { "key": "selector", "operator": "equal", "operand": "text.html" } ]
 	},
 	{ // wrap tags. the built in wrap tags function works a little awkward.
