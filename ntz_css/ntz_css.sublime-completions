@@ -68,7 +68,7 @@
     { "trigger": "tal", "contents": "text-align:left;$0" },
     { "trigger": "tar", "contents": "text-align:right;$0" },
     { "trigger": "td", "contents": "text-decoration:${1:[u]nderline/[n]one/[b]link/[o]verline}${1/(u$)|(n$)|(b$)|(o)|.*/?1:nderline:?2:one:?3:link:?4:verline/i};$0" },
-    { "trigger": "tt", "contents": "text-transform:${1:[U]pper/[L]owercase/[C]apitalize/[N]one}${1/(u$)|(l$)|(c$)|(n$)|.*/?1:pper:?2:ower:?3:aptalize:?4:one/i};$0" },
+    { "trigger": "tt", "contents": "text-transform:${1:[U]pper/[L]owercase/[C]apitalize/[N]one}${1/(u$)|(l$)|(c$)|(n$)|.*/?1:ppercase:?2:owercase:?3:aptalize:?4:one/i};$0" },
     { "trigger": "ti|hi", "contents": "text-indent:${1:-9999px};$0" },
     
     /* fonts */
@@ -102,7 +102,7 @@
     { "trigger": "ani|trans|transition", "contents": "-webkit-transition:${1:all} 0.${2:3s} ease;\n-moz-transition:${1:all} 0.${2:3s} ease;\n-o-transition:${1:all} 0.${2:3s} ease;\ntransition:${1:all } 0.${2:3s} ease;$0" },
     { "trigger": "cur", "contents": "cursor:${1:pointer};$0" },
     { "trigger": "ts", "contents": "text-shadow:$1px $2px $3px #$4;$0" },
-    { "trigger": "va", "contents": "vertical-align:${1:top}${2:middle}${3:bottom}${4:baseline};$0" },
+    { "trigger": "va", "contents": "vertical-align:${1:[T]op/[B]ottom/[M]iddle/[Ba]seline/[Te]xt-bottom/[Tex]t-top/[S]ub/[Su]per}${1/(t$)|(b$)|(m$)|(ba$)|(te$)|(tex$)|(s$)|(su$)|(st$)|.*/?1:op:?2:ottom:?3:iddle:?4:seline:?5:xt-bottom:?6:t-top:?7:ub:?8:per/i};$0" },
 
     /* media query */
 

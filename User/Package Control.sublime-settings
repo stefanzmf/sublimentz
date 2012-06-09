@@ -1,5 +1,5 @@
 {
-	"auto_upgrade_last_run": 1338569976,
+	"auto_upgrade_last_run": 1339245281,
 	"git_binary": "C:\\cygwin\\git\\bin\\git.exe",
 	"installed_packages":
 	[
@@ -8,6 +8,7 @@
 		"alternative_autocompletion",
 		"ApacheConf.tmLanguage",
 		"ASCII Decorator",
+		"Auto Semi-Colon",
 		"AutoSelect",
 		"BracketHighlighter",
 		"BufferScroll",
@@ -20,6 +21,7 @@
 		"Gobble",
 		"Inc-Dec-Value",
 		"JsFormat",
+		"Local History",
 		"MarkdownBuild",
 		"orgmode",
 		"Package Control",
@@ -44,7 +46,7 @@
 	],
 	"repositories":
 	[
-		"https://github.com/BoundInCode/st2-refresh-theme.git"
+		"https://github.com/mybuddymichael/solarized-sublimetext2"
 	],
 	"repository_channels":
 	[

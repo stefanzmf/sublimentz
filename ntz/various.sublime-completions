@@ -1,0 +1,6 @@
+{
+	"completions":
+	[
+    { "trigger": "ret", "contents": "return ${1:[t]rue/[f]alse}${1/(t$)|(f$)|.*/?1:rue:?2:alse/i};$0" }
+  ]
+}

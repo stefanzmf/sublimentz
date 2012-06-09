@@ -44,6 +44,8 @@ from errormarkers import clear_error_marks, add_error_mark, show_error_marks, \
                          update_statusbar, erase_error_marks, set_clang_view
 from common import expand_path, get_setting, get_settings, get_path_setting, Worker
 
+scriptpath = os.path.dirname(os.path.abspath(__file__))
+
 language_regex = re.compile("(?<=source\.)[\w+#]+")
 
 
@@ -215,6 +217,17 @@ class TranslationUnitCache(Worker):
         self.parsingList.unlock()
         return ret
 
+    def add_ex(self, filename, opts, opts_script, on_done=None):
+        tu = self.translationUnits.lock()
+        pl = self.parsingList.lock()
+        if filename not in tu and filename not in pl:
+            pl.append(filename)
+            self.tasks.put((
+                self.task_parse,
+                (filename, opts, opts_script, on_done)))
+        self.translationUnits.unlock()
+        self.parsingList.unlock()
+
     def add(self, view, filename, on_done=None):
         tu = self.translationUnits.lock()
         pl = self.parsingList.lock()
@@ -231,6 +244,8 @@ class TranslationUnitCache(Worker):
 
     def get_opts(self, view):
         opts = get_path_setting("options", [], view)
+        if not get_setting("dont_prepend_clang_includes", False, view):
+            opts.insert(0, "-I%s/clang/include" % scriptpath)
         if get_setting("add_language_option", True, view):
             language = get_language(view)
             if language == "objc":
@@ -254,6 +269,7 @@ class TranslationUnitCache(Worker):
         tus = self.translationUnits.lock()
         if filename not in tus:
             self.translationUnits.unlock()
+            pre_script_opts = list(opts)
 
             if opts_script:
                 # shlex.split barfs if fed with an unicode strings
@@ -277,11 +293,21 @@ class TranslationUnitCache(Worker):
                 # so reparse to heat up the cache
                 tu.reparse(unsaved_files)
                 tus = self.translationUnits.lock()
-                tus[filename] = tu = TranslationUnitCache.LockedVariable(tu)
+                tu = TranslationUnitCache.LockedVariable(tu)
+                tu.opts = pre_script_opts
+                tus[filename] = tu
                 self.translationUnits.unlock()
         else:
             tu = tus[filename]
+            recompile = tu.opts != opts
+
+            if recompile:
+                del tus[filename]
             self.translationUnits.unlock()
+
+            if recompile:
+                self.set_status("Options change detected. Will recompile %s" % filename)
+                self.add_ex(filename, opts, opts_script, None)
         return tu
 
     def remove(self, filename):
@@ -714,6 +740,7 @@ class SublimeClangAutoComplete(sublime_plugin.EventListener):
                 kind == cindex.CursorKind.OBJC_PROPERTY_DECL or \
                 kind == cindex.CursorKind.OBJC_CLASS_METHOD_DECL or \
                 kind == cindex.CursorKind.OBJC_INSTANCE_METHOD_DECL or \
+                kind == cindex.CursorKind.OBJC_IVAR_DECL or \
                 kind == cindex.CursorKind.FUNCTION_TEMPLATE or \
                 kind == cindex.CursorKind.NOT_IMPLEMENTED
 
