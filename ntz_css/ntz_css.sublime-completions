@@ -1,5 +1,5 @@
 {
-  "scope": "source.css",
+  "scope": "source.css, source.scss",
   "completions":
   [ 
     { "trigger": "i", "contents": "!important" },
@@ -83,17 +83,18 @@
 
 
     /* background */
-    { "trigger": "bg", "contents": "background:$1;$0" },
+    { "trigger": "bg", "contents": "background:${1}${1/(t$)|.*/?1:ransparent:?2:to/i};$0" },
     { "trigger": "bgp", "contents": "background-position:$1${2:px} $3${4:px};$0" },
     { "trigger": "bgi", "contents": "background-image:url(${1});$0" },
     { "trigger": "bgc", "contents": "background-color:#${1:000};$0" },
-    { "trigger": "bgg", "contents": "background:${1:url($2) ${3:${4:no-}repeat${5:-x/y}} ${6:0}${7:px} ${8:0}${9:px}};$0" },
-    
+    { "trigger": "bgg", "contents": "background:${2:url($3)} ${5:[n]o-repeat/[r]epeat/}${5/(n$)|(r$)|.*/?1:o-repeat:?2:epeat/i}$6 $7;$0" },
+    //
+
     /* lists */
     { "trigger": "ls", "contents": "list-style:${1:[n]one/[d]isc/[de]cimal/}${1/(n$)|(d$)|(de$)|.*/?1:one:?2:isc:?3:cimal/i};$0" },
 
     /* box model css3 */
-    { "trigger": "bs", "contents": "-webkit-box-shadow:$1px $2px $3px #$4;\nbox-shadow:$1px $2px $3px #$4;$0" },
+    { "trigger": "bs", "contents": "-webkit-box-shadow:$1px $2px $3px rgba$0;\nbox-shadow:$1px $2px $3px rgba$0;" },
     { "trigger": "rad", "contents": "border-radius:${1:}px;$0" },
 
     /* various & unsorted */

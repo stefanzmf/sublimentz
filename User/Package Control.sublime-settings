@@ -1,5 +1,5 @@
 {
-	"auto_upgrade_last_run": 1339245281,
+	"auto_upgrade_last_run": 1339562579,
 	"git_binary": "C:\\cygwin\\git\\bin\\git.exe",
 	"installed_packages":
 	[
@@ -20,7 +20,9 @@
 		"Gist",
 		"Gobble",
 		"Inc-Dec-Value",
+		"Jasmine",
 		"JsFormat",
+		"LineEndings",
 		"Local History",
 		"MarkdownBuild",
 		"orgmode",
@@ -32,12 +34,12 @@
 		"SideBarGit",
 		"Smart Match",
 		"SublimeBlockCursor",
-		"SublimeClang",
 		"SublimeMarkdown",
 		"SublimeTODO",
 		"Synchronized File Scrolling",
 		"TagIndent",
 		"Terminal",
+		"Theme - Nil",
 		"Theme - Refresh",
 		"Theme - Soda",
 		"VintageEx",
@@ -46,7 +48,9 @@
 	],
 	"repositories":
 	[
-		"https://github.com/mybuddymichael/solarized-sublimetext2"
+		"https://github.com/mybuddymichael/solarized-sublimetext2",
+		"http://sublime.wbond.net/testing/packages.json",
+		"https://github.com/Kentzo/SublimeMagick"
 	],
 	"repository_channels":
 	[

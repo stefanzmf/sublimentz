@@ -108,9 +108,9 @@
 
 	//{ "keys": ["ctrl+u"], "command": "upper_case" },
 	//{ "keys": ["ctrl+shift+u"], "command": "lower_case" },
-//	{ "keys": ["ctrl+k", "ctrl+s"], "command": "convert_to_snake" },
-//	{ "keys": ["ctrl+k", "ctrl+s"], "command": "convert_to_camel" },
-//	{ "keys": ["ctrl+k", "ctrl+s"], "command": "convert_to_pascal" },
+	{ "keys": ["super+keypad1"], "command": "convert_to_snake" },
+	{ "keys": ["super+keypad2"], "command": "convert_to_camel" },
+	{ "keys": ["super+keypad3"], "command": "convert_to_pascal" },
 //
 	{ "keys": ["alt+f4"], "command": "hot_exit" },
 
