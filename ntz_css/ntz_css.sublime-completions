@@ -49,6 +49,7 @@
     { "trigger": "dn", "contents": "display:none;$0" },
 
     { "trigger": "v|vis", "contents": "visibility:${1:[v]isible/[h]idden/[c]ollapse}${1/(v$)|(vi$)|(h$)|(hi$)|(c$)|(co$)|.*/?1:isible:?2:sible:?3:idden:?4:dden:?5:ollapse:?6:llapse/i};$0" },
+    { "trigger": "o|ov", "contents": "overflow:${1:[A]uto/[H]idden/[V]isible/[S]croll}${1/(a$)|(h$)|(v$)|(s$)|.*/?1:uto:?2:idden:?3:isible:?4:croll/i};$0" },
 
     /* text */
     { "trigger": "c|col|color", "contents": "color:#${1:000};$0" },
