@@ -799,8 +799,9 @@
             { "command": "open_url", "args": {"url": "http://www.sublimetext.com/docs/2/"}, "caption": "Documentation" },
             { "command": "open_url", "args": {"url": "http://twitter.com/sublimehq"}, "caption": "Twitter" },
             { "caption": "-" },
-            { "command": "open_url", "args": {"url": "http://www.sublimetext.com/buy"}, "caption": "Purchase License" },
+            { "command": "purchase_license"},
             { "command": "show_license_window", "caption": "Enter License" },
+            { "command": "remove_license"},
             { "caption": "-" },
             { "command": "show_about_window", "caption": "About Sublime Text 2", "mnemonic": "A" }
         ]

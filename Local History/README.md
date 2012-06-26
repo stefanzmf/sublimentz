@@ -32,10 +32,11 @@ The "Packages" directory location:
 ## Usage
 ![Open / Compare / Replace / Incremental Diff](http://i.imgur.com/qeoGl.png)
 
+![Open / Compare / Replace / Incremental Diff](http://i.imgur.com/ADMgy.png)
+
 ![Delete All](http://i.imgur.com/nUlx8.png)
 
 
 ## Caveats
 
-* Tested only on OS X and Windows
 * As this plugin is continuously evolving, please delete the history and reinstall the plugin incase you face any problems.
