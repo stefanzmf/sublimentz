@@ -43,6 +43,7 @@
 
     /* visibility & display */
     { "trigger": "d|dis|display", "contents": "display:${1:[i]nline/[in]line-block/[b]lock/[n]one/[t]able-cell/[ta]ble}${1/(i$)|(in$)|(b$)|(n$)|(t$)|(ta$)|.*/?1:nline:?2:line-block:?3:lock:?4:one:?5:able-cell:?6:ble/i};$0" },
+
     { "trigger": "db", "contents": "display:block;$0" },
     { "trigger": "di", "contents": "display:inline;$0" },
     { "trigger": "dib", "contents": "display:inline-block;$0" },

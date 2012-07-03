@@ -1,0 +1,6 @@
+{
+  "cmd"        : ["sass $file $file_path\\..\\screen.css --style compressed"],
+  "selector"   : "source.scss",
+  "working_dir": "$file_path",
+  "shell"      : true
+}

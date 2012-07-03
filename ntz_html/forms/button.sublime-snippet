@@ -1,0 +1,5 @@
+<snippet>
+	<content><![CDATA[<button type="${1:[s]ubmit/[r]eset/[b]utton}${1/(s$)|(rc$)|(b$)|.*/?1:ubmit:?2:eset:?3:utton/i}"$10>$0</button>]]></content>
+	<tabTrigger>btn</tabTrigger>
+	<scope>text.html,source.php</scope>
+</snippet>

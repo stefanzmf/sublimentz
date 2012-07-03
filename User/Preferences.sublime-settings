@@ -32,6 +32,7 @@
 	"draw_minimap_border": false,
 	"draw_white_space": "all",
 	"fade_fold_buttons": true,
+	"folder_exclude_patterns": [".svn", ".git", ".hg", "CVS", ".sass-cache"],
 	"file_exclude_patterns":
 	[
 		"*.pyc",
@@ -68,28 +69,28 @@
 	"highlight_modified_tabs": true,
 	"ignored_packages":
 	[
-		"Groovy",
 		"LaTeX",
-		"ASP",
 		"Java",
-		"D",
-		"Clojure",
-		"Smart Match",
-		"Lisp",
-		"AppleScript",
-		"Haskell",
-		"sublime_text2.ico",
-		"OCaml",
 		"Lua",
-		"TCL",
-		"Graphviz",
 		"Matlab",
-		"Language - English",
-		"ActionScript",
-		"Go",
 		"Erlang",
+		"ASP",
+		"AppleScript",
+		"sublime_text2.ico",
+		"TCL",
 		"CSS",
-		"readme.md"
+		"Groovy",
+		"D",
+		"Lisp",
+		"Clojure",
+		"readme.md",
+		"Smart Match",
+		"OCaml",
+		"Graphviz",
+		"Language - English",
+		"Haskell",
+		"ActionScript",
+		"Go"
 	],
 	"indent_guide_options":
 	[

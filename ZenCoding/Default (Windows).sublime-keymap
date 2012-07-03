@@ -544,21 +544,21 @@
     }
   ]
 },
-// {
-//   "keys": [
-//     "alt+shift+w"
-//   ],
-//   "__doc__": "Wraps content with abbreviation\n\n\n@param syntax: Syntax type (html, css, etc.)\n@type syntax: str\n@param profile_name: Output profile name (html, xml, xhtml)\n@type profile_name: str",
-//   "command": "wrap_zen_as_you_type",
-//   "context": [
-//     {
-//       "operand": "text.html, text.xml",
-//       "operator": "equal",
-//       "match_all": true,
-//       "key": "selector"
-//     }
-//   ]
-// },
+{
+  "keys": [
+    "ctrl+alt+shift+w"
+  ],
+  "__doc__": "Wraps content with abbreviation\n\n\n@param syntax: Syntax type (html, css, etc.)\n@type syntax: str\n@param profile_name: Output profile name (html, xml, xhtml)\n@type profile_name: str",
+  "command": "wrap_zen_as_you_type",
+  "context": [
+    {
+      "operand": "text.html, text.xml",
+      "operator": "equal",
+      "match_all": true,
+      "key": "selector"
+    }
+  ]
+},
 {
   "keys": [
     "#"

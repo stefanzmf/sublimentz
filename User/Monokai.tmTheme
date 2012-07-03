@@ -195,7 +195,7 @@
 			<key>name</key>
 			<string>Function name</string>
 			<key>scope</key>
-			<string>entity.name.function</string>
+			<string>entity.name.function, entity.name.type.class</string>
 			<key>settings</key>
 			<dict>
 				<key>fontStyle</key>
@@ -204,6 +204,23 @@
 				<string>#A6E22E</string>
 			</dict>
 		</dict>
+
+		<dict>
+			<key>name</key>
+			<string>Function name</string>
+			<key>scope</key>
+			<string>meta.function-call</string>
+			<key>settings</key>
+			<dict>
+				<key>fontStyle</key>
+				<string>italic</string>
+				<key>foreground</key>
+				<string>#ccc</string>
+				<key>background</key>
+				<string>#272822</string>
+			</dict>
+		</dict>
+
 		<dict>
 			<key>name</key>
 			<string>Function argument</string>

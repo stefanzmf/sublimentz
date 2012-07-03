@@ -24,6 +24,7 @@
 		"LineEndings",
 		"Local History",
 		"MarkdownBuild",
+		"nexus-theme",
 		"orgmode",
 		"Origami",
 		"Package Control",
@@ -39,6 +40,7 @@
 		"Synchronized File Scrolling",
 		"TagIndent",
 		"Terminal",
+		"Theme - Nexus",
 		"Theme - Nil",
 		"Theme - Refresh",
 		"Theme - Soda",
@@ -50,7 +52,9 @@
 	[
 		"https://github.com/mybuddymichael/solarized-sublimetext2",
 		"http://sublime.wbond.net/testing/packages.json",
-		"https://github.com/Kentzo/SublimeMagick"
+		"https://github.com/Kentzo/SublimeMagick",
+		"https://github.com/EleazarCrusader/nexus-theme",
+		"https://github.com/chriskempson/tomorrow-theme/tree/master/textmate"
 	],
 	"repository_channels":
 	[

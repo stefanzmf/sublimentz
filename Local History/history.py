@@ -79,16 +79,17 @@ class HistorySave(sublime_plugin.EventListener):
                 os.makedirs(newfile_dir)  # Create directory structure
             shutil.copyfile(file_path, newfile_path)
 
+            # Add reference to map
+            history_list.insert(0, newfile_name)
+
+            # Remove old files
+            for file in history_list[HISTORY_LIMIT:]:
+                os.remove(os.path.join(newfile_dir, file))
+
+            # Remove old references from map
+            del history_list[HISTORY_LIMIT:]
+
             with open(map_path, "wb") as map:
-                # Add reference to map
-                history_list.insert(0, newfile_name)
-
-                # Remove old files
-                for file in history_list[HISTORY_LIMIT + 1:]:
-                    os.remove(os.path.join(newfile_dir, file))
-                # Remove reference from map
-                del history_list[HISTORY_LIMIT + 1:]
-
                 # Dump history map
                 pickle.dump(history_map, map, -1)
 
@@ -159,6 +160,7 @@ class HistoryCompare(sublime_plugin.TextCommand):
 
             # Compare and show diff
             diff = difflib.unified_diff(from_content, to_content, from_file, to_file)
+            diff = [d.decode("utf8") for d in diff]
             show_diff(self.view.window(), "".join(diff))
 
         self.view.window().show_quick_panel(files, on_done)
@@ -222,6 +224,7 @@ class HistoryIncrementalDiff(sublime_plugin.TextCommand):
                 with open(to_file_path, "r") as f:
                     to_content = f.readlines()
                 diff = difflib.unified_diff(from_content, to_content, from_file, to_file)
+                diff = [d.decode("utf8") for d in diff]
                 show_diff(self.view.window(), "".join(diff))
 
         self.view.window().show_quick_panel(files, on_done)
