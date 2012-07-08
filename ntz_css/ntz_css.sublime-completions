@@ -10,12 +10,12 @@
     { "trigger": "b|bottom", "contents": "bottom:${1}${1/(a$)|(au$)|.*/?1:uto:?2:to/i};$0" },
     { "trigger": "z|z-index", "contents": "z-index:$1;$0" },
 
-    { "trigger": "bo|bor", "contents": "border:${1:$2px ${3:solid} #${4:000}};$0" },
-    { "trigger": "bb", "contents": "border-bottom:${1:$2px ${3:solid} #${4:000}};$0" },
-    { "trigger": "bt", "contents": "border-top:${1:$2px ${3:solid} #${4:000}};$0" },
-    { "trigger": "bl", "contents": "border-left:${1:$2px ${3:solid} #${4:000}};$0" },
-    { "trigger": "br", "contents": "border-right:${1:$2px ${3:solid} #${4:000}};$0" },
-    { "trigger": "bw", "contents": "border-width:$1;$0" },
+    { "trigger": "bo|bor", "contents": "border:${1:$2px ${3:[s]olid/[do]tted/[da]shed}${3/(s$)|(do$)|(da$)|.*/?1:olid:?2:tted:?3:shed/i} #${4:000}};$0" },
+    { "trigger": "bb", "contents": "border-bottom:${1:$2px ${3:[s]olid/[do]tted/[da]shed}${3/(s$)|(do$)|(da$)|.*/?1:olid:?2:tted:?3:shed/i} #${4:000}};$0" },
+    { "trigger": "bt", "contents": "border-top:${1:$2px ${3:[s]olid/[do]tted/[da]shed}${3/(s$)|(do$)|(da$)|.*/?1:olid:?2:tted:?3:shed/i}} #${4:000}};$0" },
+    { "trigger": "bl", "contents": "border-left:${1:$2px ${3:[s]olid/[do]tted/[da]shed}${3/(s$)|(do$)|(da$)|.*/?1:olid:?2:tted:?3:shed/i} #${4:000}};$0" },
+    { "trigger": "br", "contents": "border-right:${1:$2px ${3:[s]olid/[do]tted/[da]shed}${3/(s$)|(do$)|(da$)|.*/?1:olid:?2:tted:?3:shed/i} #${4:000}};$0" },
+    { "trigger": "bw", "contents": "border-width:$1px;$0" },
     { "trigger": "bc", "contents": "border-color:#${1:000};$0" },
     { "trigger": "bst", "contents": "border-style:${1:[s]olid/[do]tted/[da]shed/[n]one}${1/(s$)|(do$)|(da$)|(n$)|.*/?1:olid:?2:tted:?3:shed:?4:one/i};$0" },
 
