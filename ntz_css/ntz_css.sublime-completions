@@ -41,6 +41,8 @@
     { "trigger": "mw", "contents": "min-width:$1;$0" },
     { "trigger": "maw", "contents": "max-width:$1;$0" },
 
+    { "trigger": "wh", "contents": "width:$1px;\nheight:$2px;$0" },
+
     /* visibility & display */
     { "trigger": "d|dis|display", "contents": "display:${1:[i]nline/[in]line-block/[b]lock/[n]one/[t]able-cell/[ta]ble}${1/(i$)|(in$)|(b$)|(n$)|(t$)|(ta$)|.*/?1:nline:?2:line-block:?3:lock:?4:one:?5:able-cell:?6:ble/i};$0" },
 
@@ -63,7 +65,7 @@
     { "trigger": "f|float", "contents": "float:${1:[l]eft/[r]ight/[n]one/}${1/(l$)|(r$)|(n$)|.*/?1:eft:?2:ight:?3:one/i};$0" },
     { "trigger": "fl|fleft", "contents": "float:left;$0" },
     { "trigger": "fr|fright", "contents": "float:right;$0" },
-    { "trigger": "cl|clear", "contents": "clear:${1:[l]eft/[r]ight/[n]one/[b]oth}${1/(l$)|(r$)|(n$)|(b$)|.*/?1:eft:?2:ight:?3:one:?4:oth/i};$0" },
+    { "trigger": "cl|clear", "contents": "clear:${1:[l]eft/[r]ight/[n]one/[b]oth}${1/(l$)|(r$)|(n$)|(b$)|.*/?1:eft:?2:ight:?3:one:?4:oth1/i};$0" },
 
     { "trigger": "ta", "contents": "text-align:${1:[l]eft/[c]enter/[r]ight/[j]ustify}${1/(l$)|(c$)|(r$)|(j$)|.*/?1:eft:?2:enter:?3:ight:?4:ustify/i};$0" },
     { "trigger": "tac", "contents": "text-align:center;$0" },
