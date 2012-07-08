@@ -16,6 +16,11 @@
     { "trigger": "bl", "contents": "border-left:${1:$2px ${3:solid} #${4:000}};$0" },
     { "trigger": "br", "contents": "border-right:${1:$2px ${3:solid} #${4:000}};$0" },
     { "trigger": "bw", "contents": "border-width:$1;$0" },
+    { "trigger": "bc", "contents": "border-color:#${1:000};$0" },
+    { "trigger": "bst", "contents": "border-style:${1:[s]olid/[do]tted/[da]shed/[n]one}${1/(s$)|(do$)|(da$)|(n$)|.*/?1:olid:?2:tted:?3:shed:?4:one/i};$0" },
+
+
+    //{ "trigger": "bwsc", "contents": "border-width:${1:${2:0}${3:px} ${4:0}${5:px} ${6:0}${7:px} ${8:0}${9:px}},
     
     { "trigger": "m|mar", "contents": "margin:${1:${2:0}${3:px} ${4:0}${5:px} ${6:0}${7:px} ${8:0}${9:px}};$0" },
     { "trigger": "mb", "contents": "margin-bottom:${1}${1/(a$)|(au$)|.*/?1:uto:?2:to/i};$0" },
