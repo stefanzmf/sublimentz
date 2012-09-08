@@ -4,10 +4,10 @@
   [ 
     { "trigger": "i", "contents": "!important" },
 
-    { "trigger": "l|left", "contents": "left: ${1}${1/(a$)|(au$)|.*/?1:uto:?2:to/i};$0" },
-    { "trigger": "r|right", "contents": "right: ${1}${1/(a$)|(au$)|.*/?1:uto:?2:to/i};$0" },
-    { "trigger": "t|top", "contents": "top: ${1}${1/(a$)|(au$)|.*/?1:uto:?2:to/i};$0" },
-    { "trigger": "b|bottom", "contents": "bottom: ${1}${1/(a$)|(au$)|.*/?1:uto:?2:to/i};$0" },
+    { "trigger": "l|left", "contents": "left: ${1}${1/(a$)|(au$)|.*/?1:uto:?2:to/i}px;$0" },
+    { "trigger": "r|right", "contents": "right: ${1}${1/(a$)|(au$)|.*/?1:uto:?2:to/i}px;$0" },
+    { "trigger": "t|top", "contents": "top: ${1}${1/(a$)|(au$)|.*/?1:uto:?2:to/i}px;$0" },
+    { "trigger": "b|bottom", "contents": "bottom: ${1}${1/(a$)|(au$)|.*/?1:uto:?2:to/i}px;$0" },
     { "trigger": "z|z-index", "contents": "z-index: $1;$0" },
 
     { "trigger": "bo|bor", "contents": "border: ${1:$2px ${3:[s]olid/[do]tted/[da]shed}${3/(s$)|(do$)|(da$)|.*/?1:olid:?2:tted:?3:shed/i} #${4:000}};$0" },
@@ -22,27 +22,27 @@
 
     //{ "trigger": "bwsc", "contents": "border-width:${1:${2:0}${3:px} ${4:0}${5:px} ${6:0}${7:px} ${8:0}${9:px}},
     
-    { "trigger": "m|mar", "contents": "margin: ${1:${2:0}${3:px} ${4:0}${5:px} ${6:0}${7:px} ${8:0}${9:px}};$0" },
-    { "trigger": "mb", "contents": "margin-bottom: ${1}${1/(a$)|(au$)|.*/?1:uto:?2:to/i};$0" },
-    { "trigger": "mt", "contents": "margin-top: ${1}${1/(a$)|(au$)|.*/?1:uto:?2:to/i};$0" },
-    { "trigger": "ml", "contents": "margin-left: ${1}${1/(a$)|(au$)|.*/?1:uto:?2:to/i};$0" },
-    { "trigger": "mr", "contents": "margin-right: ${1}${1/(a$)|(au$)|.*/?1:uto:?2:to/i};$0" },
+    { "trigger": "m|mar", "contents": "margin: ${1:${2:0}${3:px} ${4:0}${5:px} ${6:0}${7:px} ${8:0}${9:px}}px;$0" },
+    { "trigger": "mb", "contents": "margin-bottom: ${1}${1/(a$)|(au$)|.*/?1:uto:?2:to/i}px;$0" },
+    { "trigger": "mt", "contents": "margin-top: ${1}${1/(a$)|(au$)|.*/?1:uto:?2:to/i}px;$0" },
+    { "trigger": "ml", "contents": "margin-left: ${1}${1/(a$)|(au$)|.*/?1:uto:?2:to/i}px;$0" },
+    { "trigger": "mr", "contents": "margin-right: ${1}${1/(a$)|(au$)|.*/?1:uto:?2:to/i}px;$0" },
     
     { "trigger": "p|pad", "contents": "padding: ${1:${2:0}${3:px} ${4:0}${5:px} ${6:0}${7:px} ${8:0}${9:px}};$0" },
-    { "trigger": "pb", "contents": "padding-bottom: ${1}${1/(a$)|(au$)|.*/?1:uto:?2:to/i};$0" },
-    { "trigger": "pt", "contents": "padding-top: ${1}${1/(a$)|(au$)|.*/?1:uto:?2:to/i};$0" },
-    { "trigger": "pl", "contents": "padding-left: ${1}${1/(a$)|(au$)|.*/?1:uto:?2:to/i};$0" },
-    { "trigger": "pr", "contents": "padding-right: ${1}${1/(a$)|(au$)|.*/?1:uto:?2:to/i};$0" },
+    { "trigger": "pb", "contents": "padding-bottom: ${1}${1/(a$)|(au$)|.*/?1:uto:?2:to/i}px;$0" },
+    { "trigger": "pt", "contents": "padding-top: ${1}${1/(a$)|(au$)|.*/?1:uto:?2:to/i}px;$0" },
+    { "trigger": "pl", "contents": "padding-left: ${1}${1/(a$)|(au$)|.*/?1:uto:?2:to/i}px;$0" },
+    { "trigger": "pr", "contents": "padding-right: ${1}${1/(a$)|(au$)|.*/?1:uto:?2:to/i}px;$0" },
 
     { "trigger": "pos|position", "contents": "position: ${1:[A]bsolute/[R]elative/[F]ixed/[S]tatic}${1/(a$)|(r$)|(f$)|(s$)|(ab$)|(re$)|(fi$)|(st$)|.*/?1:bsolute:?2:elative:?3:ixed:?4:tatic:?5:solute:?6:lative:?7:xed:?8:atic/i};$0" },
     { "trigger": "abs|absolute", "contents": "position: absolute;$0" },
     { "trigger": "rel|relative", "contents": "position: relative;$0" },
 
-    { "trigger": "h", "contents": "height: ${1}${1/(a$)|(au$)|.*/?1:uto:?2:to/i};$0" },
+    { "trigger": "h", "contents": "height: ${1}${1/(a$)|(au$)|.*/?1:uto:?2:to/i}px;$0" },
     { "trigger": "mh", "contents": "min-height: $1;$0" },
     { "trigger": "mah", "contents": "max-height: $1;$0" },
     
-    { "trigger": "w", "contents": "width: ${1}${1/(a$)|(au$)|.*/?1:uto:?2:to/i};$0" },
+    { "trigger": "w", "contents": "width: ${1}${1/(a$)|(au$)|.*/?1:uto:?2:to/i}px;$0" },
     { "trigger": "mw", "contents": "min-width: $1;$0" },
     { "trigger": "maw", "contents": "max-width: $1;$0" },
 
