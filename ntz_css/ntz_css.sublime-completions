@@ -70,7 +70,7 @@
     { "trigger": "f|float", "contents": "float:${1:[l]eft/[r]ight/[n]one/}${1/(l$)|(r$)|(n$)|.*/?1:eft:?2:ight:?3:one/i};$0" },
     { "trigger": "fl|fleft", "contents": "float:left;$0" },
     { "trigger": "fr|fright", "contents": "float:right;$0" },
-    { "trigger": "cl|clear", "contents": "clear:${1:[l]eft/[r]ight/[n]one/[b]oth}${1/(l$)|(r$)|(n$)|(b$)|.*/?1:eft:?2:ight:?3:one:?4:oth1/i};$0" },
+    { "trigger": "cl|clear", "contents": "clear:${1:[l]eft/[r]ight/[n]one/[b]oth}${1/(l$)|(r$)|(n$)|(b$)|.*/?1:eft:?2:ight:?3:one:?4:oth/i};$0" },
 
     { "trigger": "ta", "contents": "text-align:${1:[l]eft/[c]enter/[r]ight/[j]ustify}${1/(l$)|(c$)|(r$)|(j$)|.*/?1:eft:?2:enter:?3:ight:?4:ustify/i};$0" },
     { "trigger": "tac", "contents": "text-align:center;$0" },
@@ -84,7 +84,7 @@
     { "trigger": "f|font", "contents": "font:${1:${2:400}${3:700}} $4px${5:/$6} $7;$0" },
     //{ "trigger": "ff", "contents": "${1:${2:Arial, Helvetica, Verdana}${3:Verdana, Arial, Helvetica}, Sans Serif}${4:Georgia, Cambria, Palatino, Serif}${5:Consolas, \"Lucida Console\", \"Courier New\", Monospace}${6:\"Trebuchet MS\", Helvetica, Tahoma, Sans-serif}$0" },
     { "trigger": "fz", "contents": "font-size:$1px;$0" },
-    { "trigger": "ff", "contents": "font-family:${2:[A]rial/[V]erdana/[G]eorgia/[T]rebuchet/[C]onsolas}${2/(a$)|(v$)|(g$)|(t$)|(c$)|(m$)|.*/?1:rial, Helvetica, Verdana:?2:erdana, Arial, Helvetica:?3:eorgia, Cambria, Palatino, Serif:?4:rebuchet MS, Helvetica, Tahoma, Sans-serif:?5:onsolas, \"Lucida Console\", \"Courier New\", Monospace:?6:onospace/i};$0" },
+    { "trigger": "ff", "contents": "font-family:${1:[A]rial/[V]erdana/[G]eorgia/[T]rebuchet/[C]onsolas}${1/(a$)|(v$)|(g$)|(t$)|(c$)|(m$)|.*/?1:rial, Helvetica, Verdana:?2:erdana, Arial, Helvetica:?3:eorgia, Cambria, Palatino, Serif:?4:rebuchet MS, Helvetica, Tahoma, Sans-serif:?5:onsolas, \"Lucida Console\", \"Courier New\", Monospace:?6:onospace/i};$0" },
 
     { "trigger": "fs", "contents": "font-style:${1:[I]talic/[O]blique/[N]ormal}${1/(i$)|(it$)|(o$)|(ob$)|(n$)|(no$)|.*/?1:talic:?2:alic:?3:blique:?4:lique:?5:ormal:?6:rmal/i};$0" },
     { "trigger": "fw", "contents": "font-weight:${1:400}${2:700};$0" },
@@ -103,8 +103,10 @@
     { "trigger": "ls", "contents": "list-style:${1:[n]one/[d]isc/[de]cimal/}${1/(n$)|(d$)|(de$)|.*/?1:one:?2:isc:?3:cimal/i};$0" },
 
     /* box model css3 */
-    { "trigger": "bs", "contents": "-webkit-box-shadow:$1px $2px $3px rgba$0;\nbox-shadow:$1px $2px $3px rgba$0;" },
+    { "trigger": "bs", "contents": "-webkit-box-shadow: $1px $2px $3px #${4:000}$0;\nbox-shadow:\t\t\t\t $1px $2px $3px #${4:000}$0;" },
     { "trigger": "rad", "contents": "border-radius:${1:}px;$0" },
+    { "trigger": "box", "contents": "-webkit-box-sizing: border-box;\n-moz-box-sizing:\t\tborder-box;\nbox-sizing: \t\t\t\tborder-box$0;" },
+
 
     /* various & unsorted */
     { "trigger": "o|ou", "contents": "outline:${1:none};$0" },

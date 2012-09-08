@@ -20,23 +20,25 @@ Download the latest version from the [tags page][tags]. Unzip to your Sublime Te
 
 ## Feature requests & bug reports ##
 
-You can leave either of these things [here][issues].
+You can leave either of these things [here][issues]. Pull requests are welcomed heartily! In this repo, the main development branch is `develop` and the stable 'production' branch is `master`. Please remember to base your branch from `develop` and issue the pull request back to that branch.
 
 ## Changelog ##
-- **v2.6.5**, *19 June 2012*
-  - Bugfix for adding linebreaks when not at the start or end of a line
-- **v2.6.4**, *4 June 2012*
-  - Better support for indentation using tabs
-  - YUI tags are supported by the autocomplete
-  - When only whitespace exists on a docblock line, and `trim_automatic_white_space` is set to true, the whitespace is removed.
-  - Better support for comment blocks opened with `/*`
-- **v2.6.3**, *30 April 2012*
-  - Fixes the join-lines command <kbd>Ctrl+J</kbd> for CoffeeScript.
-- **v2.6.2**, *22 March 2012*
-  - PHP `__destruct` functions don't get a return value *(thanks to [Alex Whitman](https://github.com/whitman))*.
-- **v2.6.1**, *16 March 2012*
-  - Fixes bug whereby the return values of functions which are named `set` or `add`, *etc* were not being guessed correctly.
-  - `@return` tags are now given a description field *(thanks to [Nick Dowdell](https://github.com/mikulad13))*.
+
+- **v2.8.0**, *26 August 2012*
+  - New feature: <kbd>Alt+Q</kbd> to reformat the description field of a docblock to make it fit nicely within your ruler.
+  - Adds support for C++ (thanks to [Rafał Chłodnicki](https://github.com/rchl))
+  - Indenting to the description field works in languages which don't require type information in the docblock.
+- **v2.7.4**, *8 August 2012*
+  - Fix for Actionscript docblocks not working
+- **v2.7.3**, *7 August 2012*
+  - No trailing whitespace added on the spacer lines added when `jsdocs_spacer_between_sections` is on (thanks to [Rafał Chłodnicki](https://github.com/rchl))
+  - Fixes a bug with detecting variable names when they have a default value in PHP
+  - Changes the notation map to not ignore the leading `$` or `_`, meaning that (for example), you could specify that variables starting with `$` are `HTMLElement`s.
+- **v2.7.2**, *6 August 2012*
+  - Small bug fix, thanks to [djuliusl](https://github.com/djuliusl)
+- **v2.7.1**, *5 August 2012*
+  - Adds per-section alignment (can be set using `jsdocs_per_section_indent`)
+  - Description field for `@return` tag can be disabled using `jsdocs_return_description`. *(Both thanks to [Drarok](https://github.com/Drarok))*
 
 Older history can be found in [the history file](https://github.com/spadgos/sublime-jsdocs/blob/master/HISTORY.md).
 
@@ -46,7 +48,7 @@ Older history can be found in [the history file](https://github.com/spadgos/subl
 
 ### Docblock completion ###
 
-Pressing **enter** or **tab** after `/**` (or `#***` for Coffee-Script) will yield a new line and will close the comment.
+Pressing **enter** or **tab** after `/**` (or `###*` for Coffee-Script) will yield a new line and will close the comment.
 
     /**<<enter>>
 
@@ -235,7 +237,11 @@ If you write a double-slash comment and then press `Ctrl+Enter`, DocBlockr will 
 Sometimes, you'll perform some action which clears the fields (sections of text which you can navigate through using `tab`). This leaves you with a number of placeholders in the DocBlock with no easy way to jump to them.
 
 With DocBlockr, you can reparse a comment and reactivate the fields by pressing the hotkey `Ctrl+Alt+Tab`.
-    
+
+### Reformatting paragraphs ###
+
+Inside a comment block, hit `Alt+Q` to wrap the lines to make them fit within your rulers.
+
 ### Adding extra tags ###
 
 Finally, typing `@` inside a docblock will show a completion list for all tags supported by [JSDoc][jsdoc], the [Google Closure Compiler][closure], [YUIDoc][yui] or [PHPDoc][phpdoc]. Extra help is provided for each of these tags by prefilling the arguments each expects. Pressing `tab` will move the cursor to the next argument.

@@ -32,7 +32,6 @@
 	"draw_minimap_border": false,
 	"draw_white_space": "all",
 	"fade_fold_buttons": true,
-	"folder_exclude_patterns": [".svn", ".git", ".hg", "CVS", ".sass-cache"],
 	"file_exclude_patterns":
 	[
 		"*.pyc",
@@ -58,39 +57,53 @@
 		"*.sublime-project"
 	],
 	"find_selected_text": true,
+	"folder_exclude_patterns":
+	[
+		".svn",
+		".git",
+		".hg",
+		"CVS",
+		".sass-cache"
+	],
 	"font_face": "Consolas",
 	"font_options":
 	[
 		"directwrite",
 		"subpixel_antialias"
 	],
-	"font_size": 13,
+	"font_size": 12,
 	"highlight_line": true,
 	"highlight_modified_tabs": true,
 	"ignored_packages":
 	[
 		"LaTeX",
 		"Java",
+		"SideBarGit",
 		"Lua",
 		"Matlab",
 		"Erlang",
 		"ASP",
 		"AppleScript",
 		"sublime_text2.ico",
+		"Lisp",
 		"TCL",
 		"CSS",
 		"Groovy",
 		"D",
-		"Lisp",
+		"Camaleon",
+		"AAAPackageDev",
 		"Clojure",
+		"BufferScroll",
 		"readme.md",
 		"Smart Match",
 		"OCaml",
 		"Graphviz",
 		"Language - English",
 		"Haskell",
+		"Function Name Display",
 		"ActionScript",
-		"Go"
+		"Go",
+		"Origami"
 	],
 	"indent_guide_options":
 	[

@@ -1,8 +1,8 @@
 {
-	"auto_upgrade_last_run": null,
-	"git_binary": "C:\\cygwin\\git\\bin\\git.exe",
+	"auto_upgrade_last_run": 1347083948,
 	"installed_packages":
 	[
+		"AAAPackageDev",
 		"AdvancedNewFile",
 		"Alignment",
 		"alternative_autocompletion",
@@ -50,14 +50,6 @@
 	],
 	"repositories":
 	[
-		"https://github.com/mybuddymichael/solarized-sublimetext2",
-		"http://sublime.wbond.net/testing/packages.json",
-		"https://github.com/Kentzo/SublimeMagick",
-		"https://github.com/EleazarCrusader/nexus-theme",
-		"https://github.com/chriskempson/tomorrow-theme/tree/master/textmate"
-	],
-	"repository_channels":
-	[
-		"http://sublime.wbond.net/repositories.json"
+		"https://github.com/akrabat/SublimeFunctionNameDisplay"
 	]
 }
